@@ -1,0 +1,140 @@
+<resources>
+    <string name="app_name">Kommunalchik</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="continue_bills">Продовжити рахувати</string>
+    <string name="new_bills">Новий рахунок</string>
+    <string name="saved_bills">Збережені рахунки</string>
+    <string name="settings">Settings</string>
+    <string name="exit">Вихід</string>
+
+
+
+    <string name="communal">ЖИТЛОВО-КОМУНАЛЬНІ ТА ІНШІ ПОСЛУГИ</string>
+    <string name="gas">ГАЗ</string>
+    <string name="coldWater">ПОСТАЧАННЯ ХОЛОДНОЇ ВОДИ ТА ВОДОВІДВЕДЕННЯ</string>
+    <string name="wasteWater">ВОДОВІДВЕДЕННЯ ГАРЯЧОЇ ВОДИ</string>
+    <string name="hotWater">ПОСТАЧАННЯ ГАРЯЧОЇ ВОДИ</string>
+    <string name="heating">ОПАЛЕННЯ</string>
+    <string name="electricity">ЕЛЕКТРОЕНЕРГІЯ</string>
+    <string name="phone">КОМУНІКАЦІЙНІ ПОСЛУГИ</string>
+    <string name="total">ЗАГАЛЬНІ РЕЗУЛЬТАТИ:</string>
+
+    <string name="sum">До сплати</string>
+    <string name="total_sum">Всього до сплати:</string>
+    <string name="save">ЗБЕРЕГТИ</string>
+    <string name="counter">Лічильник:</string>
+
+
+    <string name="gas_calc">Нарахування за: </string>
+    <string name="area">Площа</string>
+    <string name="registered">Зареєстровано</string>
+    <string name="overpayment">Переплата:</string>
+    <string name="debt">Борг</string>
+    <string name="additional_payment">Додатково сплачую:</string>
+
+    <string name="current"> поточні </string>
+    <string name="previous"> попередні </string>
+    <string name="difference"> різниця </string>
+    <string name="amount_m2">Обсяг,м2</string>
+    <string name="amount_m3">Обсяг,м3</string>
+    <string name="rate">Тариф</string>
+    <string name="calculated">Нараховано</string>
+    <string name="recalculated">Перерах-к</string>
+    <string name="subsidy">Субсидія</string>
+    <string name="compensation">Компенсація</string>
+    <string name="data">Показання лічильників,м3</string>
+    <string name="consumed">Спожито</string>
+
+    <string name="communal_calc">Стаття нарахувань</string>
+    <string name="communal_sum">НАРАХОВАНО:</string>
+    <string name="house">Утримання будинків та прибуд. територій</string>
+
+    <string name="e_current">Поточні показання, кВтг</string>
+    <string name="e_previous">Попередні показання, кВтг</string>
+    <string name="e_rate">Тариф, грн.</string>
+    <string name="e_consumed">Спожито, кВтг</string>
+    <string name="e_subsidy">пільгові,кВтг</string>
+    <string name="e_below250">до 100 кВтг</string>
+    <string name="e_below800">від 100 до 600 кВтг</string>
+    <string name="e_over800">понад 600 кВтг</string>
+    <string name="e_rate_subsidy">Пільговий тариф</string>
+    <string name="e_rate_below250">Тариф до 100 кВтг</string>
+    <string name="e_rate_below800">Тариф від 100 до 600 кВтг</string>
+    <string name="e_rate_over800">Тариф понад 600 кВтг</string>
+    <string name="e_sum">Сума до сплати, грн.</string>
+    <string name="e_total_sum">Усього до сплати, грн.</string>
+
+    <string name="phone_calc">Нараховано за місяць</string>
+    <string name="phone_rate">Абонплата за ТП</string>
+    <string name="phone_total">Всього нараховано за послуги:</string>
+    <string name="phone_sum">Разом</string>
+    <string name="tax">ПДВ 20%</string>
+    <string name="no_tax">без ПДВ</string>
+    <string name="radio_rate">Абонплата за користування радіоточкою</string>
+
+    <string name="table_sum">Сума до сплати:</string>
+    <string name="table_group_sum">РАЗОМ ДО СПЛАТИ:</string>
+    <string name="net_sum">ВСЬОГО ДО СПЛАТИ:</string>
+
+
+    <!-- Error messages -->
+
+    <string name="err_fraction_count">Секція може мати тільки одну дріб</string>
+    <string name="err_fraction_format">Оберіть "&#x00BE;", щоб використати дріб</string>
+    <string name="err_decimal_count">Десяткове число може мати тільки одну точку</string>
+    <string name="err_fraction_decimal">Пропорція не може мати точок</string>
+    <string name="err_fraction_num_empty">Вкажіть чисельник, щоб додати семент</string>
+    <string name="err_fraction_den_empty">Вкажіть знаменник, щоб додати семент</string>
+    <string name="err_num_empty">Заповніть числове поле, щоб додати семент</string>
+    <string name="err_name_empty">Будь ласка, вкажіть назву запису</string>
+    <string name="err_storage_save">Помилка: не вдалося зберегти запис</string>
+    <string name="err_excel_write">Помилка: не вдалося створити файл</string>
+    <string name="err_storage_delete">Помилка: не вдалося видалити запис</string>
+
+    <string name="format_decimal">0.00</string>
+    <string name="format_percent">%</string>
+    <string name="format_fraction">&#x00BE;</string>
+
+    <string name="type_decimal">Десяткове число</string>
+    <string name="type_percent">Проценти</string>
+    <string name="type_fraction_num">Чисельник</string>
+    <string name="type_fraction_den">Знаменник</string>
+
+    <string name="calc_btn">РОЗРАХУВАТИ</string>
+    <string name="save_btn">ЗБЕРЕГТИ</string>
+    <string name="global_segment_btn">ЗАГАЛЬНИЙ СЕГМЕНТ</string>
+    <string name="calc_request">Натисніть \"розрахувати\" під таблицею,\n яку бажаєте додати до загальної</string>
+
+    <string name="segment_picker_title">НОВИЙ ЗАГАЛЬНИЙ СЕГМЕНТ</string>
+    <string name="segment_picker_name">Назва сегменту</string>
+    <string name="segment_picker_format">Формат сегменту (0.00, %, &#x00BE;)</string>
+    <string name="segment_picker_cancel">Відміна</string>
+    <string name="segment_picker_add">Додати</string>
+
+    <string name="data_saver_title">ЗБЕРЕЖЕННЯ ТАБЛИЦЬ</string>
+    <string name="data_saver_name">Назва запису</string>
+    <string name="data_saver_file_writer">Записати в Excel файл</string>
+    <string name="data_saver_excel_writer">ЗАПИСАТИ ДЛЯ EXCEL?</string>
+    <string name="data_saver_excel_success">Excel файл успішно створено</string>
+    <string name="data_saver_add">Зберегти</string>
+    <string name="data_saver_write_file">Записати</string>
+    <string name="data_saver_success">Запис успішно збережено!</string>
+    <string name="data_saver_delete_success">Запис успішно видалено</string>
+
+    <string name="delete_storage">ВИДАЛИТИ ЗАПИС?</string>
+    <string name="delete_add">Видалити</string>
+
+    <string-array name="counter_indicator">
+        <item>нема</item>
+        <item>є</item>
+    </string-array>
+
+    <string-array name="counter_indicator_gas">
+        <item>тарифом</item>
+        <item>показниками лічильника</item>
+    </string-array>
+
+
+
+</resources>

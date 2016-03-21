@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+    <color name="button_shadow">#efcdcdcd</color>
+    <color name="button_color">#fffafafa</color>
+
+    <color name="default_button_shadow">#efcdcdcd</color>
+    <color name="default_button_color">#ff575757</color>
+
+    <color name="communal_color">#ffa2003f</color>
+    <color name="communal_shadow">#a0a2003f</color>
+    <color name="communal_light">#fff65380</color>
+
+    <color name="cold_water_color">#ff00009a</color>
+    <color name="cold_water_shadow">#a000009a</color>
+    <color name="cold_light">#ff8e91d8</color>
+
+    <color name="waste_water_color">#ff75a3a3</color>
+    <color name="waste_water_shadow">#a075a3a3</color>
+    <color name="waste_water_light">#ff9de1e1</color>
+
+    <color name="hot_water_color">#ffd60000</color>
+    <color name="hot_water_shadow">#a0d60000</color>
+    <color name="hot_water_light">#ffd67167</color>
+
+    <color name="heating_color">#ffd44900</color>
+    <color name="heating_shadow">#a0d44900</color>
+    <color name="heating_light">#fff38e51</color>
+
+    <color name="electricity_color">#fffaad00</color>
+    <color name="electricity_shadow">#a0faad00</color>
+    <color name="electricity_light">#fffac376</color>
+
+    <color name="phone_color">#ff2e7832</color>
+    <color name="phone_shadow">#a02e7832</color>
+    <color name="phone_light">#ff83b97f</color>
+
+    <color name="gas_color">#ff720082</color>
+    <color name="gas_shadow">#a0720082</color>
+    <color name="gas_light">#64720082</color>
+
+    <color name="total_color">#ff1a1a1a</color>
+    <color name="total_shadow">#A01a1a1a</color>
+
+    <color name="th">#efcdcdcd</color>
+    <color name="tc">#fffafafa</color>
+    <color name="th2">#efb7b7b7</color>
+    <color name="tc2">#fff5f5f5</color>
+
+    <color name="total_row_color">#fff4f4f4</color>
+    <color name="total_row_name_color">#ff1a1a1a</color>
+
+    <color name="segment_picker_background_main">#fff5f1cf</color>
+    <color name="segment_picker_background_background">#ffd7d3b4</color>
+
+
+</resources>
