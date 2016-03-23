@@ -1,26 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+   >
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/bills_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:focusable="true"
+        android:clickable="true"
+        >
+
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="fill_parent"
+            android:text="@string/settings_bills"
+            android:id="@+id/bills"
+            android:padding="10dp"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:src="@mipmap/ic_action_forward"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:id="@+id/bills_next"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp" />
+    </LinearLayout>
+
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/line"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eee"
+        android:layout_below="@+id/bills_layout" />
 
-    <EditText
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:background="?android:attr/selectableItemBackground"
+        android:id="@+id/segments_layout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:ems="10"
-        android:id="@+id/editText"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_alignBottom="@+id/textView" />
+        android:orientation="horizontal"
+        android:layout_below="@+id/line"
+        android:clickable="true"
+        android:focusable="true">
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="fill_parent"
+            android:text="@string/settings_segments"
+            android:id="@+id/segments"
+            android:padding="10dp"
+            android:textSize="20sp" />
+
+
+
+        <ImageView
+            android:src="@mipmap/ic_action_forward"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="fill_parent"
+            android:id="@+id/segments_next"
+            android:layout_gravity="center_vertical"
+            android:padding="5dp" />
+    </LinearLayout>
+
+
+
+
+
 </RelativeLayout>

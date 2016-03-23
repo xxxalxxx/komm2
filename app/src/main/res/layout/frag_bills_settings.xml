@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:paddingBottom="90dp">
+
+    <TextView
+        android:background="@color/gas_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/gas"
+        android:id="@+id/gas"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+
+         />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_rate"
+        android:id="@+id/gas_rate_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/gas"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/gas_rate_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/gas_rate_text"
+        android:imeOptions="flagNoExtractUi"
+        android:layout_below="@+id/gas"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/gas_calc"
+        android:id="@+id/gas_calc_by_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/gas_rate_input"
+        android:paddingLeft="4dp" />
+
+    <Spinner
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/gas_calc_by_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/gas_calc_by_text"
+        android:entries="@array/counter_indicator_gas"
+        android:layout_below="@+id/gas_rate_input"/>
+
+
+    <TextView
+        android:background="@color/cold_water_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/coldWater"
+        android:id="@+id/cold_water"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+        android:layout_below="@+id/gas_calc_by_input" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_rate"
+        android:id="@+id/cold_water_rate_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/cold_water"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:imeOptions="flagNoExtractUi"
+        android:id="@+id/cold_water_rate_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/gas_rate_text"
+        android:layout_below="@+id/cold_water"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/counter"
+        android:id="@+id/cold_water_calc_by_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/cold_water_rate_input"
+        android:paddingLeft="4dp" />
+
+    <Spinner
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/cold_water_calc_by_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/cold_water_calc_by_text"
+        android:entries="@array/counter_indicator"
+        android:layout_below="@+id/cold_water_rate_input"/>
+
+
+
+    <TextView
+        android:background="@color/waste_water_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wasteWater"
+        android:id="@+id/waste_water"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+        android:layout_below="@+id/cold_water_calc_by_input" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_rate"
+        android:id="@+id/waste_water_rate_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/waste_water"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/waste_water_rate_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/gas_rate_text"
+        android:layout_below="@+id/waste_water"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/counter"
+        android:id="@+id/waste_water_calc_by_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/waste_water_rate_input"
+        android:paddingLeft="4dp" />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/waste_water_calc_by_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/cold_water_calc_by_text"
+        android:entries="@array/counter_indicator"
+        android:layout_below="@+id/waste_water_rate_input"/>
+
+
+
+
+
+
+    <TextView
+        android:background="@color/hot_water_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hotWater"
+        android:id="@+id/hot_water"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+        android:layout_below="@+id/waste_water_calc_by_input" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_rate"
+        android:id="@+id/hot_water_rate_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/hot_water"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/hot_water_rate_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/gas_rate_text"
+        android:layout_below="@+id/hot_water"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/counter"
+        android:id="@+id/hot_water_calc_by_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/hot_water_rate_input"
+        android:paddingLeft="4dp" />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/hot_water_calc_by_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/cold_water_calc_by_text"
+        android:entries="@array/counter_indicator"
+        android:layout_below="@+id/hot_water_rate_input"/>
+
+
+    <TextView
+        android:background="@color/electricity_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/electricity"
+        android:id="@+id/electricity"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+        android:layout_below="@+id/hot_water_calc_by_input" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_steps"
+        android:id="@+id/electricity_steps_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity"
+        android:paddingLeft="4dp"
+        android:gravity="center_horizontal"
+        android:background="@color/electricity_light" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_subsidy"
+        android:id="@+id/electricity_step_sub_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_steps_text"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_step_sub_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_step_sub_text"
+        android:layout_below="@+id/electricity_steps_text"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_step1"
+        android:id="@+id/electricity_step_step1_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_step_sub_input"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_step_step1_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_step_step1_text"
+        android:layout_below="@+id/electricity_step_sub_input"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_step2"
+        android:id="@+id/electricity_step_step2_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_step_step1_input"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_step_step2_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_step_step2_text"
+        android:layout_below="@+id/electricity_step_step1_input"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_rates"
+        android:id="@+id/electricity_rates_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_step_step2_input"
+        android:paddingLeft="4dp"
+        android:gravity="center_horizontal"
+        android:background="@color/electricity_light" />
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_rate_subsidy"
+        android:id="@+id/electricity_rate_sub_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_rates_text"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_rate_sub_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_rate_sub_text"
+        android:layout_below="@+id/electricity_rates_text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_step1"
+        android:id="@+id/electricity_rate_step1_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_rate_sub_input"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_rate_step1_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_rate_step1_text"
+        android:layout_below="@+id/electricity_rate_sub_input"/>
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_step2"
+        android:id="@+id/electricity_rate_step2_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_rate_step1_input"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_rate_step2_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_rate_step2_text"
+        android:layout_below="@+id/electricity_rate_step1_input"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_electricity_step3"
+        android:id="@+id/electricity_rate_step3_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/electricity_rate_step2_input"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/electricity_rate_step3_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/electricity_rate_step3_text"
+        android:layout_below="@+id/electricity_rate_step2_input"/>
+
+
+    <TextView
+        android:background="@color/phone_color"
+        android:textColor="@color/settings_bill_font"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/phone"
+        android:id="@+id/phone"
+        android:gravity="center_horizontal"
+        android:textSize="20dp"
+        android:padding="2dp"
+        android:layout_below="@+id/electricity_rate_step3_input" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_phone_tax"
+        android:id="@+id/phone_tax_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/phone"
+        android:paddingLeft="4dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/phone_tax_input"
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@+id/phone_tax_text"
+        android:layout_below="@+id/phone"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/settings_phone_rate"
+        android:id="@+id/phone_rates_text"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/phone_tax_input"
+        android:paddingLeft="4dp"
+        android:gravity="center_horizontal"
+        android:background="@color/phone_light" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/settings_phone_phone_rate"
+            android:id="@+id/phone_phone_rate_text"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/phone_rates_text"
+            android:paddingLeft="4dp" />
+
+        <EditText
+            android:imeOptions="flagNoExtractUi"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/phone_rate_input"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/phone_phone_rate_text"
+            android:layout_below="@+id/phone_rates_text"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/settings_phone_radio_rate"
+            android:id="@+id/phone_radio_rate_text"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/phone_rate_input"
+            android:paddingLeft="4dp" />
+
+        <EditText
+            android:imeOptions="flagNoExtractUi"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/phone_radio_input"
+            android:layout_alignParentTop="false"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/phone_radio_rate_text"
+            android:layout_below="@+id/phone_rate_input"/>
+    </RelativeLayout>
+</ScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_save"
+        android:src="@mipmap/ic_action_save_white"
+        app:elevation="5dp"
+        app:fabSize="normal"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+</RelativeLayout>

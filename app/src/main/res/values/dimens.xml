@@ -3,4 +3,18 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="padding">2dp</dimen>
+    <dimen name="margins">1.5dp</dimen>
+    <dimen name="total_table_bottom_padding">2dp</dimen>
+    <dimen name="total_table_sides_padding">1dp</dimen>
+    <dimen name="margin_and_padding_offset">27dp</dimen>
+    <dimen name="double_height">54dp</dimen>
+    <dimen name="imageview_padding">50dp</dimen>
+
+    <dimen name="padding_textView">2dp</dimen>
+    <dimen name="padding_editText">2dp</dimen>
+    <dimen name="margin">1dp</dimen>
+    <dimen name="textSize">15sp</dimen>
+
 </resources>

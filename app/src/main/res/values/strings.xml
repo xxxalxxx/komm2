@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">Kommunalchik</string>
+    <string name="app_name">Комунальчик</string>
+    <string name="menu_app_name">КОМУНАЛЬЧИК</string>
     <string name="action_settings">Settings</string>
 
     <string name="continue_bills">Продовжити рахувати</string>
     <string name="new_bills">Новий рахунок</string>
     <string name="saved_bills">Збережені рахунки</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Опції</string>
+    <string name="help">Як користуватись</string>
     <string name="exit">Вихід</string>
 
 
@@ -26,7 +28,7 @@
     <string name="counter">Лічильник:</string>
 
 
-    <string name="gas_calc">Нарахування за: </string>
+    <string name="gas_calc">Нарахування за:</string>
     <string name="area">Площа</string>
     <string name="registered">Зареєстровано</string>
     <string name="overpayment">Переплата:</string>
@@ -125,6 +127,8 @@
     <string name="delete_storage">ВИДАЛИТИ ЗАПИС?</string>
     <string name="delete_add">Видалити</string>
 
+
+
     <string-array name="counter_indicator">
         <item>нема</item>
         <item>є</item>
@@ -132,9 +136,27 @@
 
     <string-array name="counter_indicator_gas">
         <item>тарифом</item>
-        <item>показниками лічильника</item>
+        <item>лічильником</item>
     </string-array>
 
+    <string name="settings_bills">Таблиці рахунків</string>
+    <string name="settings_segments">Глобальні сегменти</string>
+
+    <string name="settings_rate">Тариф:</string>
+
+    <string name="settings_electricity_steps">Ступені (кВтг)</string>
+    <string name="settings_electricity_subsidy">Пільгова:</string>
+    <string name="settings_electricity_step1">Ступінь №1:</string>
+    <string name="settings_electricity_step2">Ступінь №2:</string>
+    <string name="settings_electricity_step3">Ступінь №3:</string>
+
+    <string name="settings_electricity_rates">Тарифи</string>
+    <string name="settings_electricity_rate_subsidy">Пільговий:</string>
+
+    <string name="settings_phone_tax">ПДВ (%):</string>
+    <string name="settings_phone_rate">Абонплата</string>
+    <string name="settings_phone_phone_rate">Телефон:</string>
+    <string name="settings_phone_radio_rate">Радіо:</string>
 
 
 </resources>

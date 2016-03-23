@@ -17,4 +17,106 @@
         android:layout_weight="1"
         android:background="@android:color/white"/>
 
+    <Button
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calc_btn"
+        android:id="@+id/calc_btn"
+        android:layout_below="@+id/item_title" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            app:borderWidth="0dp"
+
+            android:id="@+id/fab_save"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_action_save_white"
+            style="@style/floating_action_button"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:focusable="true"
+            android:clickable="true"/>
+
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            android:id="@+id/fab_excel"
+            style="@style/floating_action_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_excel"
+            app:backgroundTint="@color/fab_excel"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:focusable="true"
+            android:clickable="true"
+            app:borderWidth="0dp"
+            android:layout_alignTop="@+id/fab_save"
+            android:layout_toRightOf="@+id/fab_save" />
+
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fab_segment_global"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_queue_white_48dp"
+            app:backgroundTint="@color/fab_global_segment"
+            style="@style/floating_action_button"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_alignTop="@+id/fab_save"
+            android:layout_toRightOf="@+id/fab_excel" />
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fab_segment"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_add_box_white_48dp"
+            app:backgroundTint="@color/fab_segment"
+            style="@style/floating_action_button"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_alignTop="@+id/fab_save"
+            android:layout_toRightOf="@+id/fab_segment_global"/>
+
+        <android.support.design.widget.FloatingActionButton
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/fab_segment1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_attach_money_white_48dp"
+            app:backgroundTint="@color/fab_calc"
+            style="@style/floating_action_button"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_alignTop="@+id/fab_save"
+            android:layout_toRightOf="@+id/fab_segment_global"/>
+
+    </LinearLayout>
+
+
+
 </LinearLayout>

@@ -35,11 +35,38 @@ public class MenuFragment extends Fragment {
 
             @Override
             public void onClick(View b) {
-                SettingsFrament settingsFrament = new SettingsFrament();
+
+                SettingsFragment settingsFrament = new SettingsFragment();
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_container, settingsFrament, "SettingsFrag");
                 ft.addToBackStack(null);
                 ft.commit();
+            }
+
+        });
+
+
+/*
+        Button btnSettings = (Button) v.findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View b) {
+                BillsSettingsFragment settingsFrament = new BillsSettingsFragment();
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, settingsFrament, "SettingsFrag");
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+
+        });
+*/
+        Button btnExit = (Button) v.findViewById(R.id.btn_exit);
+        btnExit.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View b) {
+                getActivity().onBackPressed();
             }
 
         });

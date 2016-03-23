@@ -234,12 +234,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
                 int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
                 imageView.setPadding(2*padding, padding, 2*padding, padding);
-                //setting image resource
                 ;
                // imageView.setLayoutParams(mTabStrip.getLayoutParams());
                 imageView.setImageResource(mipmapResName);
-
-                //setting image position
 
                 tabView.setOnClickListener(tabClickListener);
                 mTabStrip.addView(imageView);
@@ -251,19 +248,12 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 tabView = createDefaultTabView(getContext());
             }
 
-
-
             if (tabTitleView == null && TextView.class.isInstance(tabView)) {
                 tabTitleView = (TextView) tabView;
             }
 
-
-
-
             tabTitleView.setText(adapter.getPageTitle(i));
             tabView.setOnClickListener(tabClickListener);
-
-
 
             mTabStrip.addView(tabView);
         }

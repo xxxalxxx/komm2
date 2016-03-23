@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:gravity="center|center_vertical|center_horizontal"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:layout_height="match_parent"
-    android:minWidth="250dp">
+    android:layout_height="fill_parent"
+    android:minWidth="250dp"
+    android:gravity="top"
+    android:baselineAligned="true"
+    android:paddingTop="40dp">
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/menu_app_name"
+        android:id="@+id/textView2"
+        android:paddingBottom="15dp"
+        android:typeface="monospace"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:textSize="30dp"
+        android:singleLine="true" />
 
     <Button
         android:layout_width="fill_parent"
@@ -39,7 +61,15 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:text="@string/help"
+        android:id="@+id/btn_help"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="@string/exit"
         android:id="@+id/btn_exit"
         android:layout_gravity="center_horizontal" />
 </LinearLayout>
+</ScrollView>

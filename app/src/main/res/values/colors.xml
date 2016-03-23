@@ -58,4 +58,15 @@
     <color name="segment_picker_background_background">#ffd7d3b4</color>
 
 
+    <color name="fab_save">#ffffffff</color>
+    <color name="fab_excel">#1e7145</color>
+    <color name="fab_segment">#338fff</color>
+    <color name="fab_global_segment">#6d1fff</color>
+    <color name="fab_calc">#FF9800</color>
+
+    <color name="menu_item_tint">#ffffffff</color>
+
+    <color name="settings_bill_background">#ffffffff</color>
+    <color name="settings_bill_font">#ffffffff</color>
+    <color name="settings_bill_fab_background">#FFB6C1</color>
 </resources>
