@@ -81,6 +81,11 @@
 
 
     <!-- Error messages -->
+    <string name="err_new_segment_name_empty">Помилка: вкажіть назву сегменту</string>
+    <string name="err_new_segment_zero_denom">Помилка: не можна ділити на нуль</string>
+    <string name="err_new_segment_empty_denom">Помилка: вкажіть знаменник</string>
+    <string name="err_new_segment_empty_num">Помилка: вкажіть значення сегменту</string>
+
 
     <string name="err_fraction_count">Секція може мати тільки одну дріб</string>
     <string name="err_fraction_format">Оберіть "&#x00BE;", щоб використати дріб</string>
@@ -142,6 +147,8 @@
     <string name="settings_bills">Таблиці рахунків</string>
     <string name="settings_segments">Глобальні сегменти</string>
 
+    <string name="settings_bills_success">Таблиці рахунків успішно змінено.</string>
+
     <string name="settings_rate">Тариф:</string>
 
     <string name="settings_electricity_steps">Ступені (кВтг)</string>
@@ -158,5 +165,20 @@
     <string name="settings_phone_phone_rate">Телефон:</string>
     <string name="settings_phone_radio_rate">Радіо:</string>
 
+    <string name="segment_title_create">НОВИЙ ГЛОБАЛЬНИЙ СЕГМЕНТ</string>
+    <string name="segment_title_update">ОНОВЛЕННЯ СЕГМЕНТУ</string>
+    <string name="segment_title_common">НОВИЙ ЗАГАЛЬНИЙ СЕГМЕНТ</string>
+
+    <string name="segment_name">Назва:</string>
+    <string name="segment_unit">Тип:</string>
+    <string name="segment_value">Значення:</string>
+
+    <string name="segment_create_success">Сегмент успішно створено.</string>
+    <string name="segment_update_success">Сегмент успішно оновлено</string>
+
+    <string name="alert_dialog_bills_settings_save">Ви дійсно бажаєте змінити значення?</string>
+    <string name="alert_dialog_segments_delete">Ви дійсно бажаєте видалити сегмент?</string>
+    <string name="alert_dialog_yes">ТАК</string>
+    <string name="alert_dialog_no">HI</string>
 
 </resources>

@@ -17,6 +17,9 @@ import tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout;
  */
 public class BillsFragment extends Fragment {
 
+    public static final int STATE_NEW = 0, STATE_CONTINUED = 1, STATE_FROM_DATABASE = 2;
+    public int mState;
+
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
 
@@ -41,7 +44,6 @@ public class BillsFragment extends Fragment {
         mSlidingTabLayout.setCustomTabViewLayoutId(R.layout.bills_menu_icon);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setSelectedIndicatorColors(getColors());
-
 
     }
 

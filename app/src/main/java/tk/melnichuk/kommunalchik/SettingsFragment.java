@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
@@ -14,10 +13,17 @@ import android.widget.LinearLayout;
  */
 public class SettingsFragment extends Fragment {
 
+    SegmentListFragment mSegmentListFragment;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_settings, container, false);
+        if(savedInstanceState != null){
+            mSegmentListFragment = (SegmentListFragment)getFragmentManager().getFragment(savedInstanceState, "segmentListFragment");
+        } else {
+            mSegmentListFragment = new SegmentListFragment();
+        }
 
 
         LinearLayout billsLayout = (LinearLayout) v.findViewById(R.id.bills_layout);
@@ -40,14 +46,21 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View b) {
 
-                SegmentNewFragment segmentNewFragment = new SegmentNewFragment();
+              //  SegmentListFragment segmentListFragment = new SegmentListFragment();
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, segmentNewFragment, "NewBillsFrag");
+                ft.replace(R.id.fragment_container, mSegmentListFragment, "NewBillsFrag");
                 ft.addToBackStack(null);
                 ft.commit();
             }
         });
 
         return v;
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getFragmentManager().putFragment(outState,"segmentListFragment",mSegmentListFragment);
     }
 }

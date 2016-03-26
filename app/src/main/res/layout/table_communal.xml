@@ -276,7 +276,7 @@
         android:padding="@dimen/padding"
         android:gravity="end"
         android:background="@color/th"
-        android:layout_toLeftOf="@+id/editText"
+        android:layout_toLeftOf="@+id/name"
         android:layout_below="@+id/r2c1"
         android:layout_alignLeft="@+id/r1c1" />
 

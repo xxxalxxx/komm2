@@ -69,4 +69,6 @@
     <color name="settings_bill_background">#ffffffff</color>
     <color name="settings_bill_font">#ffffffff</color>
     <color name="settings_bill_fab_background">#FFB6C1</color>
+
+    <color name="settings_segment_new_underline">#338fff</color>
 </resources>

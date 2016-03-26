@@ -9,6 +9,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
+import tk.melnichuk.kommunalchik.DataManagers.DbManager;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
+import android.support.v7.widget.Toolbar;
 public class MainActivity extends FragmentActivity {
 
     @Override
@@ -16,6 +22,13 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       // setSupportActionBar(toolbar);
+
+        DbManager dbManager = new DbManager(this);
+        dbManager.registerTable(new SegmentTable());
+        dbManager.registerTable(new SegmentBillTypeTable());
+        dbManager.onCreate(dbManager.getWritableDatabase());
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
