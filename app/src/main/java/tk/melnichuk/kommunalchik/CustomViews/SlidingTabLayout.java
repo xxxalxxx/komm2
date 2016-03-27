@@ -244,18 +244,18 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 continue;
             }
 
-            if (tabView == null) {
+           // if (tabView == null) {
                 tabView = createDefaultTabView(getContext());
-            }
+           // }
 
-            if (tabTitleView == null && TextView.class.isInstance(tabView)) {
-                tabTitleView = (TextView) tabView;
-            }
+           // if (tabTitleView == null && TextView.class.isInstance(tabView)) {
+           //     tabTitleView = (TextView) tabView;
+           // }
 
-            tabTitleView.setText(adapter.getPageTitle(i));
-            tabView.setOnClickListener(tabClickListener);
+          //  tabTitleView.setText(adapter.getPageTitle(i));
+           // tabView.setOnClickListener(tabClickListener);
 
-            mTabStrip.addView(tabView);
+           // mTabStrip.addView(tabView);
         }
     }
 

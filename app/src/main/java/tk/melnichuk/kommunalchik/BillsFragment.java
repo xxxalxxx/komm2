@@ -2,6 +2,8 @@ package tk.melnichuk.kommunalchik;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import tk.melnichuk.kommunalchik.BillTypeFragments.BaseBillFragment;
 import tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout;
 
 /**
@@ -26,6 +29,11 @@ public class BillsFragment extends Fragment {
     public int[] mMipmapResourceNames;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_bills, container, false);
@@ -38,7 +46,7 @@ public class BillsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new BillsPagerAdapter());
+        mViewPager.setAdapter(new BillsPagerAdapter(getChildFragmentManager()));
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabViewLayoutId(R.layout.bills_menu_icon);
@@ -47,7 +55,12 @@ public class BillsFragment extends Fragment {
 
     }
 
-    public class BillsPagerAdapter extends PagerAdapter {
+    public class BillsPagerAdapter extends FragmentPagerAdapter {
+
+
+        public BillsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
         public int getMipMapResourceName(int pos) {
             return mMipmapResourceNames[pos];
@@ -64,10 +77,10 @@ public class BillsFragment extends Fragment {
          * @return true if the value returned from {@link #instantiateItem(ViewGroup, int)} is the
          * same object as the {@link View} added to the {@link ViewPager}.
          */
-        @Override
-        public boolean isViewFromObject(View view, Object o) {
-            return o == view;
-        }
+      //  @Override
+    //    public boolean isViewFromObject(View view, Object o) {
+      //      return o == view;
+       // }
 
         // BEGIN_INCLUDE (pageradapter_getpagetitle)
         /**
@@ -77,17 +90,24 @@ public class BillsFragment extends Fragment {
          * Here we construct one using the position value, but for real application the title should
          * refer to the item's contents.
          */
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "Item " + (position + 1);
-        }
+        //@Override
+    //    public CharSequence getPageTitle(int position) {
+      //      return "Item " + (position + 1);
+      //  }
         // END_INCLUDE (pageradapter_getpagetitle)
+
+        @Override
+        public Fragment getItem(int position) {
+            return new BaseBillFragment();
+        }
 
         /**
          * Instantiate the {@link View} which should be displayed at {@code position}. Here we
          * inflate a layout from the apps resources and then change the text view to signify the position.
          */
-        @Override
+
+
+       /* @Override
         public Object instantiateItem(ViewGroup container, int position) {
             // Inflate a new layout from our resources
             View view = getActivity().getLayoutInflater().inflate(R.layout.temp_view,
@@ -101,16 +121,18 @@ public class BillsFragment extends Fragment {
 
             // Return the View
             return view;
-        }
+        }*/
+
+
 
         /**
          * Destroy the item from the {@link ViewPager}. In our case this is simply removing the
          * {@link View}.
          */
-        @Override
+        /*@Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
-        }
+        }*/
 
     }
 

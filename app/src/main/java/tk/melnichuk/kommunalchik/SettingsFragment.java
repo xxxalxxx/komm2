@@ -19,12 +19,12 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.frag_settings, container, false);
-        if(savedInstanceState != null){
+    /*    if(savedInstanceState != null){
             mSegmentListFragment = (SegmentListFragment)getFragmentManager().getFragment(savedInstanceState, "segmentListFragment");
         } else {
             mSegmentListFragment = new SegmentListFragment();
         }
-
+*/
 
         LinearLayout billsLayout = (LinearLayout) v.findViewById(R.id.bills_layout);
         billsLayout.setOnClickListener(new View.OnClickListener() {
@@ -46,9 +46,9 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View b) {
 
-              //  SegmentListFragment segmentListFragment = new SegmentListFragment();
+                SegmentListFragment segmentListFragment = new SegmentListFragment();
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, mSegmentListFragment, "NewBillsFrag");
+                ft.replace(R.id.fragment_container, segmentListFragment, "NewBillsFrag");
                 ft.addToBackStack(null);
                 ft.commit();
             }
@@ -61,6 +61,8 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        getFragmentManager().putFragment(outState,"segmentListFragment",mSegmentListFragment);
+        //if (mSegmentListFragment.isAdded()) {
+        //    getFragmentManager().putFragment(outState, "segmentListFragment", mSegmentListFragment);
+       // }
     }
 }

@@ -6,7 +6,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 
 public abstract class BaseTable  {
-
+    //bill(id,[type(temp, temp_db ,db)], name, [desc], create_at, updated_at)
+    //communal(id,bill_id, calc, recalc, sub, comp, overpay, addpay, total)
+    //gas(id,bill_id, calcby, area, registered, curr, prev, rate, calc, sub, addpay, total )
+    //cold_water(id,bill_id, counter, curr, prev, rate)
+    //cold_water_row(id,cold_water_bill_id, cold_water_id,type(normal_row, counter_row), calc, recalc, sub, comp, total);
+    //heating
+    //hot_water
+    //electricity(id,bill_id, curr, prev)
+    //electricity_row(id, electricity_bill_id, type(nomral,subsidy), step ,rate,total)
+    //phone(id,bill_id,tax,calc_phone, calc_radio, total_phone, total_radio)
     public final static String
     COMMA = ",",
     CREATE_TABLE = "CREATE TABLE ",

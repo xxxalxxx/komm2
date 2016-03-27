@@ -12,18 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
-import tk.melnichuk.kommunalchik.DataManagers.Tables.BaseTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
+import tk.melnichuk.kommunalchik.Helpers.Utils;
 
 /**
  * Created by al on 22.03.16.
@@ -35,8 +32,19 @@ public class SegmentListFragment extends Fragment {
     TextView mNavPage;
     SegmentListAdapter mSegmentListAdapter;
     private final int ITEMS_PER_PAGE = 3;
-    private long mNumItems, mOffset;
+    private long mNumItems, mOffset = 0;
     ArrayList<SegmentListItem> mData;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState != null){
+            mOffset = savedInstanceState.getLong("offset");
+            mNumItems = savedInstanceState.getLong("numItems");
+        }
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,16 +54,12 @@ public class SegmentListFragment extends Fragment {
 
 
         mData = new ArrayList<>();
-        if(savedInstanceState != null){
-            mView = inflater.inflate(R.layout.frag_segment_list, container, false);
-            mOffset = savedInstanceState.getLong("offset");
-            mNumItems = savedInstanceState.getLong("numItems");
-        } else if(mView == null){
-            mView = inflater.inflate(R.layout.frag_segment_list, container, false);
-            mOffset = 0;
-            updateNumItems();
-        }
 
+        if(mView == null){
+            mView = inflater.inflate(R.layout.frag_segment_list, container, false);
+
+        }
+        updateNumItems();
 
         updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
 
@@ -71,6 +75,7 @@ public class SegmentListFragment extends Fragment {
         updateNavPageText();
 
         FloatingActionButton fabAdd = (FloatingActionButton) mView.findViewById(R.id.fab_segment_add);
+        final SegmentListFragment thiz = this;
         fabAdd.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -79,6 +84,7 @@ public class SegmentListFragment extends Fragment {
                 SegmentFragment segmentNewFragment = new SegmentFragment();
                 segmentNewFragment.setState(SegmentFragment.STATE_CREATE);
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
+
                 ft.replace(R.id.fragment_container, segmentNewFragment, "NewBillsFrag");
                 ft.addToBackStack(null);
                 ft.commit();
@@ -90,10 +96,11 @@ public class SegmentListFragment extends Fragment {
 
             @Override
             public void onClick(View b) {
-                if(mOffset - ITEMS_PER_PAGE < 0) {
+                long prevOffset = mOffset - ITEMS_PER_PAGE;
+                if(prevOffset < 0) {
                     return;
                 }
-                mOffset -= ITEMS_PER_PAGE;
+                mOffset = prevOffset;
 
                 updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE,mOffset);
                 updateNumItems();
@@ -107,11 +114,11 @@ public class SegmentListFragment extends Fragment {
 
             @Override
             public void onClick(View b) {
-
-                if(mOffset + ITEMS_PER_PAGE >= mNumItems) {
+                long nextOffset = mOffset + ITEMS_PER_PAGE;
+                if(nextOffset >= mNumItems) {
                     return;
                 }
-                mOffset += ITEMS_PER_PAGE;
+                mOffset = nextOffset;
                 updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE,mOffset);
                 updateNumItems();
                 mSegmentListAdapter.notifyDataSetChanged();
@@ -230,8 +237,9 @@ public class SegmentListFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         outState.putLong("offset", mOffset);
-        outState.putLong("numItems",mNumItems);
+        outState.putLong("numItems", mNumItems);
 
     }
 

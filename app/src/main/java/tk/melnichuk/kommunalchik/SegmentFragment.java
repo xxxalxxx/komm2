@@ -24,7 +24,7 @@ import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
  * Created by al on 22.03.16.
  */
 public class SegmentFragment extends Fragment{
-
+    String testVar = "ttt";
     public final static int STATE_CREATE = 0, STATE_UPDATE = 1, STATE_COMMON = 2;
     public final static int MODE_DECIMAL = 0, MODE_PERCENT = 1, MODE_FRACTION = 2;
     private int mCurrentMode, mState = -1;
@@ -57,7 +57,8 @@ public class SegmentFragment extends Fragment{
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-
+        if(mView != null) testVar = "aaa";
+        Log.d("TESTVAR",testVar);
         mView = inflater.inflate(R.layout.frag_segment, container, false);
 
         mTitle = (TextView) mView.findViewById(R.id.title);
@@ -366,6 +367,7 @@ public class SegmentFragment extends Fragment{
     public void setCommon(DataHolder dh) {
         //TODO: save dataholder on recreation of window
         mDataHolder = dh;
+
         mState = STATE_COMMON;
     }
 
