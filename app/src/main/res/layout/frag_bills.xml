@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout
         android:id="@+id/sliding_tabs"
@@ -13,8 +12,11 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="325dp"
-        android:background="@android:color/white"/>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:layout_below="@+id/sliding_tabs"
+        android:layout_above="@+id/calc_btn" />
+
 
     <Button
 
@@ -22,13 +24,16 @@
         android:layout_height="wrap_content"
         android:text="@string/calc_btn"
         android:id="@+id/calc_btn"
-        android:layout_below="@+id/item_title" />
+        android:layout_below="@+id/item_title"
+        android:layout_above="@+id/fab_layout" />
 
     <LinearLayout
+        android:id="@+id/fab_layout"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_alignParentBottom="true">
 
         <android.support.design.widget.FloatingActionButton
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -118,4 +123,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

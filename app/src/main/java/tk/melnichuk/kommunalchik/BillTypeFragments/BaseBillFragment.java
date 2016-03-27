@@ -25,7 +25,7 @@ public class BaseBillFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        mView =  inflater.inflate(R.layout.frag_bills_settings, container, false);
+        mView =  inflater.inflate(R.layout.table_communal, container, false);
 
 
         return mView;

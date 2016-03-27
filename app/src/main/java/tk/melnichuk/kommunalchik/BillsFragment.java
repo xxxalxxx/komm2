@@ -90,10 +90,10 @@ public class BillsFragment extends Fragment {
          * Here we construct one using the position value, but for real application the title should
          * refer to the item's contents.
          */
-        //@Override
-    //    public CharSequence getPageTitle(int position) {
-      //      return "Item " + (position + 1);
-      //  }
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Item " + (position + 1);
+        }
         // END_INCLUDE (pageradapter_getpagetitle)
 
         @Override
