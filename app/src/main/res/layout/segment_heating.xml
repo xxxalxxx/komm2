@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:divider="?android:dividerVertical"
+    android:gravity="center">
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/text1"
+        android:textSize="15sp"
+        android:inputType="textNoSuggestions"
+        android:layout_margin="1dp"
+        android:lines="1"
+        android:padding="2dp"
+        android:gravity="center"
+        android:textIsSelectable="true"
+        android:minWidth="75dp" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:text="X"
+        android:layout_toRightOf="@android:id/text1"
+        android:layout_alignBottom="@android:id/text1"
+        android:background="@color/hot_water_color"
+        android:textScaleX="1.5"
+        android:textColor="@color/button_color" />
+
+   <TextView
+        android:id="@+id/format"
+        android:background="@color/th"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/format_decimal"
+        android:layout_below="@android:id/text1"
+       android:layout_toRightOf="@+id/text2"
+       android:layout_alignBottom="@+id/text2"
+       android:gravity="center"
+       android:layout_alignRight="@+id/delete_button" />
+
+    <com.yahoo.melnichuk.a.kommunalchik.CustomViews.NumberFormatEditText
+        android:id="@+id/text2"
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:hint="0.00,%,&#x00BE;"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="1dp"
+        android:lines="1"
+        android:padding="2dp"
+        android:gravity="center"
+        android:layout_below="@android:id/text1"
+        android:layout_alignLeft="@android:id/text1"
+        android:textIsSelectable="true"
+        android:focusable="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:enabled="true"
+        android:layout_toLeftOf="@+id/delete_button" />
+
+    <EditText
+        android:id="@+id/text3"
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:text=""
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="1dp"
+        android:lines="1"
+        android:padding="2dp"
+        android:numeric="decimal"
+        android:inputType="numberDecimal"
+        android:layout_toRightOf="@android:id/text1"
+        android:layout_alignLeft="@android:id/text1"
+        android:layout_below="@+id/text2"
+        android:layout_alignRight="@+id/delete_button" />
+
+    <EditText
+        android:id="@+id/text4"
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:text=""
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:layout_margin="1dp"
+        android:lines="1"
+        android:padding="2dp"
+        android:numeric="decimal"
+        android:inputType="numberDecimal"
+        android:layout_toRightOf="@android:id/text1"
+        android:layout_alignLeft="@android:id/text1"
+        android:layout_below="@+id/text3"
+        android:layout_alignRight="@+id/delete_button" />
+
+
+</RelativeLayout>

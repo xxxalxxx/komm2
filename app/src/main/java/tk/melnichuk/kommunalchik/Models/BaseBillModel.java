@@ -9,10 +9,14 @@ public class BaseBillModel {
     void getFromDb(){}
     void getMainTableFromDb(){}
     void getSegmentsFromDb(){}
+
     //write from DataHolder to db
     void writeToDb(){}
     void writeMainTableToDb(){}
     void writeSegmentsToDb(){}
+
+    void getFromView(){}
+    void writeToView(){}
 
     void calc(){}
     void calcMainTable(){}

@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/table_container"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/data"
+        android:id="@+id/r0c0"
+        android:tag="r0c0"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_alignRight="@+id/r1c2"
+        android:layout_alignLeft="@+id/r1c0" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/current"
+        android:id="@+id/r1c0"
+        android:tag="r1c0"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_below="@+id/r0c0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/previous"
+        android:id="@+id/r1c1"
+        android:tag="r1c1"
+        android:layout_below="@+id/r0c0"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c0" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/difference"
+        android:id="@+id/r1c2"
+        android:tag="r1c2"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_below="@+id/r0c0"
+        android:layout_toRightOf="@+id/r1c1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/rate"
+        android:id="@+id/r1c3"
+        android:tag="r1c3"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c2"
+        android:minWidth="75dp"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/calculated"
+        android:id="@+id/r1c4"
+        android:tag="r1c4"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c3"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/recalculated"
+        android:id="@+id/r1c5"
+        android:tag="r1c5"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c4"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/subsidy"
+        android:id="@+id/r1c6"
+        android:tag="r1c6"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c5"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/compensation"
+        android:id="@+id/r1c7"
+        android:tag="r1c7"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c6"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
+        android:text="@string/sum"
+        android:id="@+id/r1c8"
+        android:tag="r1c8"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_toRightOf="@+id/r1c7"
+        android:gravity="center" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c0"
+        android:tag="r2c0"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c0"
+        android:layout_alignLeft="@+id/r0c0" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c1"
+        android:tag="r2c1"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c1"
+        android:layout_alignLeft="@+id/r1c1" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c2"
+        android:tag="r2c2"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c2"
+        android:layout_alignLeft="@+id/r1c2" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c3"
+        android:tag="r2c3"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c3"
+        android:layout_alignLeft="@+id/r1c3" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c4"
+        android:tag="r2c4"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c4"
+        android:layout_alignLeft="@+id/r1c4" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c5"
+        android:tag="r2c5"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c5"
+        android:layout_alignLeft="@+id/r1c5" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c6"
+        android:tag="r2c6"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c6"
+        android:layout_alignLeft="@+id/r1c6" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c7"
+        android:tag="r2c7"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c7"
+        android:layout_alignLeft="@+id/r1c7" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r2c8"
+        android:tag="r2c8"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r1c0"
+        android:layout_alignRight="@+id/r1c8"
+        android:layout_alignLeft="@+id/r1c8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/counter"
+        android:id="@+id/counter"
+        android:tag="r3c1"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_alignRight="@+id/r1c1"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignParentStart="true"
+        android:gravity="right"
+        android:layout_alignParentLeft="true" />
+
+    <Spinner
+        android:background="@color/tc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:tag="r3c2"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:entries="@array/counter_indicator"
+        android:layout_below="@+id/r2c0"
+        android:spinnerMode="dropdown"
+        android:layout_alignRight="@+id/r1c2"
+        android:layout_alignLeft="@+id/r1c2"
+        android:layout_alignBottom="@+id/counter"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/consumed"
+        android:id="@+id/r3c3"
+        android:tag="r3c3"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_alignRight="@+id/r1c3"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignLeft="@+id/r1c3"
+        android:gravity="right"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r3c4"
+        android:tag="r3c4"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignRight="@+id/r1c4"
+        android:layout_alignLeft="@+id/r1c4"
+        android:autoText="false" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r3c5"
+        android:tag="r3c5"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignRight="@+id/r1c5"
+        android:layout_alignLeft="@+id/r1c5"
+        android:autoText="false" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r3c6"
+        android:tag="r3c6"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignRight="@+id/r1c6"
+        android:layout_alignLeft="@+id/r1c6"
+        android:autoText="false" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r3c7"
+        android:tag="r3c7"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignRight="@+id/r1c7"
+        android:layout_alignLeft="@+id/r1c7"
+        android:autoText="false" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r3c8"
+        android:tag="r3c8"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r2c0"
+        android:layout_alignRight="@+id/r1c8"
+        android:layout_alignLeft="@+id/r1c8"
+        android:autoText="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/table_sum"
+        android:id="@+id/r4c7"
+        android:tag="r4c7"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:background="@color/th"
+        android:layout_alignRight="@+id/r1c7"
+        android:layout_below="@+id/r3c3"
+        android:layout_alignLeft="@+id/r3c6"
+        android:gravity="right" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/r4c8"
+        android:tag="r4c8"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:lines="1"
+        android:inputType="numberDecimal"
+        android:layout_below="@+id/r3c8"
+        android:layout_alignRight="@+id/r1c8"
+        android:layout_alignLeft="@+id/r1c8" />
+
+
+    <LinearLayout
+        android:id="@+id/segments_container"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentTop="false"
+        android:layout_toRightOf="@+id/r1c8"
+        android:layout_alignTop="@+id/r0c0"
+        android:layout_alignBottom="@+id/r4c7" />
+
+    <ImageButton
+        android:src="@mipmap/segmentation_icon"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:layout_toRightOf="@+id/segments_container"
+        android:layout_alignBottom="@+id/r4c7"
+        android:layout_alignTop="@+id/segments_container" />
+
+</RelativeLayout>

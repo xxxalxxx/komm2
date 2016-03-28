@@ -1,18 +1,31 @@
 package tk.melnichuk.kommunalchik;
 
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
+
 import tk.melnichuk.kommunalchik.BillTypeFragments.BaseBillFragment;
+import tk.melnichuk.kommunalchik.CustomViews.FixedSpeedScroller;
 import tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout;
 
 /**
@@ -28,6 +41,8 @@ public class BillsFragment extends Fragment {
 
     public int[] mMipmapResourceNames;
 
+    public int mLandScapeHeight;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +51,15 @@ public class BillsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
+
         View v = inflater.inflate(R.layout.frag_bills, container, false);
         mMipmapResourceNames = getMipmapResourceNames();
+
+      //  v.findViewById(R.id.main_container).setMinimumHeight(11000);
+
+       // v.findViewById(R.id.main_container_inner).setMinimumHeight(mLandScapeHeight);
         return v;
     }
 
@@ -48,18 +70,65 @@ public class BillsFragment extends Fragment {
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new BillsPagerAdapter(getChildFragmentManager()));
 
+        try {
+            Field mScroller;
+            mScroller = ViewPager.class.getDeclaredField("mScroller");
+            mScroller.setAccessible(true);
+            FixedSpeedScroller scroller = new FixedSpeedScroller(mViewPager.getContext(), new AccelerateInterpolator());
+            // scroller.setFixedDuration(5000);
+            mScroller.set(mViewPager, scroller);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalArgumentException e) {
+        } catch (IllegalAccessException e) {
+        }
+
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabViewLayoutId(R.layout.bills_menu_icon);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setSelectedIndicatorColors(getColors());
 
+       // mViewPager.setMinimumHeight(mLandScapeHeight);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        mLandScapeHeight = Math.min(metrics.widthPixels,metrics.heightPixels);
+
+        Log.d("MMET", "h " + metrics.heightPixels + "  w" + metrics.widthPixels);
+        Log.d("SLDIM", "h " + view.findViewById(R.id.fab_save).getHeight());
+
+
+
+
     }
 
-    public class BillsPagerAdapter extends FragmentPagerAdapter {
+    public class BillsPagerAdapter extends FragmentStatePagerAdapter {
+        Field mScroller;
+        FixedSpeedScroller mFixedSpeedScroller;
 
+        public void setDuration(int coeff) {
+
+            try {
+
+                FixedSpeedScroller scroller = new FixedSpeedScroller(mViewPager.getContext(), new DecelerateInterpolator());
+                scroller.setFixedDuration(coeff);
+                mScroller.set(mViewPager,scroller);
+
+            } catch (IllegalArgumentException e) {
+            } catch (IllegalAccessException e) {
+            }
+
+        }
 
         public BillsPagerAdapter(FragmentManager fm) {
             super(fm);
+
+            try {
+                mScroller = ViewPager.class.getDeclaredField("mScroller");
+                mScroller.setAccessible(true);
+                mFixedSpeedScroller =  new FixedSpeedScroller(mViewPager.getContext(), new DecelerateInterpolator());
+            } catch (NoSuchFieldException e){}
+
         }
 
         public int getMipMapResourceName(int pos) {
@@ -73,23 +142,6 @@ public class BillsFragment extends Fragment {
             return 8;
         }
 
-        /**
-         * @return true if the value returned from {@link #instantiateItem(ViewGroup, int)} is the
-         * same object as the {@link View} added to the {@link ViewPager}.
-         */
-      //  @Override
-    //    public boolean isViewFromObject(View view, Object o) {
-      //      return o == view;
-       // }
-
-        // BEGIN_INCLUDE (pageradapter_getpagetitle)
-        /**
-         * Return the title of the item at {@code position}. This is important as what this method
-         * returns is what is displayed in the {@link SlidingTabLayout}.
-         * <p>
-         * Here we construct one using the position value, but for real application the title should
-         * refer to the item's contents.
-         */
         @Override
         public CharSequence getPageTitle(int position) {
             return "Item " + (position + 1);
@@ -100,39 +152,6 @@ public class BillsFragment extends Fragment {
         public Fragment getItem(int position) {
             return new BaseBillFragment();
         }
-
-        /**
-         * Instantiate the {@link View} which should be displayed at {@code position}. Here we
-         * inflate a layout from the apps resources and then change the text view to signify the position.
-         */
-
-
-       /* @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            // Inflate a new layout from our resources
-            View view = getActivity().getLayoutInflater().inflate(R.layout.temp_view,
-                    container, false);
-            // Add the newly created View to the ViewPager
-            container.addView(view);
-
-            // Retrieve a TextView from the inflated View, and update it's text
-            TextView title = (TextView) view.findViewById(R.id.item_title);
-            title.setText(String.valueOf(position + 1));
-
-            // Return the View
-            return view;
-        }*/
-
-
-
-        /**
-         * Destroy the item from the {@link ViewPager}. In our case this is simply removing the
-         * {@link View}.
-         */
-        /*@Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }*/
 
     }
 

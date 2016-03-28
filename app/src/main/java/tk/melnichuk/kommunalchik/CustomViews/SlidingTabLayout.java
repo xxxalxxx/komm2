@@ -25,6 +25,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -245,7 +246,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             }
 
            // if (tabView == null) {
-                tabView = createDefaultTabView(getContext());
+            //    tabView = createDefaultTabView(getContext());
            // }
 
            // if (tabTitleView == null && TextView.class.isInstance(tabView)) {
@@ -265,6 +266,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         if (mViewPager != null) {
             scrollToTab(mViewPager.getCurrentItem(), 0);
+
         }
     }
 
@@ -337,9 +339,14 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private class TabClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {
+            final int curr = mViewPager.getCurrentItem();
             for (int i = 0; i < mTabStrip.getChildCount(); i++) {
                 if (v == mTabStrip.getChildAt(i)) {
-                    mViewPager.setCurrentItem(i);
+                    int diff = Math.abs(curr - i);
+                    Log.d("DIFF", " " +diff);
+                    BillsFragment.BillsPagerAdapter  billsPagerAdapter = (BillsFragment.BillsPagerAdapter) mViewPager.getAdapter();
+                    billsPagerAdapter.setDuration(diff);
+                    mViewPager.setCurrentItem(i, true);
                     return;
                 }
             }

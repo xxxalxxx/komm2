@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_container"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent">
+
 
     <tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout
         android:id="@+id/sliding_tabs"
@@ -9,118 +12,129 @@
         android:layout_height="wrap_content" />
 
 
-    <android.support.v4.view.ViewPager
+    <RelativeLayout
+        android:id="@+id/main_container_inner"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/sliding_tabs">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/bill_title"
+            android:gravity="center_horizontal" />
+
+        <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:layout_below="@+id/sliding_tabs"
-        android:layout_above="@+id/calc_btn" />
+        android:layout_alignParentTop="false"
+        android:layout_above="@+id/calc_btn"
+            android:layout_below="@+id/bill_title" />
 
 
     <Button
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/calc_btn"
         android:id="@+id/calc_btn"
-        android:layout_below="@+id/item_title"
-        android:layout_above="@+id/fab_layout" />
+        android:layout_above="@+id/fab_save" />
 
-    <LinearLayout
-        android:id="@+id/fab_layout"
-        android:orientation="horizontal"
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text=""
+            android:id="@+id/mid"
+            android:layout_centerHorizontal="true" />
+
+        <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        app:borderWidth="0dp"
+
+        android:id="@+id/fab_save"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_action_save_white"
+        style="@style/floating_action_button"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        android:focusable="true"
+        android:clickable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/fab_excel" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        android:id="@+id/fab_excel"
+        style="@style/floating_action_button"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_excel"
+        app:backgroundTint="@color/fab_excel"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        android:focusable="true"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/mid" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_segment_global"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_queue_white_48dp"
+        app:backgroundTint="@color/fab_global_segment"
+        style="@style/floating_action_button"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_toRightOf="@+id/fab_excel"
+        android:layout_alignParentBottom="true" />
+
+    <android.support.design.widget.FloatingActionButton
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_segment"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_add_box_white_48dp"
+        app:backgroundTint="@color/fab_segment"
+        style="@style/floating_action_button"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/fab_segment_global" />
+
+    </RelativeLayout>
+
+    <android.inputmethodservice.KeyboardView
+        android:id="@+id/keyboardview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_alignParentBottom="true">
-
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-
-            app:borderWidth="0dp"
-
-            android:id="@+id/fab_save"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_action_save_white"
-            style="@style/floating_action_button"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            android:focusable="true"
-            android:clickable="true"/>
-
-
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-
-            android:id="@+id/fab_excel"
-            style="@style/floating_action_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_excel"
-            app:backgroundTint="@color/fab_excel"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            android:focusable="true"
-            android:clickable="true"
-            app:borderWidth="0dp"
-            android:layout_alignTop="@+id/fab_save"
-            android:layout_toRightOf="@+id/fab_save" />
-
-
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fab_segment_global"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_queue_white_48dp"
-            app:backgroundTint="@color/fab_global_segment"
-            style="@style/floating_action_button"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_alignTop="@+id/fab_save"
-            android:layout_toRightOf="@+id/fab_excel" />
-
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fab_segment"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_add_box_white_48dp"
-            app:backgroundTint="@color/fab_segment"
-            style="@style/floating_action_button"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_alignTop="@+id/fab_save"
-            android:layout_toRightOf="@+id/fab_segment_global"/>
-
-        <android.support.design.widget.FloatingActionButton
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fab_segment1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_attach_money_white_48dp"
-            app:backgroundTint="@color/fab_calc"
-            style="@style/floating_action_button"
-            app:elevation="6dp"
-            app:fabSize="normal"
-            android:focusable="true"
-            android:clickable="true"
-            android:layout_alignTop="@+id/fab_save"
-            android:layout_toRightOf="@+id/fab_segment_global"/>
-
-    </LinearLayout>
-
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="gone"/>
 
 
 </RelativeLayout>
