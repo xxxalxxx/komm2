@@ -52,11 +52,16 @@
     <string name="communal_sum">НАРАХОВАНО:</string>
     <string name="house">Утримання будинків та прибуд. територій</string>
 
+    <string name="e_to">до</string>
+    <string name="e_from">від</string>
+    <string name="e_over">понад</string>
+    <string name="e_units">кВтг</string>
+
     <string name="e_current">Поточні показання, кВтг</string>
     <string name="e_previous">Попередні показання, кВтг</string>
     <string name="e_rate">Тариф, грн.</string>
     <string name="e_consumed">Спожито, кВтг</string>
-    <string name="e_subsidy">пільгові,кВтг</string>
+    <string name="e_subsidy">пільгові кВтг</string>
     <string name="e_below250">до 100 кВтг</string>
     <string name="e_below800">від 100 до 600 кВтг</string>
     <string name="e_over800">понад 600 кВтг</string>
@@ -71,7 +76,8 @@
     <string name="phone_rate">Абонплата за ТП</string>
     <string name="phone_total">Всього нараховано за послуги:</string>
     <string name="phone_sum">Разом</string>
-    <string name="tax">ПДВ 20%</string>
+    <string name="tax">ПДВ</string>
+    <string name="percent_sign">%</string>
     <string name="no_tax">без ПДВ</string>
     <string name="radio_rate">Абонплата за користування радіоточкою</string>
 

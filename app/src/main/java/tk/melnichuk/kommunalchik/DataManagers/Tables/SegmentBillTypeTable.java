@@ -22,9 +22,9 @@ public class SegmentBillTypeTable extends BaseTable {
 
     final static String SQL_CREATE =
             CREATE_TABLE_IF_NOT_EXISTS + TABLE_NAME + "("+
-                    COL_ID + SUFFIX_ID + COMMA +
-                    COL_SEGMENT_ID + SUFFIX_INTEGER_NOT_NULL + COMMA +
-                    COL_TYPE + SUFFIX_INTEGER_NOT_NULL +
+                COL_ID + SUFFIX_ID + COMMA +
+                COL_SEGMENT_ID + SUFFIX_INTEGER_NOT_NULL + COMMA +
+                COL_TYPE + SUFFIX_INTEGER_NOT_NULL +
             "); ";
 
     @Override

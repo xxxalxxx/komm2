@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/table_container_scroll"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/table_container"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content"
+    android:id="@+id/table_container">
 
         <TextView
             android:layout_width="wrap_content"
@@ -430,3 +434,4 @@
             android:layout_alignBottom="@+id/r5c7" />
 
 </RelativeLayout>
+    </tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView>

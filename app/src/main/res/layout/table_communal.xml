@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView
+<tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/table_container_scroll"
@@ -306,4 +306,4 @@
         android:layout_alignBottom="@+id/r3c1"
         android:layout_alignTop="@+id/r1c0" />
 </RelativeLayout>
-</HorizontalScrollView>
+</tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView>

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/table_container_scroll"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/table_container"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content"
+    android:id="@+id/table_container">
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,18 +55,51 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="@dimen/double_height"
+        android:text="@string/percent_sign"
+        android:id="@+id/percent_sign"
+        android:tag="r1c2"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:layout_toRightOf="@+id/tax_input"
+        android:background="@color/th"
+        android:layout_alignTop="@+id/r1c0"
+        android:gravity="center_vertical" />
+
+    <EditText
+        android:background="@color/tc"
+        android:imeOptions="flagNoExtractUi"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tax_input"
+        android:tag="r2c2"
+        android:textSize="@dimen/textSize"
+        android:layout_margin="@dimen/margin"
+        android:padding="@dimen/padding"
+        android:inputType="numberDecimal"
+        android:layout_toRightOf="@+id/r1c2"
+        android:lines="1"
+        android:layout_alignTop="@+id/r1c0"
+        android:layout_above="@+id/r2c0"
+        android:minWidth="30dp"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/double_height"
         android:text="@string/phone_sum"
         android:id="@+id/r1c3"
         android:tag="r1c3"
         android:textSize="@dimen/textSize"
         android:layout_margin="@dimen/margin"
         android:padding="@dimen/padding"
-        android:layout_toRightOf="@+id/r1c2"
-        android:layout_toEndOf="@+id/r1c2"
         android:background="@color/th"
         android:minWidth="70dp"
         android:gravity="center_vertical|center"
-        android:layout_alignTop="@+id/r1c0" />
+        android:layout_alignTop="@+id/r1c0"
+        android:layout_toRightOf="@+id/percent_sign" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,9 +155,8 @@
         android:layout_toEndOf="@+id/r1c1"
         android:layout_below="@+id/r1c0"
         android:layout_alignBottom="@+id/r2c0"
-        android:layout_alignRight="@+id/r1c2"
-        android:layout_alignEnd="@+id/r1c2"
-        android:lines="1"/>
+        android:lines="1"
+        android:layout_alignRight="@+id/percent_sign" />
 
     <EditText
         android:background="@color/tc"
@@ -135,12 +171,10 @@
         android:layout_margin="@dimen/margin"
         android:padding="@dimen/padding"
         android:inputType="numberDecimal"
-        android:layout_toRightOf="@+id/r1c2"
-        android:layout_toEndOf="@+id/r1c2"
+        android:layout_toRightOf="@+id/percent_sign"
         android:layout_below="@+id/r1c0"
         android:layout_alignBottom="@+id/r2c0"
         android:layout_alignRight="@+id/r1c3"
-        android:layout_alignEnd="@+id/r1c3"
         android:lines="1" />
 
     <TextView
@@ -193,10 +227,8 @@
         android:padding="@dimen/padding"
         android:inputType="numberDecimal"
         android:layout_toRightOf="@+id/r1c1"
-        android:layout_toEndOf="@+id/r1c1"
         android:layout_below="@+id/r2c0"
-        android:layout_alignRight="@+id/r1c2"
-        android:layout_alignEnd="@+id/r1c2"
+        android:layout_alignRight="@+id/percent_sign"
         android:lines="1" />
 
     <EditText
@@ -212,11 +244,9 @@
         android:layout_margin="@dimen/margin"
         android:padding="@dimen/padding"
         android:inputType="numberDecimal"
-        android:layout_toRightOf="@+id/r1c2"
-        android:layout_toEndOf="@+id/r1c2"
+        android:layout_toRightOf="@+id/percent_sign"
         android:layout_below="@+id/r2c0"
         android:layout_alignRight="@+id/r1c3"
-        android:layout_alignEnd="@+id/r1c3"
         android:lines="1" />
 
     <TextView
@@ -270,10 +300,8 @@
         android:padding="@dimen/padding"
         android:inputType="numberDecimal"
         android:layout_toRightOf="@+id/r1c1"
-        android:layout_toEndOf="@+id/r1c1"
         android:layout_below="@+id/r3c0"
-        android:layout_alignRight="@+id/r1c2"
-        android:layout_alignEnd="@+id/r1c2"
+        android:layout_alignRight="@+id/percent_sign"
         android:lines="1" />
 
     <EditText
@@ -289,11 +317,9 @@
         android:layout_margin="@dimen/margin"
         android:padding="@dimen/padding"
         android:inputType="numberDecimal"
-        android:layout_toRightOf="@+id/r1c2"
-        android:layout_toEndOf="@+id/r1c2"
+        android:layout_toRightOf="@+id/percent_sign"
         android:layout_below="@+id/r3c0"
         android:layout_alignRight="@+id/r1c3"
-        android:layout_alignEnd="@+id/r1c3"
         android:lines="1" />
 
     <LinearLayout
@@ -318,3 +344,4 @@
         android:layout_alignTop="@+id/segments_container"
         android:layout_alignBottom="@+id/r4c3" />
 </RelativeLayout>
+</tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView>
