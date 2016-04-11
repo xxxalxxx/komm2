@@ -15,14 +15,16 @@ public class ElectricityTable extends BaseTable{
             COL_BILL_ID = "bill_id",
             COL_CURR = "type",
             COL_PREV = "name",
-            COL_DIFF = "diff";
+            COL_DIFF = "diff",
+            COL_SUM = "sum";
 
     public final static String[] COLUMN_NAMES = {
             COL_ID,
             COL_BILL_ID,
             COL_CURR,
             COL_PREV,
-            COL_DIFF
+            COL_DIFF,
+            COL_SUM
     };
 
     final static String SQL_CREATE =
@@ -31,7 +33,8 @@ public class ElectricityTable extends BaseTable{
                 COL_BILL_ID + SUFFIX_INTEGER_NOT_NULL + COMMA +
                 COL_CURR + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_PREV + SUFFIX_TEXT_NOT_NULL + COMMA +
-                COL_DIFF + SUFFIX_TEXT_NOT_NULL +
+                COL_DIFF + SUFFIX_TEXT_NOT_NULL + COMMA +
+                COL_SUM + SUFFIX_TEXT_NOT_NULL +
             "); ";
 
     @Override

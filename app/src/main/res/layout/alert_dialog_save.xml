@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alert_dialog_save_btn_new"
+            android:id="@+id/btn_new_bill" />
+
+
+        <RadioButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alert_dialog_save_btn_update"
+            android:id="@+id/btn_curr_bill" />
+
+    </RadioGroup>
+    <EditText
+        android:hint="@string/alert_dialog_save_hint_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/name" />
+
+
+    <DatePicker
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/datePicker"
+        android:calendarViewShown="false"/>
+
+</LinearLayout>

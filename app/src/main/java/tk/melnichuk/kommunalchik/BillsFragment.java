@@ -1,48 +1,42 @@
 package tk.melnichuk.kommunalchik;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.widget.LinearLayout;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import tk.melnichuk.kommunalchik.BillTypeFragments.BaseBillFragment;
+import tk.melnichuk.kommunalchik.BillTypeFragments.ElectricityFragment;
+import tk.melnichuk.kommunalchik.BillTypeFragments.GasFragment;
+import tk.melnichuk.kommunalchik.BillTypeFragments.WaterFragment;
 import tk.melnichuk.kommunalchik.CustomViews.FixedSpeedScroller;
 import tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout;
+import tk.melnichuk.kommunalchik.CustomViews.UnitTypesKeyboard;
 import tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView;
+import tk.melnichuk.kommunalchik.DataManagers.BillManager;
 import tk.melnichuk.kommunalchik.Helpers.HeightAnimation;
 
 /**
@@ -50,9 +44,12 @@ import tk.melnichuk.kommunalchik.Helpers.HeightAnimation;
  */
 public class BillsFragment extends Fragment {
 
-    public static final int STATE_NEW = 0, STATE_CONTINUED = 1, STATE_FROM_DATABASE = 2;
+    public static final int STATE_NEW = 0, STATE_CONTINUED = 1, STATE_FROM_DATABASE = 2,
+        BILL_ID_NEW = 0, BILL_ID_CONTINUED = 0;
     public int mState;
 
+    public long mBillId, mRelId;
+    BillManager mBillManager;
 
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
@@ -102,6 +99,8 @@ public class BillsFragment extends Fragment {
             R.layout.segment_default,
     };
 
+    public BaseBillFragment mCurrBill;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,11 +108,12 @@ public class BillsFragment extends Fragment {
         if(savedInstanceState != null) {
             mPrevHeight = savedInstanceState.getInt("prevViewPagerHeight",0);
             mPrevPos = savedInstanceState.getInt("viewPagerPos",0);
+            mBillId = savedInstanceState.getLong("billId", 0);
+            mRelId = savedInstanceState.getLong("relId", 0);
+            mState = savedInstanceState.getInt("state",0);
+            //restore dataholder state
+
         }
-
-
-
-
 
     }
 
@@ -121,9 +121,29 @@ public class BillsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
-
         View v = inflater.inflate(R.layout.frag_bills, container, false);
+
+        //Bundle b = getArguments();
+      //  mState = b.getInt("state");
+       // mBillId = b.getInt("billId");
+        mBillManager = new BillManager(this);
+        switch (mState){
+            case STATE_CONTINUED:
+                mBillId = mBillManager.continueBill(mRelId);
+                mState = STATE_CONTINUED;
+                break;
+            case STATE_NEW:
+
+                mBillId = mBillManager.initNewBill(mRelId);
+                mState = STATE_CONTINUED;
+                //create new temp table, set default rate values from settings and segments
+                break;
+
+            case STATE_FROM_DATABASE:
+                break;
+        }
+
+
         mColors = getColors();
 
         final float scale = getContext().getResources().getDisplayMetrics().density;
@@ -135,7 +155,7 @@ public class BillsFragment extends Fragment {
 
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(View view, final Bundle savedInstanceState) {
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(new BillsPagerAdapter(getChildFragmentManager()));
@@ -149,7 +169,7 @@ public class BillsFragment extends Fragment {
             public void onPageSelected(final int position) {
 
                 animateViewPagerPageChange(position);
-                mPrevPos = position;
+               // mPrevPos = position;
             }
 
             @Override
@@ -157,30 +177,115 @@ public class BillsFragment extends Fragment {
             }
         });
 
+        view.findViewById(R.id.calc_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewPager != null && mCurrBill != null) {
+                  //  mCurrBill.getMainTableData();
+                   // mCurrBill.getSegmentsData();
+                    mCurrBill.calc();
+                }
+            }
+        });
+
+        view.findViewById(R.id.fab_segment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "new segment", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        view.findViewById(R.id.fab_segment_global).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "segmentS", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        view.findViewById(R.id.fab_save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+
+                View dialogView = getLayoutInflater(savedInstanceState).inflate(R.layout.alert_dialog_save, null);
+                adb.setView(dialogView);
+
+                final DatePicker dp = (DatePicker) dialogView.findViewById(R.id.datePicker);
+                final EditText et  = (EditText) dialogView.findViewById(R.id.name);
+
+                dialogView.findViewById(R.id.btn_new_bill).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "n", Toast.LENGTH_LONG).show();
+                        //dp.setVisibility(View.VISIBLE);
+                        //et.setVisibility(View.VISIBLE);
+                    }
+                });
+
+                dialogView.findViewById(R.id.btn_curr_bill).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "c", Toast.LENGTH_LONG).show();
+                        //dp.setVisibility(View.INVISIBLE);
+                        //et.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+
+                adb.setPositiveButton(R.string.alert_dialog_yes, null)
+                   .setNegativeButton(R.string.alert_dialog_no, null)
+                   .show();
+
+
+
+                Toast.makeText(getActivity(), "save", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        view.findViewById(R.id.fab_excel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "excel", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
         try {
             Field mScroller;
             mScroller = ViewPager.class.getDeclaredField("mScroller");
             mScroller.setAccessible(true);
             FixedSpeedScroller scroller = new FixedSpeedScroller(mViewPager.getContext(), new AccelerateInterpolator());
             mScroller.set(mViewPager, scroller);
-        } catch (NoSuchFieldException e) {
-        } catch (IllegalArgumentException e) {
-        } catch (IllegalAccessException e) {
         }
+        catch (NoSuchFieldException e) {}
+        catch (IllegalArgumentException e) {}
+        catch (IllegalAccessException e) {}
 
         mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
         mSlidingTabLayout.setCustomTabViewLayoutId(R.layout.bills_menu_icon);
         mSlidingTabLayout.setViewPager(mViewPager);
         mSlidingTabLayout.setSelectedIndicatorColors(getColors());
 
-      //  resizeLayout(p);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if(mainActivity != null)
+        mainActivity.mKeyboard = new UnitTypesKeyboard(mainActivity, R.id.keyboardview, mainActivity.isLandscapeOrientation() ? R.xml.keyboard_landscape : R.xml.keyboard_portrait );
+
         animateViewPagerPageChange(mPrevPos);
-       // mViewPager.onPageSelected(0);
-
-
-
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mViewPager != null)
+            outState.putInt("viewPagerPos",mViewPager.getCurrentItem());
+        outState.putInt("prevViewPagerHeight", mPrevHeight);
+        outState.putLong("billId", mBillId);
+        outState.putLong("relId", mRelId);
+        outState.putInt("state", mState);
+    }
+
 
     public class BillsPagerAdapter extends FragmentStatePagerAdapter {
         Field mScroller;
@@ -189,14 +294,13 @@ public class BillsFragment extends Fragment {
         public void setDuration(int coeff) {
 
             try {
-
                 FixedSpeedScroller scroller = new FixedSpeedScroller(mViewPager.getContext(), new DecelerateInterpolator());
                 scroller.setFixedDuration(coeff);
                 mScroller.set(mViewPager,scroller);
 
-            } catch (IllegalArgumentException e) {
-            } catch (IllegalAccessException e) {
             }
+            catch (IllegalArgumentException e) {}
+            catch (IllegalAccessException e) {}
 
         }
 
@@ -219,7 +323,7 @@ public class BillsFragment extends Fragment {
          */
         @Override
         public int getCount() {
-            return 8;
+            return BillManager.NUM_BILL_TABLES;
         }
 
         @Override
@@ -227,17 +331,83 @@ public class BillsFragment extends Fragment {
             return "Item " + (position + 1);
         }
         @Override
-        public Fragment getItem(final int position) {
-
-            BaseBillFragment bbf = new BaseBillFragment();
+        public Fragment getItem(int position) {
+            if(mViewPager != null)
+            Log.d("__POX", position +" curr " + mViewPager.getCurrentItem());
+            BaseBillFragment bbf;
             Bundle bundle = new Bundle();
-            bundle.putInt("segLayout",mSegmentLayouts[position]);
-            bundle.putInt("mainLayout",mBillLayouts[position]);
-            bbf.setArguments(bundle);
 
+            switch (position){
+                case BillManager.INDEX_GAS:
+                    bbf = new GasFragment();
+                    break;
+                case BillManager.INDEX_COLD_WATER:
+                case BillManager.INDEX_WASTE_WATER:
+                case BillManager.INDEX_HOT_WATER:
+                    bbf = new WaterFragment();
+                    break;
+                case BillManager.INDEX_ELECTRICITY:
+                    bbf = new ElectricityFragment();
+                    break;
+                default:
+                    bbf = new BaseBillFragment();
+            }
+
+
+
+            bundle.putInt("segLayout",mSegmentLayouts[position]);
+            bundle.putInt("mainLayout", mBillLayouts[position]);
+            bundle.putInt("modelId",position);
+            bbf.setArguments(bundle);
+           // mCurrBill = bbf;
             return bbf;
         }
 
+        @Override
+        public void setPrimaryItem(ViewGroup container, final int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            Log.d("_CURRBILL", " IN ");
+            if (mCurrBill != object) {
+                final BaseBillFragment prevBill = mCurrBill;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (prevBill == null) return;
+                        ArrayList<String> mainTableData = prevBill.getMainTableData();
+                        ArrayList<ArrayList<String>> segmentsData = prevBill.getFullSegmentsData();
+
+                        if(mainTableData != null && segmentsData != null){
+                            Log.d("_DBD", " NOT NULL ");
+                            Log.d("_DBD", mainTableData.toString());
+                            Log.d("_DBD", segmentsData.toString());
+
+                            mBillManager.updateTableData(mainTableData, segmentsData, mBillId, mPrevPos);
+
+                        }
+                    }
+                }).start();
+
+                mCurrBill = ((BaseBillFragment) object);
+                ArrayList<String> mtd = mBillManager.getMainTableFromDb(mBillId,position);
+                long lastModelId = mBillManager.getLastModelId(position);
+                ArrayList<ArrayList<String>> segments = mBillManager.getSegmentsFromDb(position, lastModelId);
+                Log.d("_DBD", "pos curr:" + mViewPager.getCurrentItem() + " currPos2:" + position + " prevPos:" + mPrevPos + " modelId:"+lastModelId);
+                if(mCurrBill.mBillContainer == null) {
+
+                }
+                if(mtd != null){
+                    Log.d("_DBD","out "+ mtd.toString());
+                    mCurrBill.fillMainTableData(mtd);
+
+                }
+
+                if(segments != null) {
+                    Log.d("_DBD","seg out "+ segments.toString());
+                    mCurrBill.fillSegmentsDataFromDb(segments);
+                }
+            }
+            mPrevPos = position;
+        }
     }
 
     void animateViewPagerPageChange(final int position){
@@ -256,8 +426,6 @@ public class BillsFragment extends Fragment {
         {
             public void run()
             {
-
-
                 DisplayMetrics metrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
@@ -274,12 +442,8 @@ public class BillsFragment extends Fragment {
                     heightAnim.setDuration(500);
                 }
 
-
                 v.post(new Runnable() {
                     public void run() {
-                      //  int pos = position;
-                        Log.d("_SCROLLER", position + "");
-
                         if(heightAnim != null)
                             v.startAnimation(heightAnim);
                     }
@@ -321,27 +485,24 @@ public class BillsFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ViewPagerHorizontalScrollView rll = (ViewPagerHorizontalScrollView) getLayoutInflater(new Bundle()).inflate(BillsFragment.mBillLayouts[position], rl, false);
-                            rll.measure(widthMeasureSpec, heightMeasureSpec);
-                            int h = rll.getMeasuredHeight() + mTableBottomOffsetDp;
+                        ViewPagerHorizontalScrollView rll = (ViewPagerHorizontalScrollView) getLayoutInflater(new Bundle()).inflate(BillsFragment.mBillLayouts[position], rl, false);
+                        rll.measure(widthMeasureSpec, heightMeasureSpec);
+                        int h = rll.getMeasuredHeight() + mTableBottomOffsetDp;
 
-                            if (h > 0) {
+                        if (h > 0) {
 
-                                Log.d("_RLL", h + " " + vplp.height);
-                                if (mPrevHeight == 0) mPrevHeight = vplp.height;
-                                vplp.height = h;
+                            Log.d("_RLL", h + " " + vplp.height);
+                            if (mPrevHeight == 0) mPrevHeight = vplp.height;
+                            vplp.height = h;
 
-                                if (mPrevHeight != h) {
-                                    HeightAnimation heightAnim = new HeightAnimation(mViewPager, mPrevHeight, h);
-                                    heightAnim.setDuration(500);
-                                    mViewPager.startAnimation(heightAnim);
-                                    //   mViewPager.setLayoutParams(vplp);
-                                    mPrevHeight = h;
-
-                                }
+                            if (mPrevHeight != h) {
+                                HeightAnimation heightAnim = new HeightAnimation(mViewPager, mPrevHeight, h);
+                                heightAnim.setDuration(500);
+                                mViewPager.startAnimation(heightAnim);
+                                mPrevHeight = h;
 
                             }
-
+                        }
                         }
                     });
                 }
@@ -349,13 +510,7 @@ public class BillsFragment extends Fragment {
         }).start();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(mViewPager != null)
-        outState.putInt("viewPagerPos",mViewPager.getCurrentItem());
-        outState.putInt("prevViewPagerHeight", mPrevHeight);
-    }
+
 
 
 
@@ -371,5 +526,13 @@ public class BillsFragment extends Fragment {
             ContextCompat.getColor(getContext(), R.color.phone_color)
         };
     }
+
+    void setState(int state, long relId){
+
+        mState = state;
+        mRelId = relId;
+    }
+
+
 
 }

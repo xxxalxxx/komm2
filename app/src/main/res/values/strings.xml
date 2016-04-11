@@ -3,7 +3,7 @@
     <string name="menu_app_name">КОМУНАЛЬЧИК</string>
     <string name="action_settings">Settings</string>
 
-    <string name="continue_bills">Продовжити рахувати</string>
+    <string name="continue_bills">Продовжити новий рахунок</string>
     <string name="new_bills">Новий рахунок</string>
     <string name="saved_bills">Збережені рахунки</string>
     <string name="settings">Опції</string>
@@ -182,9 +182,22 @@
     <string name="segment_create_success">Сегмент успішно створено.</string>
     <string name="segment_update_success">Сегмент успішно оновлено</string>
 
+    <string name="alert_dialog_save_btn_new">Новий рахунок</string>
+    <string name="alert_dialog_save_btn_update">Оновити рахунок</string>
+    <string name="alert_dialog_save_hint_name">Назва рахунку</string>
+
     <string name="alert_dialog_bills_settings_save">Ви дійсно бажаєте змінити значення?</string>
+    <string name="alert_dialog_bills_save">Зберегти розраховані рахунки?</string>
     <string name="alert_dialog_segments_delete">Ви дійсно бажаєте видалити сегмент?</string>
     <string name="alert_dialog_yes">ТАК</string>
     <string name="alert_dialog_no">HI</string>
+
+    <string name="dummy_segment_name_value">Людина</string>
+
+    <string name="segment_list_no_pages">-</string>
+    <string name="segment_list_no_segments">Нема глобальних сегментів</string>
+
+
+
 
 </resources>

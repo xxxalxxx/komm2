@@ -1,11 +1,17 @@
 package tk.melnichuk.kommunalchik.DataManagers.Tables;
 
+import tk.melnichuk.kommunalchik.DataManagers.DbManager;
+
 /**
  * Created by al on 28.03.16.
  */
+
+
 public class CommunalTable extends BaseTable {
     //communal(id,bill_id, calc, recalc, sub, comp, overpay, addpay, total)
     public final static String TABLE_NAME = "communal";
+
+
 
 
     public final static String
@@ -18,6 +24,8 @@ public class CommunalTable extends BaseTable {
         COL_OVERPAY = "overpay",
         COL_ADDPAY = "addpay",
         COL_TOTAL = "total";
+
+
 
 
     public final static String[] COLUMN_NAMES = {

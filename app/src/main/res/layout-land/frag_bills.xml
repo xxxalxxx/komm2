@@ -37,9 +37,9 @@
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewpager"
+                android:background="@color/viewpager"
                 android:layout_width="match_parent"
                 android:layout_height="225dp"
-                android:background="@android:color/white"
                 android:layout_below="@+id/bill_title" />
 
 

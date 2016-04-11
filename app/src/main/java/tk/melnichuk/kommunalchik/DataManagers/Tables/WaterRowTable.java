@@ -3,7 +3,7 @@ package tk.melnichuk.kommunalchik.DataManagers.Tables;
 /**
  * Created by al on 28.03.16.
  */
-public class WaterRow extends BaseTable {
+public class WaterRowTable extends BaseTable {
 
     //cold_water_row(id,water_bill_id, cold_water_id,type(normal_row, counter_row), calc, recalc, sub, comp, total);
 

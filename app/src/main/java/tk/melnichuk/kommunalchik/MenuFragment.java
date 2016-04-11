@@ -22,6 +22,30 @@ public class MenuFragment extends Fragment {
             @Override
             public void onClick(View b) {
                 BillsFragment billsFragment = new BillsFragment();
+              //  Bundle args = new Bundle();
+              //  args.putInt("state", BillsFragment.STATE_NEW);
+              //  args.putInt("billId", BillsFragment.BILL_ID_NEW);
+             //   billsFragment.setArguments(args);
+                billsFragment.setState(BillsFragment.STATE_NEW,BillsFragment.BILL_ID_NEW);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.fragment_container, billsFragment, "NewBillsFrag");
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+
+        });
+
+        Button btnContinueBills = (Button) v.findViewById(R.id.btn_continue_bills);
+        btnContinueBills.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View b) {
+                BillsFragment billsFragment = new BillsFragment();
+              //  Bundle args = new Bundle();
+                //args.putInt("state", BillsFragment.STATE_CONTINUED);
+                //args.putInt("billId", BillsFragment.BILL_ID_CONTINUED);
+               // billsFragment.setArguments(args);
+                billsFragment.setState(BillsFragment.STATE_CONTINUED, BillsFragment.BILL_ID_CONTINUED);
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.fragment_container, billsFragment, "NewBillsFrag");
                 ft.addToBackStack(null);

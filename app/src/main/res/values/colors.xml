@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="bill_background">#eeeeee</color>
+    <color name="viewpager">#fff</color>
 
     <color name="button_shadow">#efcdcdcd</color>
     <color name="button_color">#fffafafa</color>
@@ -47,7 +49,7 @@
     <color name="total_shadow">#A01a1a1a</color>
 
     <color name="th">#efcdcdcd</color>
-    <color name="tc">#fffafafa</color>
+    <color name="tc">#eeeeee</color>
     <color name="th2">#efb7b7b7</color>
     <color name="tc2">#fff5f5f5</color>
 
@@ -71,4 +73,18 @@
     <color name="settings_bill_fab_background">#FFB6C1</color>
 
     <color name="settings_segment_new_underline">#338fff</color>
+
+    <color name="btn_add_segment">#338fff</color>
+    <color name="btn_add_segment_border">#ec2f80e4</color>
+    <color name="btn_add_segment_pressed">#2d7fe2</color>
+    <color name="btn_add_segment_border_pressed">#2b79d7</color>
+
+    <color name="btn_calc">#FF9800</color>
+    <color name="btn_calc_border">#f79300</color>
+    <color name="btn_calc_pressed">#e98b01</color>
+    <color name="btn_calc_border_pressed">#dc8300</color>
+    <color name="btn_calc_text">#ffffffff</color>
+
+    <color name="btn_empty_space">#1effffff</color>
+
 </resources>

@@ -26,6 +26,7 @@ public class SegmentTable extends BaseTable {
 
         TYPE_LOCAL  = 0,
         TYPE_GLOBAL = 1;
+    public final static int BILL_ID_GLOBAL = -1;
 
     public final static String
             COL_ID = "id",

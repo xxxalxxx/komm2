@@ -45,7 +45,7 @@
        android:gravity="center"
        android:layout_alignRight="@+id/delete_button" />
 
-    <com.yahoo.melnichuk.a.kommunalchik.CustomViews.NumberFormatEditText
+    <tk.melnichuk.kommunalchik.CustomViews.UnitTypesEditText
         android:id="@+id/text2"
         android:background="@color/tc"
         android:imeOptions="flagNoExtractUi"

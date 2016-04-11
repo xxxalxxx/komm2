@@ -12,6 +12,15 @@
         android:layout_alignParentStart="true"
         android:layout_above="@+id/nav_layout" />
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/segment_list_no_segments"
+        android:layout_centerVertical="true"
+        android:id="@+id/no_segments_text"
+        android:gravity="center" />
+
     <LinearLayout
         android:id="@+id/nav_layout"
         android:orientation="horizontal"

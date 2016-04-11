@@ -6,6 +6,8 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
 import tk.melnichuk.kommunalchik.R;
 
@@ -31,6 +33,12 @@ public class Utils {
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
         return textView.getMeasuredHeight();
+    }
+
+    public static  String getZeroStrippedString(BigDecimal b){
+        BigDecimal zero = BigDecimal.ZERO;
+        b = b.compareTo(zero) == 0 ? zero : b.stripTrailingZeros();
+        return b.toPlainString();
     }
 
 }

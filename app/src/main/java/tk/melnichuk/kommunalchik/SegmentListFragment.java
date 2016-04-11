@@ -29,7 +29,7 @@ public class SegmentListFragment extends Fragment {
     View mView;
     ListView mListView;
     Button mNavNext, mNavPrev;
-    TextView mNavPage;
+    TextView mNavPage, mNoSegmentsText;
     SegmentListAdapter mSegmentListAdapter;
     private final int ITEMS_PER_PAGE = 3;
     private long mNumItems, mOffset = 0;
@@ -69,6 +69,7 @@ public class SegmentListFragment extends Fragment {
         mListView.setAdapter(mSegmentListAdapter);
 
         mNavPage = (TextView) mView.findViewById(R.id.nav_page);
+        mNoSegmentsText = (TextView) mView.findViewById(R.id.no_segments_text);
         mNavPrev = (Button) mView.findViewById(R.id.nav_prev);
         mNavNext = (Button) mView.findViewById(R.id.nav_next);
 
@@ -154,7 +155,7 @@ public class SegmentListFragment extends Fragment {
         Cursor c = db.query(
                 SegmentTable.TABLE_NAME,  // The table to query
                 new String[]{SegmentTable.COL_ID,SegmentTable.COL_NAME, SegmentTable.COL_UNIT, SegmentTable.COL_VALUE},                               // The columns to return
-                SegmentTable.COL_TYPE + " = ?",                                // The columns for the WHERE clause
+                SegmentTable.COL_TYPE + " =?",                                // The columns for the WHERE clause
                 new String[] {String.valueOf(SegmentTable.TYPE_GLOBAL)},                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
@@ -177,9 +178,18 @@ public class SegmentListFragment extends Fragment {
     }
 
     void updateNavPageText(){
+        int numPages = (int) Math.ceil( (double) mNumItems/ITEMS_PER_PAGE );
+        if(numPages == 0) {
+            mNoSegmentsText.setVisibility(View.VISIBLE);
+            mNavPage.setText(R.string.segment_list_no_pages);
+            return;
+        }
+        mNoSegmentsText.setVisibility(View.GONE);
+
+
         long currPage =  (int) Math.ceil( (double) mOffset/ITEMS_PER_PAGE ) + 1;//mOffset/ITEMS_PER_PAGE + 1;
 
-        int numPages = (int) Math.ceil( (double) mNumItems/ITEMS_PER_PAGE );
+
         String navText = currPage + "/" + numPages;
         mNavPage.setText(navText);
     }
@@ -187,7 +197,7 @@ public class SegmentListFragment extends Fragment {
     void updateNumItems(){
         DbManager dbManager = new DbManager(getContext());
         SQLiteDatabase db = dbManager.getReadableDatabase();
-        mNumItems =  DatabaseUtils.queryNumEntries(db, SegmentTable.TABLE_NAME);
+        mNumItems =  DatabaseUtils.queryNumEntries(db, SegmentTable.TABLE_NAME, SegmentTable.COL_TYPE + "=?", new String[]{String.valueOf(SegmentTable.TYPE_GLOBAL)});
     }
 
     void startFragmentUpdateTransaction(String id){

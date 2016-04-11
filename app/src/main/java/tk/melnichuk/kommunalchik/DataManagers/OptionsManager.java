@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class OptionsManager {
 
     private static String PREFS_NAME = "kommunalchik_prefs";
-    private Activity mActivity;
+    private Context mContext;
     SharedPreferences mSharedPrefs;
     SharedPreferences.Editor mEditor;
 
@@ -34,7 +34,9 @@ public class OptionsManager {
             DEFAULT_HOT_WATER_COUNTER,
             DEFAULT_ELECTRICITY_STEP_SUBSIDY,
             DEFAULT_ELECTRICITY_STEP_1,
-            DEFAULT_ELECTRICITY_STEP_2;
+            DEFAULT_ELECTRICITY_STEP_2,
+
+            DEFAULT_TEMP_BILL_TABLE_ID = -1;
 
     private static String
             STR_GAS_RATE = "gas_rate",
@@ -55,7 +57,11 @@ public class OptionsManager {
             STR_HOT_WATER_COUNTER = "hot_water_counter",
             STR_ELECTRICITY_STEP_SUBSIDY = "electricity_step_subsidy",
             STR_ELECTRICITY_STEP_1 =  "electricity_step_1",
-            STR_ELECTRICITY_STEP_2 =  "electricity_step_2";
+            STR_ELECTRICITY_STEP_2 =  "electricity_step_2",
+
+
+    STR_TEMP_BILL_TABLE_ID = "tempBillTableId",
+    STR_SAVED_TEMP_BILL_TABLE_ID = "savedTempBillTableId";
 
 
     static {
@@ -72,8 +78,9 @@ public class OptionsManager {
         DEFAULT_TAX_RATE = 20.0f;
     }
 
-    public OptionsManager(Activity activity){
-        mActivity = activity;
+
+    public OptionsManager(Context context){
+        mContext = context;
     }
 
 
@@ -151,6 +158,13 @@ public class OptionsManager {
         return mSharedPrefs.getInt(STR_ELECTRICITY_STEP_2, DEFAULT_ELECTRICITY_STEP_2);
     }
 
+    public int getTempBillTableId(int id){
+        return mSharedPrefs.getInt(STR_TEMP_BILL_TABLE_ID, DEFAULT_TEMP_BILL_TABLE_ID);
+    }
+
+
+
+
 
     public void setGasRate(float gr){
         mEditor.putFloat(STR_GAS_RATE, gr);
@@ -226,10 +240,12 @@ public class OptionsManager {
         mEditor.putInt(STR_ELECTRICITY_STEP_2, es2);
     }
 
-
+    public void setTempBillTableId(int id){
+        mEditor.putInt(STR_TEMP_BILL_TABLE_ID, id);
+    }
 
     public void start() {
-        mSharedPrefs = mActivity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        mSharedPrefs = mContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         mEditor = mSharedPrefs.edit();
     }
 

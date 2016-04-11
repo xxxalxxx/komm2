@@ -33,20 +33,24 @@
 
         <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
+        android:background="@color/viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+
         android:layout_alignParentTop="false"
         android:layout_above="@+id/calc_btn"
-            android:layout_below="@+id/bill_title" />
+        android:layout_below="@+id/bill_title" />
 
 
     <Button
+        android:background="@drawable/btn_calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/calc_btn"
         android:id="@+id/calc_btn"
-        android:layout_above="@+id/fab_save" />
+        android:layout_above="@+id/fab_save"
+        android:layout_margin="3dp"
+        android:textColor="@color/btn_calc_text" />
 
 
         <TextView

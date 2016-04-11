@@ -25,7 +25,8 @@ public class GasTable extends  BaseTable {
             COL_CALC = "calc",
             COL_SUB = "sub",
             COL_ADDPAY = "addpay",
-            COL_TOTAL = "total";
+            COL_TOTAL = "total",
+            COL_SUM = "sum";
 
     public final static String[] COLUMN_NAMES = {
             COL_ID,
@@ -40,7 +41,8 @@ public class GasTable extends  BaseTable {
             COL_CALC,
             COL_SUB,
             COL_ADDPAY,
-            COL_TOTAL
+            COL_TOTAL,
+            COL_SUM
     };
 
     final static String SQL_CREATE =
@@ -57,7 +59,8 @@ public class GasTable extends  BaseTable {
                     COL_CALC + SUFFIX_TEXT_NOT_NULL + COMMA +
                     COL_SUB + SUFFIX_TEXT_NOT_NULL + COMMA +
                     COL_ADDPAY + SUFFIX_TEXT_NOT_NULL + COMMA +
-                    COL_TOTAL + SUFFIX_TEXT_NOT_NULL +
+                    COL_TOTAL + SUFFIX_TEXT_NOT_NULL + COMMA +
+                    COL_SUM + SUFFIX_TEXT_NOT_NULL +
             "); ";
 
     @Override

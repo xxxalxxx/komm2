@@ -15,8 +15,10 @@ public class HeatingTable extends BaseTable {
             COL_RECALC = "recalc",
             COL_SUB = "sub",
             COL_COMP = "comp",
-            COL_PAY = "pay",
-            COL_TOTAL = "total";
+            COL_ADDPAY = "addpay",
+            COL_OVERPAY = "overpay",
+            COL_TOTAL = "total",
+            COL_SUM = "sum";
 
     public final static String[] COLUMN_NAMES = {
             COL_ID,
@@ -26,7 +28,9 @@ public class HeatingTable extends BaseTable {
             COL_SUB,
             COL_COMP,
             COL_TOTAL,
-            COL_PAY
+            COL_OVERPAY,
+            COL_ADDPAY,
+            COL_SUM
     };
 
     final static String SQL_CREATE =
@@ -38,7 +42,9 @@ public class HeatingTable extends BaseTable {
                 COL_SUB + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_COMP + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_TOTAL + SUFFIX_TEXT_NOT_NULL + COMMA +
-                COL_PAY + SUFFIX_TEXT_NOT_NULL +
+                COL_ADDPAY + SUFFIX_TEXT_NOT_NULL + COMMA +
+                COL_OVERPAY + SUFFIX_TEXT_NOT_NULL + COMMA +
+                COL_SUM + SUFFIX_TEXT_NOT_NULL +
             "); ";
 
     @Override

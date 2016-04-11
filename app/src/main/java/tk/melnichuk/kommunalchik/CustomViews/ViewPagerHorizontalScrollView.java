@@ -39,7 +39,7 @@ public class ViewPagerHorizontalScrollView extends HorizontalScrollView {
             public void run() {
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(750);
                     mScrollable = true;
                 } catch (InterruptedException e) {
 
@@ -62,10 +62,10 @@ public class ViewPagerHorizontalScrollView extends HorizontalScrollView {
             case MotionEvent.ACTION_DOWN:
                 mX = (int) ev.getX();
 
-
+/*
                 if(!mScrollable && Math.abs(mScrollPosX - mX) > mScrollEnablingDist ) {
                     mScrollable = true;
-                }
+                }*/
                 return mScrollable ? super.onTouchEvent(ev) : mScrollable;
             default:
                 return super.onTouchEvent(ev);

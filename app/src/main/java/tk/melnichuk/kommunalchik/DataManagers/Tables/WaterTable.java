@@ -23,7 +23,8 @@ public class WaterTable extends BaseTable{
         COL_CURR = "curr",
         COL_PREV = "prev",
         COL_DIFF = "diff",
-        COL_RATE = "rate";
+        COL_RATE = "rate",
+        COL_SUM = "sum";
 
     public final static String[] COLUMN_NAMES = {
             COL_ID,
@@ -33,7 +34,8 @@ public class WaterTable extends BaseTable{
             COL_CURR,
             COL_PREV,
             COL_DIFF,
-            COL_RATE
+            COL_RATE,
+            COL_SUM
     };
 
     final static String SQL_CREATE =
@@ -45,7 +47,8 @@ public class WaterTable extends BaseTable{
                 COL_CURR + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_PREV + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_DIFF + SUFFIX_TEXT_NOT_NULL + COMMA +
-                COL_RATE + SUFFIX_TEXT_NOT_NULL +
+                COL_RATE + SUFFIX_TEXT_NOT_NULL + COMMA +
+                COL_SUM + SUFFIX_TEXT_NOT_NULL +
             "); ";
 
     @Override

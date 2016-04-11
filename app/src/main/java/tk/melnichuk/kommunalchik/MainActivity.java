@@ -1,22 +1,32 @@
 package tk.melnichuk.kommunalchik;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
+import tk.melnichuk.kommunalchik.CustomViews.UnitTypesKeyboard;
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.BaseTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.CommunalTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityRowTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.GasTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.HeatingTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.PhoneRowTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.PhoneTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
-import android.support.v7.widget.Toolbar;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterRowTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterTable;
+
 public class MainActivity extends FragmentActivity {
+
+    public UnitTypesKeyboard mKeyboard = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +35,27 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
        // setSupportActionBar(toolbar);
-
+        BaseTable[] tables = {
+                new SegmentTable(),
+                new SegmentBillTypeTable(),
+                new SegmentRowTable(),
+                new BillTable(),
+                new CommunalTable(),
+                new GasTable(),
+                new WaterTable(),
+                new WaterRowTable(),
+                new HeatingTable(),
+                new ElectricityTable(),
+                new ElectricityRowTable(),
+                new PhoneTable(),
+                new PhoneRowTable()
+        };
         DbManager dbManager = new DbManager(this);
-        dbManager.registerTable(new SegmentTable());
-        dbManager.registerTable(new SegmentBillTypeTable());
+        for(BaseTable t: tables){
+            dbManager.registerTable(t);
+        }
+        //dbManager.registerTable(new SegmentTable());
+        // dbManager.registerTable(new SegmentBillTypeTable());
         dbManager.onCreate(dbManager.getWritableDatabase());
 
         // Check that the activity is using the layout version with
@@ -55,6 +82,9 @@ public class MainActivity extends FragmentActivity {
             // Add the fragment to the 'fragment_container' FrameLayout
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, menuFragment).commit();
         }
+
+      //  mKeyboard = new UnitTypesKeyboard(this,isLandscapeOrientation() ? R.xml.keyboard_landscape : R.xml.keyboard_portrait );
+
     }
 
 
@@ -84,5 +114,19 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mKeyboard != null && mKeyboard.isCustomKeyboardVisible()) {
+
+            mKeyboard.hideCustomKeyboard();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    public boolean isLandscapeOrientation() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 }

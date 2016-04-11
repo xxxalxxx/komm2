@@ -9,13 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import tk.melnichuk.kommunalchik.DataManagers.DataHolder;
+import tk.melnichuk.kommunalchik.DataManagers.BillManager;
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
@@ -27,6 +26,7 @@ public class SegmentFragment extends Fragment{
     String testVar = "ttt";
     public final static int STATE_CREATE = 0, STATE_UPDATE = 1, STATE_COMMON = 2;
     public final static int MODE_DECIMAL = 0, MODE_PERCENT = 1, MODE_FRACTION = 2;
+
     private int mCurrentMode, mState = -1;
     String mSegmentId = "-1";
 
@@ -49,7 +49,7 @@ public class SegmentFragment extends Fragment{
 
     ViewGroup mCheckBoxLayout;
 
-    DataHolder mDataHolder;
+    BillManager mBillManager;
 
 
     @Override
@@ -272,7 +272,7 @@ public class SegmentFragment extends Fragment{
                     try {
 
                         ContentValues cw = new ContentValues();
-                        cw.put(SegmentTable.COL_BILL_ID, 0 );
+                        cw.put(SegmentTable.COL_BILL_ID, SegmentTable.BILL_ID_GLOBAL );
                         cw.put(SegmentTable.COL_TYPE, SegmentTable.TYPE_GLOBAL);
                         cw.put(SegmentTable.COL_NAME,segmentName);
                         cw.put(SegmentTable.COL_UNIT, mCurrentMode);
@@ -313,9 +313,6 @@ public class SegmentFragment extends Fragment{
                         db.endTransaction();
                         db.close();
                     }
-
-
-
 
                 } else {
 
@@ -364,9 +361,9 @@ public class SegmentFragment extends Fragment{
         mSegmentId = segmentId;
     }
 
-    public void setCommon(DataHolder dh) {
+    public void setCommon(BillManager dh) {
         //TODO: save dataholder on recreation of window
-        mDataHolder = dh;
+        mBillManager = dh;
 
         mState = STATE_COMMON;
     }

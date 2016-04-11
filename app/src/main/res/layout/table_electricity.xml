@@ -229,7 +229,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/e_from"
+        android:text="@string/e_to"
         android:id="@+id/r3c0"
         android:tag="r3c0"
         android:textSize="@dimen/textSize"
