@@ -87,6 +87,9 @@
 
 
     <!-- Error messages -->
+
+    <string name="err_new_bill_name_empty">Помилка: назва не може бути пустою</string>
+
     <string name="err_new_segment_name_empty">Помилка: вкажіть назву сегменту</string>
     <string name="err_new_segment_zero_denom">Помилка: не можна ділити на нуль</string>
     <string name="err_new_segment_empty_denom">Помилка: вкажіть знаменник</string>
@@ -175,7 +178,11 @@
     <string name="segment_title_update">ОНОВЛЕННЯ СЕГМЕНТУ</string>
     <string name="segment_title_common">НОВИЙ ЗАГАЛЬНИЙ СЕГМЕНТ</string>
 
+    <string name="bill_name">Назва:</string>
+    <string name="bill_date">Дата:</string>
+
     <string name="segment_name">Назва:</string>
+
     <string name="segment_unit">Тип:</string>
     <string name="segment_value">Значення:</string>
 
@@ -188,7 +195,9 @@
 
     <string name="alert_dialog_bills_settings_save">Ви дійсно бажаєте змінити значення?</string>
     <string name="alert_dialog_bills_save">Зберегти розраховані рахунки?</string>
+    <string name="alert_dialog_bills_delete">Ви дійсно бажаєте видалити рахунок?</string>
     <string name="alert_dialog_segments_delete">Ви дійсно бажаєте видалити сегмент?</string>
+
     <string name="alert_dialog_yes">ТАК</string>
     <string name="alert_dialog_no">HI</string>
 
@@ -196,7 +205,7 @@
 
     <string name="segment_list_no_pages">-</string>
     <string name="segment_list_no_segments">Нема глобальних сегментів</string>
-
+    <string name="bill_list_no_bills">Нема збережених рахунків</string>
 
 
 

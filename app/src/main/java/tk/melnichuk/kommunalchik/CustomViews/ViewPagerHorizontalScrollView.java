@@ -66,7 +66,8 @@ public class ViewPagerHorizontalScrollView extends HorizontalScrollView {
                 if(!mScrollable && Math.abs(mScrollPosX - mX) > mScrollEnablingDist ) {
                     mScrollable = true;
                 }*/
-                return mScrollable ? super.onTouchEvent(ev) : mScrollable;
+                return super.onTouchEvent(ev);
+                //return mScrollable ? super.onTouchEvent(ev) : mScrollable;
             default:
                 return super.onTouchEvent(ev);
         }
@@ -76,8 +77,9 @@ public class ViewPagerHorizontalScrollView extends HorizontalScrollView {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         // Don't do anything with intercepted touch events if
         // we are not scrollable
-        if (!mScrollable) return false;
-        else return super.onInterceptTouchEvent(ev);
+       // if (!mScrollable) return false;
+        //else
+        return super.onInterceptTouchEvent(ev);
     }
 
 

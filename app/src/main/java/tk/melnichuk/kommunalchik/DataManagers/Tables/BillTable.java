@@ -18,10 +18,11 @@ public class BillTable extends BaseTable {
             COL_DATE = "date";
 
     public static final int
-    RELATION_NEW = 0,
+    RELATION_NONE = 0,
 
     STATUS_TEMP = 0,
     STATUS_SAVED = 1,
+    STATUS_TEMP_FROM_SAVED = 2,
 
     TEMP_BILL_ID = 0;
 

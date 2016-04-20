@@ -5,6 +5,7 @@
 
 
     <RadioGroup
+        android:id="@+id/radio_group"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -34,7 +35,7 @@
     <DatePicker
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
+        android:id="@+id/date_picker"
         android:calendarViewShown="false"/>
 
 </LinearLayout>

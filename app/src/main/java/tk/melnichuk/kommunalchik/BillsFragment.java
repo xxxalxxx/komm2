@@ -2,11 +2,14 @@ package tk.melnichuk.kommunalchik;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -21,12 +24,17 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import tk.melnichuk.kommunalchik.BillTypeFragments.BaseBillFragment;
 import tk.melnichuk.kommunalchik.BillTypeFragments.ElectricityFragment;
@@ -37,6 +45,8 @@ import tk.melnichuk.kommunalchik.CustomViews.SlidingTabLayout;
 import tk.melnichuk.kommunalchik.CustomViews.UnitTypesKeyboard;
 import tk.melnichuk.kommunalchik.CustomViews.ViewPagerHorizontalScrollView;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.OptionsManager;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
 import tk.melnichuk.kommunalchik.Helpers.HeightAnimation;
 
 /**
@@ -44,10 +54,11 @@ import tk.melnichuk.kommunalchik.Helpers.HeightAnimation;
  */
 public class BillsFragment extends Fragment {
 
-    public static final int STATE_NEW = 0, STATE_CONTINUED = 1, STATE_FROM_DATABASE = 2,
+    public static final int
+        STATE_NEW = 0, STATE_CONTINUED = 1, STATE_SAVED = 2,
         BILL_ID_NEW = 0, BILL_ID_CONTINUED = 0;
     public int mState;
-
+    public boolean mDoRestoreBill = false;
     public long mBillId, mRelId;
     BillManager mBillManager;
 
@@ -111,6 +122,7 @@ public class BillsFragment extends Fragment {
             mBillId = savedInstanceState.getLong("billId", 0);
             mRelId = savedInstanceState.getLong("relId", 0);
             mState = savedInstanceState.getInt("state",0);
+          //  mDoRestoreBill = savedInstanceState.getBoolean("doRestoreBill",false);
             //restore dataholder state
 
         }
@@ -123,12 +135,14 @@ public class BillsFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.frag_bills, container, false);
 
-        //Bundle b = getArguments();
-      //  mState = b.getInt("state");
-       // mBillId = b.getInt("billId");
         mBillManager = new BillManager(this);
         switch (mState){
             case STATE_CONTINUED:
+
+                OptionsManager opts = new OptionsManager(getContext());
+                opts.start();
+                mRelId = opts.getSavedRelId();
+                Log.d("_LC","cont:"+ mRelId + "");
                 mBillId = mBillManager.continueBill(mRelId);
                 mState = STATE_CONTINUED;
                 break;
@@ -138,11 +152,10 @@ public class BillsFragment extends Fragment {
                 mState = STATE_CONTINUED;
                 //create new temp table, set default rate values from settings and segments
                 break;
-
-            case STATE_FROM_DATABASE:
+            case STATE_SAVED:
+                mBillId = mBillManager.initSavedBill(mRelId);
                 break;
         }
-
 
         mColors = getColors();
 
@@ -167,9 +180,7 @@ public class BillsFragment extends Fragment {
 
             @Override
             public void onPageSelected(final int position) {
-
                 animateViewPagerPageChange(position);
-               // mPrevPos = position;
             }
 
             @Override
@@ -181,8 +192,6 @@ public class BillsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (mViewPager != null && mCurrBill != null) {
-                  //  mCurrBill.getMainTableData();
-                   // mCurrBill.getSegmentsData();
                     mCurrBill.calc();
                 }
             }
@@ -199,6 +208,17 @@ public class BillsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "segmentS", Toast.LENGTH_LONG).show();
+                mDoRestoreBill = true;
+
+                SegmentFragment segmentFragment = new SegmentFragment();
+                segmentFragment.setState(SegmentFragment.STATE_COMMON);
+                segmentFragment.setBillId(mBillId);
+                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                ft.replace(R.id.fragment_container, segmentFragment, "NewBillsFrag");
+                ft.addToBackStack(null);
+                ft.commit();
+
             }
         });
 
@@ -207,35 +227,75 @@ public class BillsFragment extends Fragment {
             public void onClick(View v) {
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-
                 View dialogView = getLayoutInflater(savedInstanceState).inflate(R.layout.alert_dialog_save, null);
                 adb.setView(dialogView);
 
-                final DatePicker dp = (DatePicker) dialogView.findViewById(R.id.datePicker);
-                final EditText et  = (EditText) dialogView.findViewById(R.id.name);
+                final DatePicker dp = (DatePicker) dialogView.findViewById(R.id.date_picker);
+                final EditText nameEditText  = (EditText) dialogView.findViewById(R.id.name);
+                final RadioGroup rg = (RadioGroup)  dialogView.findViewById(R.id.radio_group);
+                final RadioButton rbNew =  (RadioButton) dialogView.findViewById(R.id.btn_new_bill);
+                final RadioButton rbCurr =  (RadioButton) dialogView.findViewById(R.id.btn_curr_bill);
 
-                dialogView.findViewById(R.id.btn_new_bill).setOnClickListener(new View.OnClickListener() {
+
+                Log.d("_REL", mRelId + "");
+                if(mRelId == 0) {
+                    dialogView.findViewById(R.id.btn_curr_bill).setVisibility(View.GONE);
+                    rg.check(R.id.btn_new_bill);
+                } else {
+                    rg.check(R.id.btn_curr_bill);
+                    Cursor c = mBillManager.getRelatedBillCursor(mRelId);
+
+                    String name = c.getString(c.getColumnIndexOrThrow(BillTable.COL_NAME));
+                    String date = c.getString(c.getColumnIndexOrThrow(BillTable.COL_DATE));
+                    String[] dateVals = date.split("/");
+                    Log.d("_REL","restore:"+ date);
+                    dp.updateDate(
+                            Integer.valueOf(dateVals[2]),
+                            Integer.valueOf(dateVals[1]) - 1,// map [1,12] -> [0,11]
+                            Integer.valueOf(dateVals[0])
+                    );
+                    nameEditText.setText(name);
+                }
+
+                adb.setPositiveButton(R.string.alert_dialog_yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getActivity(), "n", Toast.LENGTH_LONG).show();
-                        //dp.setVisibility(View.VISIBLE);
-                        //et.setVisibility(View.VISIBLE);
+                    public void onClick(DialogInterface dialog, int which) {
+                        for(int i=0;i<rg.getChildCount();++i){
+                            View child = rg.getChildAt(i);
+                            if(child instanceof RadioButton){
+                                RadioButton radioButtonChild = (RadioButton) child;
+                                if(radioButtonChild.isChecked()) {
+                                    String name = nameEditText.getText().toString();
+                                    if(name.trim().isEmpty()){
+                                        Toast.makeText(getActivity(), R.string.err_new_bill_name_empty, Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
+
+                                    updateFragmentInDb(mCurrBill);
+
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.set(dp.getYear(), dp.getMonth(), dp.getDayOfMonth());
+                                    Date newDate = cal.getTime();
+                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                    String date = dateFormat.format(newDate);
+
+
+                                    long resultRelId;
+                                    if(radioButtonChild == rbNew) {
+                                        resultRelId = mBillManager.createSavedBill(name, date,mBillId);
+                                        if(resultRelId != -1) mRelId = resultRelId;
+                                    } else if(radioButtonChild == rbCurr){
+                                        resultRelId = mBillManager.updateSavedBill(name, date, mBillId, mRelId);
+                                        if(resultRelId != -1) mRelId = resultRelId;
+                                    }
+                                }
+
+                            }
+                        }
                     }
-                });
-
-                dialogView.findViewById(R.id.btn_curr_bill).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getActivity(), "c", Toast.LENGTH_LONG).show();
-                        //dp.setVisibility(View.INVISIBLE);
-                        //et.setVisibility(View.INVISIBLE);
-                    }
-                });
-
-
-                adb.setPositiveButton(R.string.alert_dialog_yes, null)
-                   .setNegativeButton(R.string.alert_dialog_no, null)
-                   .show();
+                })
+               .setNegativeButton(R.string.alert_dialog_no, null)
+               .show();
 
 
 
@@ -273,6 +333,7 @@ public class BillsFragment extends Fragment {
 
         animateViewPagerPageChange(mPrevPos);
 
+
     }
 
     @Override
@@ -284,6 +345,29 @@ public class BillsFragment extends Fragment {
         outState.putLong("billId", mBillId);
         outState.putLong("relId", mRelId);
         outState.putInt("state", mState);
+        outState.putBoolean("doRestoreBill", mDoRestoreBill);
+
+
+
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("_LC", "stop");
+        updateFragmentInDb(mCurrBill);
+
+
+        if(mState == STATE_CONTINUED) {
+            Log.d("_LC", "rel id:"+mRelId);
+            OptionsManager opts = new OptionsManager(getContext());
+            opts.start();
+            opts.setSavedRelId(mRelId);
+            opts.save();
+        }
+
+
     }
 
 
@@ -367,46 +451,71 @@ public class BillsFragment extends Fragment {
         public void setPrimaryItem(ViewGroup container, final int position, Object object) {
             super.setPrimaryItem(container, position, object);
             Log.d("_CURRBILL", " IN ");
+
+           /* mCurrBill = ((BaseBillFragment) object);
+            if(mCurrBill != null && mDoRestoreBill){
+                updateFragmentFromDb(position);
+                mDoRestoreBill = false;
+            }*/
+            boolean pageChanged =  false;
             if (mCurrBill != object) {
+                pageChanged = true;
+                Log.d("_VPD", " IN ");
                 final BaseBillFragment prevBill = mCurrBill;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (prevBill == null) return;
-                        ArrayList<String> mainTableData = prevBill.getMainTableData();
-                        ArrayList<ArrayList<String>> segmentsData = prevBill.getFullSegmentsData();
+                      updateFragmentInDb(prevBill);
 
-                        if(mainTableData != null && segmentsData != null){
-                            Log.d("_DBD", " NOT NULL ");
-                            Log.d("_DBD", mainTableData.toString());
-                            Log.d("_DBD", segmentsData.toString());
-
-                            mBillManager.updateTableData(mainTableData, segmentsData, mBillId, mPrevPos);
-
-                        }
                     }
                 }).start();
 
                 mCurrBill = ((BaseBillFragment) object);
-                ArrayList<String> mtd = mBillManager.getMainTableFromDb(mBillId,position);
-                long lastModelId = mBillManager.getLastModelId(position);
-                ArrayList<ArrayList<String>> segments = mBillManager.getSegmentsFromDb(position, lastModelId);
-                Log.d("_DBD", "pos curr:" + mViewPager.getCurrentItem() + " currPos2:" + position + " prevPos:" + mPrevPos + " modelId:"+lastModelId);
-                if(mCurrBill.mBillContainer == null) {
-
-                }
-                if(mtd != null){
-                    Log.d("_DBD","out "+ mtd.toString());
-                    mCurrBill.fillMainTableData(mtd);
-
-                }
-
-                if(segments != null) {
-                    Log.d("_DBD","seg out "+ segments.toString());
-                    mCurrBill.fillSegmentsDataFromDb(segments);
-                }
+                updateFragmentFromDb(mCurrBill,position);
             }
             mPrevPos = position;
+
+
+            if(!pageChanged && object != null && mDoRestoreBill){
+                updateFragmentFromDb((BaseBillFragment)object,position);
+                mDoRestoreBill = false;
+            }
+
+        }
+    }
+
+
+
+    void updateFragmentFromDb(BaseBillFragment bill, int position){
+        ArrayList<String> mtd = mBillManager.getMainTableFromDb(mBillId,position);
+        long lastModelId = mBillManager.getLastModelId(position);
+        ArrayList<ArrayList<String>> segments = mBillManager.getSegmentsFromDb(position, lastModelId);
+        Log.d("_DBD", "pos curr:" + mViewPager.getCurrentItem() + " currPos2:" + position + " prevPos:" + mPrevPos + " modelId:"+lastModelId);
+
+        if(mtd != null){
+            Log.d("_DBD","out "+ mtd.toString());
+            bill.fillMainTableData(mtd);
+
+        }
+
+        if(segments != null) {
+            Log.d("_DBD","seg out "+ segments.toString());
+            bill.fillSegmentsDataFromDb(segments);
+        }
+    }
+
+    void updateFragmentInDb(BaseBillFragment bill){
+        if(bill == null) return;
+        ArrayList<String> mainTableData = bill.getMainTableData();
+        ArrayList<ArrayList<String>> segmentsData = bill.getFullSegmentsData();
+
+        if(mainTableData != null && segmentsData != null){
+            Log.d("_DBD", " NOT NULL ");
+            Log.d("_DBD", mainTableData.toString());
+            Log.d("_DBD", segmentsData.toString());
+            if(mBillManager != null)
+            mBillManager.updateTableData(mainTableData, segmentsData, mBillId, mPrevPos);
+
         }
     }
 
@@ -500,7 +609,6 @@ public class BillsFragment extends Fragment {
                                 heightAnim.setDuration(500);
                                 mViewPager.startAnimation(heightAnim);
                                 mPrevHeight = h;
-
                             }
                         }
                         }
@@ -509,9 +617,6 @@ public class BillsFragment extends Fragment {
             }
         }).start();
     }
-
-
-
 
 
     int[] getColors() {
@@ -532,7 +637,4 @@ public class BillsFragment extends Fragment {
         mState = state;
         mRelId = relId;
     }
-
-
-
 }

@@ -24,6 +24,7 @@ public class SegmentTable extends BaseTable {
         UNIT_PERCENT  = 1,
         UNIT_FRACTION = 2,
 
+        BILL_TYPE_NONE = -1,
         TYPE_LOCAL  = 0,
         TYPE_GLOBAL = 1;
     public final static int BILL_ID_GLOBAL = -1;
@@ -31,6 +32,7 @@ public class SegmentTable extends BaseTable {
     public final static String
             COL_ID = "id",
             COL_BILL_ID = "bill_id",
+            COL_BILL_TYPE = "bill_type",
             COL_TYPE = "type",
             COL_NAME = "name",
             COL_UNIT = "unit",
@@ -39,6 +41,7 @@ public class SegmentTable extends BaseTable {
     public final static String[] COLUMN_NAMES = {
             COL_ID,
             COL_BILL_ID,
+            COL_BILL_TYPE,
             COL_TYPE,
             COL_NAME,
             COL_UNIT,
@@ -49,17 +52,13 @@ public class SegmentTable extends BaseTable {
             CREATE_TABLE_IF_NOT_EXISTS + TABLE_NAME + "("+
                 COL_ID + SUFFIX_ID + COMMA +
                 COL_BILL_ID + SUFFIX_INTEGER_NOT_NULL + COMMA +
+                COL_BILL_TYPE + SUFFIX_INTEGER_NOT_NULL + COMMA +
                 COL_TYPE + SUFFIX_INTEGER_NOT_NULL + COMMA +
                 COL_NAME + SUFFIX_TEXT_NOT_NULL + COMMA +
                 COL_UNIT + SUFFIX_INTEGER_NOT_NULL + COMMA +
                 COL_VALUE + SUFFIX_TEXT_NOT_NULL +
             //  " FOREIGN KEY (" + TASK_CAT + ") REFERENCES " + CAT_TABLE +"("+CAT_ID+"));";
             "); ";
-
-    // CREATE TABLE IF NOT EXISTS segment(id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, bill_id INTEGER NOT NULL, bill_name TEXT NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, unit INTEGER NOT NULL DEFAULT 0, value TEXT NOT NULL)
-//segment (id,name,)
-// segment_item (id, segment_id, bill_type)
-
 
     @Override
     public String getTableName() {

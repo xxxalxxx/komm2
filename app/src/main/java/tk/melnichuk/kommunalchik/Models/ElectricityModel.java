@@ -1,15 +1,30 @@
 package tk.melnichuk.kommunalchik.Models;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+
+import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.OptionsManager;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityRowTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterRowTable;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterTable;
 
 /**
  * Created by al on 30.03.16.
  */
 public class ElectricityModel extends BaseModel {
     public static final int
+        BILL_SIZE = 18,
+        NUM_ELECTRICITY_ROWS = 4,
+
         INDEX_CURR = 0,
         INDEX_PREV = 1,
         INDEX_DIFF = 2,
@@ -141,5 +156,276 @@ public class ElectricityModel extends BaseModel {
                 mMainTableData[INDEX_SUM]
         };
     }
+
+    long createMainTableInDb(SQLiteDatabase db, long billId, ArrayList<String> data){
+        ContentValues cw = new ContentValues();
+        cw.put(ElectricityTable.COL_BILL_ID, billId );
+        cw.put(ElectricityTable.COL_CURR, data.get(INDEX_CURR));
+        cw.put(ElectricityTable.COL_PREV, data.get(INDEX_PREV));
+        cw.put(ElectricityTable.COL_DIFF, data.get(INDEX_DIFF));
+        cw.put(ElectricityTable.COL_SUM, data.get(INDEX_SUM));
+
+
+        long id = db.insertOrThrow(ElectricityTable.TABLE_NAME, null, cw);
+        setLastModelId(id);
+        //cw.clear();
+
+        int[] diffIndices = new int[]{INDEX_DIFF_STEP_SUB, INDEX_DIFF_STEP_1, INDEX_DIFF_STEP_2, INDEX_DIFF_STEP_3};
+        for(int i = 0; i < NUM_ELECTRICITY_ROWS; ++i){
+            cw.clear();
+            cw.put(ElectricityRowTable.COL_ELECTRICITY_BILL_ID, id);
+            cw.put(ElectricityRowTable.COL_TYPE, i);
+            String step = (i == ElectricityRowTable.STEP_SUBSIDY || i == ElectricityRowTable.STEP_3 ) ? DEFAULT_INPUT : data.get(diffIndices[i] - 1);
+            cw.put(ElectricityRowTable.COL_STEP, step );
+            cw.put(ElectricityRowTable.COL_DIFF, data.get(diffIndices[i]));
+            cw.put(ElectricityRowTable.COL_RATE,  data.get(diffIndices[i] + 1));
+            cw.put(ElectricityRowTable.COL_TOTAL, data.get(diffIndices[i] + 2));
+
+            db.insertOrThrow(ElectricityRowTable.TABLE_NAME, null, cw);
+        }
+
+        Log.d("_DBD", "create table " + billId);
+        return id;
+    }
+
+
+
+    public void updateMainTableInDb(SQLiteDatabase db, ArrayList<String>data, long billId){
+        if(data == null || data.isEmpty()) return;
+
+        long modelId = getModelId(db, ElectricityTable.TABLE_NAME, ElectricityTable.COL_ID, ElectricityTable.COL_BILL_ID, String.valueOf(billId));
+        Log.d("_DBD", "upd segs not null bI:"+billId+" mI:"+modelId + " d:"+data.toString());
+
+        setLastModelId(modelId);
+
+        if(modelId != -1) {
+            String modelIdStr = String.valueOf(modelId);
+            ContentValues cw = new ContentValues();
+            cw.put(ElectricityTable.COL_BILL_ID, billId );
+            cw.put(ElectricityTable.COL_CURR, data.get(INDEX_CURR));
+            cw.put(ElectricityTable.COL_PREV, data.get(INDEX_PREV));
+            cw.put(ElectricityTable.COL_DIFF, data.get(INDEX_DIFF));
+            cw.put(ElectricityTable.COL_SUM, data.get(INDEX_SUM));
+
+            db.update(ElectricityTable.TABLE_NAME, cw, ElectricityTable.COL_ID + "=?", new String[]{modelIdStr});
+
+            int[] diffIndices = new int[]{INDEX_DIFF_STEP_SUB, INDEX_DIFF_STEP_1, INDEX_DIFF_STEP_2, INDEX_DIFF_STEP_3};
+            String electricityRowWhereString = ElectricityRowTable.COL_ELECTRICITY_BILL_ID + "=? AND " + ElectricityRowTable.COL_TYPE + "=?";
+
+            for(int i = 0; i < NUM_ELECTRICITY_ROWS; ++i){
+                cw.clear();
+                cw.put(ElectricityRowTable.COL_ELECTRICITY_BILL_ID, modelIdStr);
+                String step = (i == ElectricityRowTable.STEP_SUBSIDY || i == ElectricityRowTable.STEP_3 ) ? DEFAULT_INPUT : data.get(diffIndices[i] - 1);
+                cw.put(ElectricityRowTable.COL_STEP, step );
+                cw.put(ElectricityRowTable.COL_DIFF, data.get(diffIndices[i]));
+                cw.put(ElectricityRowTable.COL_RATE, data.get(diffIndices[i] + 1));
+                cw.put(ElectricityRowTable.COL_TOTAL, data.get(diffIndices[i] + 2));
+
+                db.update(ElectricityRowTable.TABLE_NAME, cw,  electricityRowWhereString, new String[]{modelIdStr, String.valueOf(i)});
+            }
+        }
+    }
+
+
+
+
+    @Override
+    public void initInDb(SQLiteDatabase db, long billId, Context c){
+        ArrayList<String> data = new ArrayList<>();
+        OptionsManager opts = new OptionsManager(c);
+        opts.start();
+
+
+        for(int i=0;i<BILL_SIZE;++i){
+            switch (i){
+                case INDEX_DIFF_STEP_SUB:
+                    data.add( String.valueOf(opts.getElectricityStepSubsidy()) );
+                    data.add( String.valueOf(opts.getElectricityRateSubsidy()) );
+                    i+=1;
+                    continue;
+                case INDEX_STEP_1:
+                    data.add( String.valueOf(opts.getElectricityStep1()) );
+                    data.add(DEFAULT_INPUT);
+                    data.add( String.valueOf(opts.getElectricityRate1()) );
+                    i+=2;
+                    continue;
+                case INDEX_STEP_2:
+                    data.add( String.valueOf(opts.getElectricityStep2()) );
+                    data.add(DEFAULT_INPUT);
+                    data.add( String.valueOf(opts.getElectricityRate2()) );
+                    i+=2;
+                    continue;
+                case INDEX_RATE_STEP_3:
+                    data.add( String.valueOf(opts.getElectricityRate3()) );
+                default:
+                    data.add(DEFAULT_INPUT);
+            }
+        }
+
+
+        long billTypeId = createMainTableInDb(db, billId, data);
+        initSegmentsInDb(db, billTypeId, BillManager.INDEX_ELECTRICITY);
+
+        Log.d("_DBD", "init " + data.toString());
+
+
+    }
+
+
+
+    @Override
+    public ArrayList<String> getMainTableFromDb(SQLiteDatabase db, long billId) {
+        ArrayList<String> data = new ArrayList<>();
+        for(int i=0;i<BILL_SIZE;++i){
+            data.add("");
+        }
+
+        Cursor c = db.query(
+                ElectricityTable.TABLE_NAME,
+                new String[]{
+                        ElectricityTable.COL_ID,
+                        ElectricityTable.COL_BILL_ID,
+                        ElectricityTable.COL_CURR,
+                        ElectricityTable.COL_PREV,
+                        ElectricityTable.COL_DIFF,
+                        ElectricityTable.COL_SUM
+                },
+                ElectricityTable.COL_BILL_ID + "=?",
+                new String[]{String.valueOf(billId)},
+                null,
+                null,
+                null,
+                "1"
+        );
+
+        Log.d("_DBD", "get " + billId);
+        if(c.getCount() > 0){
+            c.moveToFirst();
+            Log.d("_DBD", "not null");
+            long modelId = c.getLong(c.getColumnIndex(ElectricityTable.COL_ID));
+            setLastModelId(modelId);
+
+            data.set(INDEX_CURR, c.getString(c.getColumnIndex(ElectricityTable.COL_CURR)));
+            data.set(INDEX_PREV, c.getString(c.getColumnIndex(ElectricityTable.COL_PREV)));
+            data.set(INDEX_DIFF, c.getString(c.getColumnIndex(ElectricityTable.COL_DIFF)));
+            data.set(INDEX_SUM, c.getString(c.getColumnIndex(ElectricityTable.COL_SUM)));
+
+            c = db.query(
+                    ElectricityRowTable.TABLE_NAME,
+                    new String[]{
+                            ElectricityRowTable.COL_TYPE,
+                            ElectricityRowTable.COL_STEP,
+                            ElectricityRowTable.COL_DIFF,
+                            ElectricityRowTable.COL_RATE,
+                            ElectricityRowTable.COL_TOTAL
+                    },
+                    ElectricityRowTable.COL_ELECTRICITY_BILL_ID + "=?",
+                    new String[]{String.valueOf(modelId)},
+                    null,
+                    null,
+                    ElectricityRowTable.COL_TYPE + " ASC",
+                    String.valueOf(NUM_ELECTRICITY_ROWS)
+            );
+
+            if(c.getCount() > 0){
+                while (c.moveToNext()){
+
+                    int type = c.getInt(c.getColumnIndex(ElectricityRowTable.COL_TYPE));
+                    switch (type){
+                        case ElectricityRowTable.STEP_SUBSIDY:
+                            data.set(INDEX_DIFF_STEP_SUB, c.getString(c.getColumnIndex(ElectricityRowTable.COL_DIFF)));
+                            data.set(INDEX_RATE_STEP_SUB, c.getString(c.getColumnIndex(ElectricityRowTable.COL_RATE)));
+                            data.set(INDEX_TOTAL_STEP_SUB, c.getString(c.getColumnIndex(ElectricityRowTable.COL_TOTAL)));
+                            break;
+                        case ElectricityRowTable.STEP_1:
+                            data.set(INDEX_STEP_1, c.getString(c.getColumnIndex(ElectricityRowTable.COL_STEP)));
+                            data.set(INDEX_DIFF_STEP_1, c.getString(c.getColumnIndex(ElectricityRowTable.COL_DIFF)));
+                            data.set(INDEX_RATE_STEP_1, c.getString(c.getColumnIndex(ElectricityRowTable.COL_RATE)));
+                            data.set(INDEX_TOTAL_STEP_1, c.getString(c.getColumnIndex(ElectricityRowTable.COL_TOTAL)));
+                            break;
+                        case ElectricityRowTable.STEP_2:
+                            data.set(INDEX_STEP_2, c.getString(c.getColumnIndex(ElectricityRowTable.COL_STEP)));
+                            data.set(INDEX_DIFF_STEP_2, c.getString(c.getColumnIndex(ElectricityRowTable.COL_DIFF)));
+                            data.set(INDEX_RATE_STEP_2, c.getString(c.getColumnIndex(ElectricityRowTable.COL_RATE)));
+                            data.set(INDEX_TOTAL_STEP_2, c.getString(c.getColumnIndex(ElectricityRowTable.COL_TOTAL)));
+                            break;
+                        case ElectricityRowTable.STEP_3:
+                            data.set(INDEX_DIFF_STEP_3, c.getString(c.getColumnIndex(ElectricityRowTable.COL_DIFF)));
+                            data.set(INDEX_RATE_STEP_3, c.getString(c.getColumnIndex(ElectricityRowTable.COL_RATE)));
+                            data.set(INDEX_TOTAL_STEP_3, c.getString(c.getColumnIndex(ElectricityRowTable.COL_TOTAL)));
+                            break;
+                    }
+                }
+            }
+        }
+
+        return  data;
+    }
+
+
+    @Override
+    public void deleteFromDb(SQLiteDatabase db, long billId) {
+        int modelId = getModelId(db, ElectricityTable.TABLE_NAME, ElectricityTable.COL_ID, ElectricityTable.COL_BILL_ID, String.valueOf(billId));
+        Log.d("_DBD","dfd "+billId + " " + modelId);
+        if(modelId != -1){
+            String currIdStr = String.valueOf(modelId);
+            deleteSegmentsFromDb(db, modelId, BillManager.INDEX_ELECTRICITY);
+            db.delete(ElectricityRowTable.TABLE_NAME, ElectricityRowTable.COL_ELECTRICITY_BILL_ID + "=?", new String[]{currIdStr});
+            db.delete(ElectricityTable.TABLE_NAME, ElectricityTable.COL_ID + "=?", new String[]{currIdStr});
+        }
+    }
+
+
+    @Override
+    public void addCalcedSegment(SQLiteDatabase db, long billId, ArrayList<String> segment) {
+
+        Cursor c = db.query(
+                ElectricityTable.TABLE_NAME,
+                new String[]{ElectricityTable.COL_ID, ElectricityTable.COL_SUM},
+                ElectricityTable.COL_BILL_ID + "=?",
+                new String[]{String.valueOf(billId)},
+                null,
+                null,
+                null,
+                "1");
+
+        if(c.getCount() > 0) {
+            c.moveToFirst();
+
+            long modelId = c.getLong(c.getColumnIndex(ElectricityTable.COL_ID));
+            setLastModelId(modelId);
+
+            String sum =  c.getString(c.getColumnIndex(ElectricityTable.COL_SUM));
+            String[] items = new String[NUM_ELECTRICITY_ROWS + 1]; // all rows + sum row
+            items[NUM_ELECTRICITY_ROWS] = sum;
+
+            c = db.query(
+                    ElectricityRowTable.TABLE_NAME,
+                    new String[]{ElectricityRowTable.COL_TOTAL},
+                    ElectricityRowTable.COL_ELECTRICITY_BILL_ID + "=?",
+                    new String[]{String.valueOf(modelId)},
+                    null,
+                    null,
+                    ElectricityRowTable.COL_TYPE + " ASC",
+                    String.valueOf(NUM_ELECTRICITY_ROWS)
+            );
+
+            if(c.getCount() > 0){
+                int i = 0;
+                while(c.moveToNext()) {
+                    items[i] = c.getString(c.getColumnIndexOrThrow(ElectricityRowTable.COL_TOTAL));
+                    ++i;
+                }
+            }
+
+            ArrayList<String> newSegment = new ArrayList<>();
+            for(String s : segment) newSegment.add(s);
+
+            addCalcedItemsToSegment(newSegment, segment.get(2), items);
+            Log.d("_DBD", "adding new segment:" + newSegment.toString() + " s:" + sum);
+            addSegment(db, modelId,BillManager.INDEX_ELECTRICITY, newSegment);
+        }
+    }
+
 
 }

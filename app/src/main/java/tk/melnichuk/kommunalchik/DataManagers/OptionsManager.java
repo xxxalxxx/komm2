@@ -39,6 +39,8 @@ public class OptionsManager {
             DEFAULT_TEMP_BILL_TABLE_ID = -1;
 
     private static String
+            STR_SAVED_REL_ID = "savedRelId",
+
             STR_GAS_RATE = "gas_rate",
             STR_COLD_WATER_RATE = "cold_water_rate",
             STR_HOT_WATER_RATE = "hot_water_rate",
@@ -83,6 +85,14 @@ public class OptionsManager {
         mContext = context;
     }
 
+
+    public long getSavedRelId(){
+        return mSharedPrefs.getLong(STR_SAVED_REL_ID, 0);
+    }
+
+    public void setSavedRelId(long relId){
+        mEditor.putLong(STR_SAVED_REL_ID, relId);
+    }
 
     //now that was kind of boring
 

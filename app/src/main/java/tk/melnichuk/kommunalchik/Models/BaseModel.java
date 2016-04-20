@@ -34,12 +34,6 @@ public class BaseModel {
       //  mMainTableItems = new String[getNumMainTableItems()];
     }
 
-    int getNumMainTableItems(){
-        return 0;
-    }
-
-
-
     BigDecimal[] getBigDecimalArray(ArrayList<String> in){
         BigDecimal[] b = new BigDecimal[in.size()];
         for(int i=0;i<in.size();++i){
@@ -56,28 +50,8 @@ public class BaseModel {
         return s;
     }
 
-    //write to BillManager from db
-    void getFromDb(){}
-
-    //write from BillManager to db
-    void writeToDb(){}
-    void writeMainTableToDb(){}
-    void writeSegmentsToDb(){}
-
-
-    void getUpdatedMainTableData(){
-
-    }
-
-    void calc(){}
     void calcMainTable(BigDecimal[] b){}
-    void calcSegment(){}
-    void calcSegments(){}
 
-    void addSegment(){}
-    void addSegments(){}
-
-    void removeSegment(){}
 
     //getExcelArrayFromDataManager
     void getExcelArray(){}
@@ -107,15 +81,8 @@ public class BaseModel {
 
     }
 
-
-
-
     BigDecimal[] getLastColumnItems(){
         return null;
-    }
-
-    void getLastMainTableColumnFromDb(){
-
     }
 
     public ArrayList<String> getMainTableFromDb(SQLiteDatabase db, long billId){
@@ -123,22 +90,23 @@ public class BaseModel {
         return null;
     }
 
-    public ArrayList<ArrayList<String>> getSegmentsFromDb(SQLiteDatabase db, long modelId) {
+    public ArrayList<ArrayList<String>> getSegmentsFromDb(SQLiteDatabase db, long modelId, long modelType) {
 
         String segId = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_ID;
         String segBillId = SegmentTable.TABLE_NAME + "."+ SegmentTable.COL_BILL_ID;
+        String segBillType = SegmentTable.TABLE_NAME  + "." + SegmentTable.COL_BILL_TYPE;
         String segName = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_NAME;
         String segUnit = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_UNIT;
         String segVal = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_VALUE;
         String segInput = SegmentRowTable.TABLE_NAME + "." + SegmentRowTable.COL_VALUE;
         String segOrder =  SegmentRowTable.TABLE_NAME + "." + SegmentRowTable.COL_POSITION;
         String segOtherId =  SegmentRowTable.TABLE_NAME + "." + SegmentRowTable.COL_SEGMENT_ID;
-        // db.rawQuery("select * from segment where type = "+ SegmentTable.TYPE_LOCAL + " AND bill_id=" + modelId,null);
+
         Cursor c = db.query(
                 SegmentTable.TABLE_NAME + " LEFT JOIN " + SegmentRowTable.TABLE_NAME + " ON " + segId + " = " + segOtherId,
-                new String[]{segId, segName,segUnit,segVal,segInput, segOtherId },
-                segBillId + "=?",
-                new String[]{String.valueOf(modelId)},
+                new String[]{segId, segName,segUnit,segVal, segInput, segOtherId },
+                segBillId + "=? AND " + segBillType + "=?",
+                new String[]{String.valueOf(modelId), String.valueOf(modelType)},
                 null,
                 null,
                 segOtherId + " ASC,"+ segOrder + " ASC"
@@ -147,8 +115,8 @@ public class BaseModel {
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
         int len = c.getCount();
-        Log.d("_DBD","seg ln " + len + " id" + modelId);
-        if(len == 0) return null;
+        Log.d("_DBD","seg ln " + len + " id" + modelId + " type:"+modelType);
+        if(len == 0) return data;
 
         c.moveToFirst();
         int id = c.getInt(c.getColumnIndex(segId));//c.getInt(c.getColumnIndex(segOtherId));
@@ -159,14 +127,16 @@ public class BaseModel {
         segment.add(c.getString(1));
         segment.add(c.getString(2));
         segment.add(c.getString(3));
-        segment.add(c.getString(4));
+        String input = c.getString(4);
+        if(input ==  null || input.equals("null")) input = "0";
+        segment.add(input);
 
         Log.d("_DBD", "S " + segment.toString() + " id " + id + " prevId " + prevId);
 
         if(len > 1) {
             while (c.moveToNext()) {
 
-                id = c.getInt(c.getColumnIndex(segId));//c.getInt(c.getColumnIndex(segOtherId));
+                id = c.getInt(c.getColumnIndex(segId));
                 if (id != prevId) {
                     data.add(segment);
                     segment = new ArrayList<>();
@@ -177,9 +147,10 @@ public class BaseModel {
                     segment.add(c.getString(2));
                     segment.add(c.getString(3));
                 }
-                //id2 =  c.getInt(c.getColumnIndex(segId));
-                Log.d("_DBD", ""+ c.getColumnIndex("segment.value") + " " +c.getColumnIndex("segment_row.value"));
-                segment.add(c.getString(4));
+
+                input = c.getString(4);
+                if(input ==  null || input.equals("null")) input = "0";
+                segment.add(input);
                 Log.d("_DBD", "S " + segment.toString() + " id " + id + " prevId " + prevId);
                 prevId = id;
 
@@ -187,7 +158,6 @@ public class BaseModel {
         }
 
         data.add(segment);
-
         return data;
     }
 
@@ -198,10 +168,11 @@ public class BaseModel {
 
     public void initInDb(SQLiteDatabase db, long billId, Context c){}
 
-    void initSegmentsInDb(SQLiteDatabase db, long modelId, int modelIndex){
+    void initSegmentsInDb(SQLiteDatabase db, long modelId, int modelType){
 
-        Log.d("_DBD","seg init " + modelIndex);
-
+        Log.d("_DBD","seg init " + modelType);
+        String segId = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_ID;
+        String segIdRel = SegmentBillTypeTable.TABLE_NAME +"."+SegmentBillTypeTable.COL_SEGMENT_ID;
         String segType = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_TYPE;
         String segName =  SegmentTable.TABLE_NAME + "." + SegmentTable.COL_NAME;
         String segUnit = SegmentTable.TABLE_NAME + "." + SegmentTable.COL_UNIT;
@@ -210,20 +181,21 @@ public class BaseModel {
 
         Cursor c = db.query(
             SegmentTable.TABLE_NAME + " INNER JOIN " + SegmentBillTypeTable.TABLE_NAME + " ON " +
-            SegmentTable.TABLE_NAME + "." + SegmentTable.COL_ID + " = " + SegmentBillTypeTable.TABLE_NAME +"."+SegmentBillTypeTable.COL_SEGMENT_ID,
-            new String[]{ segType, segName, segUnit, segVal},
-                segType + "=? AND " + segBillType + " =?",
-            new String[]{SegmentTable.TYPE_GLOBAL + "", modelIndex +""},
+            segId + " = " + segIdRel,
+            new String[]{ segType, segName, segUnit, segVal, segBillType},
+                segType + "=? AND " + segBillType + "=?",
+            new String[]{SegmentTable.TYPE_GLOBAL + "", modelType + ""},
             null,
             null,
             null
         );
 
         if(c.getCount() > 0) {
+
             while (c.moveToNext()) {
                 ContentValues cw = new ContentValues();
-
                 cw.put(SegmentTable.COL_BILL_ID, modelId + "");
+                cw.put(SegmentTable.COL_BILL_TYPE, c.getString(c.getColumnIndexOrThrow(segBillType)) );
                 cw.put(SegmentTable.COL_TYPE, SegmentTable.TYPE_LOCAL +"");
                 cw.put(SegmentTable.COL_NAME, c.getString(c.getColumnIndexOrThrow(segName)));
                 cw.put(SegmentTable.COL_UNIT, c.getInt(c.getColumnIndexOrThrow(segUnit)));
@@ -236,61 +208,72 @@ public class BaseModel {
 
     public void updateMainTableInDb(SQLiteDatabase db, ArrayList<String> data, long billId){}
 
-    public void updateSegmentsInDb(SQLiteDatabase db, ArrayList<ArrayList<String>> data, long modelId){
+    public void updateSegmentsInDb(SQLiteDatabase db, ArrayList<ArrayList<String>> data, long modelId, long modelType){
+        if(data == null) return;
+        deleteSegmentsFromDb(db, modelId, modelType);
+        if(data.isEmpty()) return;
 
-        deleteSegmentsFromDb(db, String.valueOf(modelId));
-        if(data == null || data.isEmpty()) return;
         for(int i=0;i<data.size();++i){
-            ArrayList<String> segment = data.get(i);
-            String name  = segment.get(0);
-            String unit  = segment.get(1);
-            String value = segment.get(2);
+            addSegment(db,modelId,modelType,data.get(i));
+        }
+    }
 
-            ContentValues cw = new ContentValues();
-            cw.put(SegmentTable.COL_BILL_ID, modelId);
-            cw.put(SegmentTable.COL_NAME, name);
-            cw.put(SegmentTable.COL_TYPE, SegmentTable.TYPE_LOCAL);
-            cw.put(SegmentTable.COL_UNIT, unit);
-            cw.put(SegmentTable.COL_VALUE, value);
+    void addSegment(SQLiteDatabase db, long modelId,long modelType, ArrayList<String> segment){
+        String name  = segment.get(0);
+        String unit  = segment.get(1);
+        String value = segment.get(2);
 
-            long segmentId = db.insert(SegmentTable.TABLE_NAME,null, cw);
-            int itStart = 3;
-            int len = segment.size();
+        ContentValues cw = new ContentValues();
+        cw.put(SegmentTable.COL_BILL_ID, modelId);
+        cw.put(SegmentTable.COL_BILL_TYPE, modelType);
+        cw.put(SegmentTable.COL_NAME, name);
+        cw.put(SegmentTable.COL_TYPE, SegmentTable.TYPE_LOCAL);
+        cw.put(SegmentTable.COL_UNIT, unit);
+        cw.put(SegmentTable.COL_VALUE, value);
 
-            if(len > itStart){
-                for(int j=itStart;j<len;++j){
-                    cw.clear();
+        long segmentId = db.insertOrThrow(SegmentTable.TABLE_NAME,null, cw);
+        int itStart = 3;
+        int len = segment.size();
 
-                    cw.put(SegmentRowTable.COL_SEGMENT_ID, segmentId);
-                    cw.put(SegmentRowTable.COL_POSITION, j - itStart);
-                    cw.put(SegmentRowTable.COL_VALUE, segment.get(j));
+        if(len > itStart){
+            for(int j=itStart;j<len;++j){
+                cw.clear();
 
-                    db.insert(SegmentRowTable.TABLE_NAME, null, cw);
+                cw.put(SegmentRowTable.COL_SEGMENT_ID, segmentId);
+                cw.put(SegmentRowTable.COL_POSITION, j - itStart);
+                cw.put(SegmentRowTable.COL_VALUE, segment.get(j));
 
-                    Log.d("_DBD","seg insert "+ cw.toString() );
-                }
+                db.insertOrThrow(SegmentRowTable.TABLE_NAME, null, cw);
+
+                Log.d("_DBD","seg insert "+ cw.toString() +  " model type:"+modelType );
             }
         }
     }
 
-    void deleteSegmentsFromDb(SQLiteDatabase db, String modelIdStr) {
-
+    void deleteSegmentsFromDb(SQLiteDatabase db, long modelId, long modelType) {
+        Log.d("_DBD","seg delete "+ modelId +  " model type:"+modelType );
         db.execSQL("DELETE FROM " + SegmentRowTable.TABLE_NAME +
                         " WHERE " + SegmentRowTable.COL_SEGMENT_ID +
                         " IN (SELECT " + SegmentTable.COL_ID +
                         " FROM " + SegmentTable.TABLE_NAME +
-                        " WHERE " + SegmentTable.COL_BILL_ID + " = " + modelIdStr + ")"
+                        " WHERE " + SegmentTable.COL_BILL_ID + " = " + modelId + " AND " + SegmentTable.COL_BILL_TYPE + "=" + modelType + " )"
         );
-        db.delete(SegmentTable.TABLE_NAME, SegmentTable.COL_BILL_ID + "=? AND "+ SegmentTable.COL_TYPE + "=?", new String[]{modelIdStr, String.valueOf(SegmentTable.TYPE_LOCAL)});
+        db.delete(SegmentTable.TABLE_NAME,
+                SegmentTable.COL_BILL_ID + "=? AND "+ SegmentTable.COL_TYPE + "=? AND " + SegmentTable.COL_BILL_TYPE + "=?",
+                new String[]{
+                    String.valueOf(modelId),
+                    String.valueOf(SegmentTable.TYPE_LOCAL),
+                    String.valueOf(modelType)
+                });
 
     }
 
-    int getModelId(SQLiteDatabase db, String tableName,String colId,String colBillId, String billId){
+    int getModelId(SQLiteDatabase db, String tableName,String colId,String colBillId, String valBillId){
         Cursor c = db.query(
                 tableName,
                 new String[]{colId},
                 colBillId + "=?",
-                new String[]{billId},
+                new String[]{valBillId},
                 null,
                 null,
                 null,
@@ -312,8 +295,20 @@ public class BaseModel {
         mLastModelId = modelId;
     }
 
+    public void addCalcedSegment(SQLiteDatabase db, long billId, ArrayList<String> segment){}
 
+    void addCalcedItemsToSegment(ArrayList<String> newSegment, String multiplier ,String[] items){
 
-
+        if(newSegment != null){
+            Log.d("_SDB", newSegment.toString() + " m:"+multiplier + " ");
+            BigDecimal decMultipier = Utils.getParsedBigDecimal(multiplier);
+            for(String item : items){
+                BigDecimal decItem =  Utils.getParsedBigDecimal(item);
+                BigDecimal decResult = decMultipier.multiply(decItem);
+                decResult = decResult.setScale(2, RoundingMode.HALF_UP);
+                newSegment.add( Utils.getZeroStrippedString(decResult) );
+            }
+        }
+    }
 
 }

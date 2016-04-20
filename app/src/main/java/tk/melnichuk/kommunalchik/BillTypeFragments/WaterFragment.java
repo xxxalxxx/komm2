@@ -81,7 +81,6 @@ public class WaterFragment extends BaseBillFragment {
                 mHideableRow[i].setVisibility(visibility);
             }
         }
-
     }
 
     void setHideableSegmentsRowVisibility(int visibility){

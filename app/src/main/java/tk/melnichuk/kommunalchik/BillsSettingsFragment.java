@@ -86,8 +86,8 @@ public class BillsSettingsFragment extends Fragment {
 
                         optionsManager.setElectricityRateSubsidy(getFloatFromEditText(R.id.electricity_rate_sub_input));
                         optionsManager.setElectricityRate1(getFloatFromEditText(R.id.electricity_rate_step1_input));
-                        optionsManager.setElectricityRate2(getFloatFromEditText(R.id.electricity_rate_step1_input));
-                        optionsManager.setElectricityRate3(getFloatFromEditText(R.id.electricity_rate_step1_input));
+                        optionsManager.setElectricityRate2(getFloatFromEditText(R.id.electricity_rate_step2_input));
+                        optionsManager.setElectricityRate3(getFloatFromEditText(R.id.electricity_rate_step3_input));
 
                         optionsManager.setTaxRate(getFloatFromEditText(R.id.phone_tax_input));
                         optionsManager.setRadioRate(getFloatFromEditText(R.id.phone_radio_input));
@@ -101,8 +101,6 @@ public class BillsSettingsFragment extends Fragment {
                      //   MenuFragment menuFragment = new MenuFragment();
                        // final FragmentTransaction ft = getFragmentManager().beginTransaction();
                        // ft.replace(R.id.fragment_container, menuFragment, "SettingsFrag").commit();
-
-
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:

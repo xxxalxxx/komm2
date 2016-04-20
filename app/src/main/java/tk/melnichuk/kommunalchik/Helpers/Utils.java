@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Helpers;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -33,6 +34,25 @@ public class Utils {
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         textView.measure(widthMeasureSpec, heightMeasureSpec);
         return textView.getMeasuredHeight();
+    }
+
+    public static BigDecimal getParsedBigDecimal(String s){
+        if(s == null) return BigDecimal.ZERO;
+        s = s.trim();
+        if(s.isEmpty()) return BigDecimal.ZERO;
+
+        try {
+            if(s.contains("/")) {
+                String[] vals = s.split("/");
+                if(Double.parseDouble(vals[1]) == 0.0) return BigDecimal.ZERO;
+                return  new BigDecimal(vals[0]).divide(new BigDecimal(vals[1]));
+            }
+
+            return  new BigDecimal(s);
+        } catch(Exception e) {
+            Log.e("_UDB", e.toString());
+        }
+        return BigDecimal.ZERO;
     }
 
     public static  String getZeroStrippedString(BigDecimal b){

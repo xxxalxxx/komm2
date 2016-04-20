@@ -134,10 +134,6 @@ public class WaterModel extends BaseModel {
         };
     }
 
-    BigDecimal[] getLastColumnItemsFromDb(){
-        return null;
-    }
-
     long createMainTableInDb(SQLiteDatabase db, long billId, ArrayList<String> data){
         ContentValues cw = new ContentValues();
         cw.put(WaterTable.COL_BILL_ID, billId );
@@ -331,7 +327,7 @@ public class WaterModel extends BaseModel {
             data.set(INDEX_PREV, c.getString(c.getColumnIndex(WaterTable.COL_PREV)));
             data.set(INDEX_DIFF, c.getString(c.getColumnIndex(WaterTable.COL_DIFF)));
             data.set(INDEX_RATE, c.getString(c.getColumnIndex(WaterTable.COL_RATE)));
-            data.set(INDEX_SUM,c.getString(c.getColumnIndex(WaterTable.COL_SUM)) );
+            data.set(INDEX_SUM, c.getString(c.getColumnIndex(WaterTable.COL_SUM)));
 
             c = db.query(
                 WaterRowTable.TABLE_NAME,
@@ -384,10 +380,64 @@ public class WaterModel extends BaseModel {
         Log.d("_DBD","dfd "+billId + " " + modelId);
         if(modelId != -1){
             String currIdStr = String.valueOf(modelId);
-            deleteSegmentsFromDb(db,currIdStr);
+            deleteSegmentsFromDb(db,modelId, BillManager.INDEX_COLD_WATER + mType);
             db.delete(WaterRowTable.TABLE_NAME, WaterRowTable.COL_WATER_BILL_ID + "=?", new String[]{currIdStr});
             db.delete(WaterTable.TABLE_NAME, WaterTable.COL_ID + "=?", new String[]{currIdStr});
         }
     }
 
+    @Override
+    public void addCalcedSegment(SQLiteDatabase db, long billId, ArrayList<String> segment) {
+
+        Cursor c = db.query(
+                WaterTable.TABLE_NAME,
+                new String[]{WaterTable.COL_ID, WaterTable.COL_SUM},
+                WaterTable.COL_BILL_ID + "=? AND " + WaterTable.COL_TYPE + "=?",
+                new String[]{String.valueOf(billId), String.valueOf(mType)},
+                null,
+                null,
+                null,
+                "1");
+
+        if(c.getCount() > 0) {
+            c.moveToFirst();
+
+            long modelId = c.getLong(c.getColumnIndex(WaterTable.COL_ID));
+            setLastModelId(modelId);
+
+            String sum =  c.getString(c.getColumnIndex(WaterTable.COL_SUM));
+            String totalNormalRow = "";
+            String totalCounterRow = "";
+
+            c = db.query(
+                    WaterRowTable.TABLE_NAME,
+                    new String[]{
+                            WaterRowTable.COL_ROW_TYPE,
+                            WaterRowTable.COL_TOTAL,
+                    },
+                    WaterRowTable.COL_WATER_BILL_ID + "=?",
+                    new String[]{String.valueOf(modelId)},
+                    null,
+                    null,
+                    null,
+                    "2"
+            );
+
+            if(c.getCount() > 0){
+                while(c.moveToNext()) {
+                    int type = c.getInt(c.getColumnIndexOrThrow(WaterRowTable.COL_ROW_TYPE));
+                    String total = c.getString(c.getColumnIndexOrThrow(WaterRowTable.COL_TOTAL));
+                    if(type == WaterRowTable.ROW_TYPE_NORMAL) totalNormalRow = total;
+                    else if(type == WaterRowTable.ROW_TYPE_COUNTER) totalCounterRow = total;
+                }
+            }
+
+            ArrayList<String> newSegment = new ArrayList<>();
+            for(String s : segment) newSegment.add(s);
+
+            addCalcedItemsToSegment(newSegment,segment.get(2), new String[]{totalNormalRow, totalCounterRow, sum});
+            Log.d("_DBD", "adding new segment:" + newSegment.toString() + " n:"+totalNormalRow + " c:"+totalCounterRow + " s:" + sum);
+            addSegment(db, modelId, BillManager.INDEX_COLD_WATER + mType, newSegment);
+        }
+    }
 }

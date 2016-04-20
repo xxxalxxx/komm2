@@ -145,19 +145,11 @@ public class BaseBillFragment extends Fragment {
         final ViewGroup newView = (ViewGroup) LayoutInflater.from(getContext()).inflate(
                 mSegmentLayoutResourceId, mSegmentContainer, false);
         mSegmentContainer.addView(newView);
-        //ViewGroup segment = (ViewGroup) newView.getChildAt(0);
+
         ((TextView) newView.getChildAt(0)).setText(segmentItem.get(0));
-       // TextView t = (TextView) newView.findViewById(android.R.id.text1);
-
-      //  t.setText(segmentItem.get(0));
-        //Log.d("_SSS", "add seg" + " " + t.getText() );
-      //  ViewGroup p = (ViewGroup) t.getParent();
-
 
         MainActivity mainActivity = (MainActivity) getActivity();
         if(mainActivity != null && mainActivity.mKeyboard != null) {
-           // ((TextView) newView.getChildAt(0)).setText(segmentItem.get(0));
-           // ((TextView) segment.getChildAt(2)).setText();
 
             UnitTypesEditText et = (UnitTypesEditText) newView.getChildAt(3);
             et.setUnitTypeFromIdStr(segmentItem.get(1));
@@ -168,14 +160,17 @@ public class BaseBillFragment extends Fragment {
 
         }
 
-
-        int k = INDEX_SEGMENT_INPUT_FROM_DB_START;
-        if(INDEX_SEGMENT_INPUT_START < segmentItem.size())
-            for(int j=INDEX_SEGMENT_INPUT_START;j<newView.getChildCount();++j){
+        int interfaceSegmentsLeft = newView.getChildCount() - INDEX_SEGMENT_INPUT_START;
+        int arrayListSegmentsLeft = segmentItem.size() - INDEX_SEGMENT_INPUT_FROM_DB_START;
+        if(interfaceSegmentsLeft > 0 && arrayListSegmentsLeft > 0){
+            int len = Math.min(interfaceSegmentsLeft,arrayListSegmentsLeft);
+            for(int i=0, j = INDEX_SEGMENT_INPUT_START, k = INDEX_SEGMENT_INPUT_FROM_DB_START;
+                i<len;
+                ++i, ++j, ++k){
+                Log.d("_DBD", "j:" + j + "segInterfacelen:" + newView.getChildCount() + " k:" + k + " segitemlen:" + segmentItem.size());
                 ((TextView)newView.getChildAt(j)).setText(segmentItem.get(k));
-                ++k;
             }
-
+        }
 
         newView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,31 +237,6 @@ public class BaseBillFragment extends Fragment {
                 }
             });
         }
-
-            //Log.d();
-
-
-
-     //   Log.d("_DBD", "in segdat " + segmentsData.toString() );
-
-       /* for(int i=0;i<len;++i){
-            ViewGroup segment = (ViewGroup) mSegmentContainer.getChildAt(i);
-            ArrayList<String> segmentItem = segmentsData.get(i);
-            Log.d("_DBD", "in segdat " + segmentItem.toString() + " " + ((TextView)segment.getChildAt(0)).getText().toString() );
-            ((TextView)segment.getChildAt(0)).setText("-1");
-
-           ((TextView)segment.getChildAt(0)).setText(segmentItem.get(0));
-            UnitTypesEditText unitTypesEditText = (UnitTypesEditText) segment.getChildAt(INDEX_SEGMENT_UNIT_TYPES_INPUT);
-            unitTypesEditText.setUnitTypeFromIdStr(segmentItem.get(1));
-            unitTypesEditText.setText(segmentItem.get(2));
-
-            int k = INDEX_SEGMENT_INPUT_FROM_DB_START;
-            if(INDEX_SEGMENT_INPUT_START < segmentItem.size())
-            for(int j=INDEX_SEGMENT_INPUT_START;j<segment.getChildCount();++j){
-                ((TextView)segment.getChildAt(j)).setText(segmentItem.get(k));
-                ++k;
-            }
-        }*/
     }
 
     public ArrayList<String> getMainTableData(){

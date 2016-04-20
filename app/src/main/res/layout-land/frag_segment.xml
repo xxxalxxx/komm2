@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:windowSoftInputMode="adjustNothing"
+    android:isScrollContainer="false"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Large Text"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/name"
+        android:layout_below="@+id/title"
+        android:hint="@string/segment_picker_name" />
+
+    <LinearLayout
+        android:id="@+id/units"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp">
+
+
+        <TextView
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/format_decimal"
+            android:id="@+id/decimal_text"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/line"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:paddingTop="5dip"
+            android:gravity="center_horizontal"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#aaa"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/format_percent"
+            android:id="@+id/percent_text"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textIsSelectable="false"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/line2"
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:paddingTop="5dip"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#aaa"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/format_fraction"
+            android:id="@+id/fraction_text"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/underlines"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/units">
+
+
+        <TextView
+            android:background="@color/settings_segment_new_underline"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/underline_decimal"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18dp" />
+
+        <TextView
+            android:background="@color/settings_segment_new_underline"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/underline_percent"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:background="@color/settings_segment_new_underline"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/underline_fraction"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/decimal_input"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/underlines"
+        android:hint="@string/type_decimal" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/percent_input"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/underlines"
+        android:hint="@string/type_percent"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="/"
+        android:id="@+id/divide"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/underlines"
+        android:visibility="invisible" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/numerator"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/underlines"
+        android:layout_toLeftOf="@+id/divide"
+        android:gravity="right"
+        android:textAlignment="gravity"
+        android:hint="@string/type_fraction_num"
+        android:visibility="invisible" />
+
+    <EditText
+        android:imeOptions="flagNoExtractUi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/denominator"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/underlines"
+        android:layout_toRightOf="@+id/divide"
+        android:hint="@string/type_fraction_den"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/buttons_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/btn_back" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/btn_save" />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/decimal_input"
+        android:layout_above="@+id/buttons_layout">
+
+        <RelativeLayout
+            android:id="@+id/checkbox_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/communal"
+                android:id="@+id/communal"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/gas"
+                android:id="@+id/gas"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/communal" />
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/coldWater"
+                android:id="@+id/cold_water"
+
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/gas" />
+
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/wasteWater"
+                android:id="@+id/waste_water"
+
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/cold_water" />
+
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hotWater"
+                android:id="@+id/hot_water"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/waste_water" />
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/heating"
+                android:id="@+id/heating"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/hot_water" />
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/electricity"
+                android:id="@+id/electricity"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/heating" />
+
+            <CheckBox
+                android:checked="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/phone"
+                android:id="@+id/phone"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/electricity" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

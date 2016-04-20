@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import tk.melnichuk.kommunalchik.DataManagers.BillManager;
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
+import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
 import tk.melnichuk.kommunalchik.Helpers.Utils;
@@ -25,15 +27,15 @@ import tk.melnichuk.kommunalchik.Helpers.Utils;
 /**
  * Created by al on 22.03.16.
  */
-public class SegmentListFragment extends Fragment {
+public class BillListFragment extends Fragment {
     View mView;
     ListView mListView;
     Button mNavNext, mNavPrev;
     TextView mNavPage, mNoSegmentsText;
-    SegmentListAdapter mSegmentListAdapter;
+    BillListAdapter mBillListAdapter;
     private final int ITEMS_PER_PAGE = 3;
     private long mNumItems, mOffset = 0;
-    ArrayList<SegmentListItem> mData;
+    ArrayList<BillListItem> mData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,17 +58,16 @@ public class SegmentListFragment extends Fragment {
         mData = new ArrayList<>();
 
         if(mView == null){
-            mView = inflater.inflate(R.layout.frag_segment_list, container, false);
+            mView = inflater.inflate(R.layout.frag_bill_list, container, false);
 
         }
         updateNumItems();
 
-        updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
+        updateBillsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
 
-
-        mSegmentListAdapter = new SegmentListAdapter(getContext(), mData, this);
-        mListView = (ListView) mView.findViewById(R.id.segment_list);
-        mListView.setAdapter(mSegmentListAdapter);
+        mBillListAdapter = new BillListAdapter(getContext(), mData, this);
+        mListView = (ListView) mView.findViewById(R.id.bill_list);
+        mListView.setAdapter(mBillListAdapter);
 
         mNavPage = (TextView) mView.findViewById(R.id.nav_page);
         mNoSegmentsText = (TextView) mView.findViewById(R.id.no_segments_text);
@@ -74,23 +75,6 @@ public class SegmentListFragment extends Fragment {
         mNavNext = (Button) mView.findViewById(R.id.nav_next);
 
         updateNavPageText();
-
-        FloatingActionButton fabAdd = (FloatingActionButton) mView.findViewById(R.id.fab_segment_add);
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View b) {
-
-                SegmentFragment segmentNewFragment = new SegmentFragment();
-                segmentNewFragment.setState(SegmentFragment.STATE_CREATE);
-                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                ft.replace(R.id.fragment_container, segmentNewFragment, "NewBillsFrag");
-                ft.addToBackStack(null);
-                ft.commit();
-            }
-        });
-
 
         mNavPrev.setOnClickListener(new View.OnClickListener() {
 
@@ -102,9 +86,9 @@ public class SegmentListFragment extends Fragment {
                 }
                 mOffset = prevOffset;
 
-                updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE,mOffset);
+                updateBillsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
                 updateNumItems();
-                mSegmentListAdapter.notifyDataSetChanged();
+                mBillListAdapter.notifyDataSetChanged();
                 updateNavPageText();
 
             }
@@ -119,9 +103,9 @@ public class SegmentListFragment extends Fragment {
                     return;
                 }
                 mOffset = nextOffset;
-                updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE,mOffset);
+                updateBillsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
                 updateNumItems();
-                mSegmentListAdapter.notifyDataSetChanged();
+                mBillListAdapter.notifyDataSetChanged();
                 updateNavPageText();
 
 
@@ -132,45 +116,42 @@ public class SegmentListFragment extends Fragment {
         return mView;
     }
 
-    public class SegmentListItem {
-        String mName, mUnit,mValue;
+    public class BillListItem {
         long mId;
-        public SegmentListItem(long id, String name, String unit, String value){
+        String mName, mDate;
+
+        public BillListItem(long id, String name, String date){
             mId = id;
             mName = name;
-            mUnit = unit;
-            mValue = value;
+            mDate = date;
+
         }
     };
 
 
 
-    public void updateSegmentsByOffsetAndLimit(int limit, long offset){
+    public void updateBillsByOffsetAndLimit(int limit, long offset){
         mData.clear();
         DbManager dbManager  = new DbManager(getContext());
         SQLiteDatabase db = dbManager.getReadableDatabase();
 
-
         Cursor c = db.query(
-                SegmentTable.TABLE_NAME,  // The table to query
-                new String[]{SegmentTable.COL_ID,SegmentTable.COL_NAME, SegmentTable.COL_UNIT, SegmentTable.COL_VALUE},                               // The columns to return
-                SegmentTable.COL_TYPE + " =?",                                // The columns for the WHERE clause
-                new String[] {String.valueOf(SegmentTable.TYPE_GLOBAL)},                            // The values for the WHERE clause
+                BillTable.TABLE_NAME,  // The table to query
+                new String[]{BillTable.COL_ID,BillTable.COL_NAME, BillTable.COL_DATE},                               // The columns to return
+                BillTable.COL_STATUS + " =?",                                // The columns for the WHERE clause
+                new String[] {String.valueOf(BillTable.STATUS_SAVED)},                            // The values for the WHERE clause
                 null,                                     // don't group the rows
                 null,                                     // don't filter by row groups
-                SegmentTable.COL_ID + SegmentTable.ORDER_ASC,                                // The sort order
+            BillTable.COL_ID + " ASC",                    // The sort order
                 offset + "," + limit
         );
 
         while(c.moveToNext()){
-            long id = c.getLong(c.getColumnIndexOrThrow(SegmentTable.COL_ID));
-            String name = c.getString(c.getColumnIndexOrThrow(SegmentTable.COL_NAME));
-            String value = c.getString(c.getColumnIndexOrThrow(SegmentTable.COL_VALUE));
+            long id = c.getLong(c.getColumnIndexOrThrow(BillTable.COL_ID));
+            String name = c.getString(c.getColumnIndexOrThrow(BillTable.COL_NAME));
+            String date = c.getString(c.getColumnIndexOrThrow(BillTable.COL_DATE));
 
-            int unitInt = c.getInt(c.getColumnIndexOrThrow(SegmentTable.COL_UNIT));
-            String unit = Utils.getUnitValue(getContext(), unitInt);
-
-            mData.add(new SegmentListItem(id,name,unit,value));
+            mData.add(new BillListItem(id,name,date));
         }
 
         db.close();
@@ -180,14 +161,12 @@ public class SegmentListFragment extends Fragment {
         int numPages = (int) Math.ceil( (double) mNumItems/ITEMS_PER_PAGE );
         if(numPages == 0) {
             mNoSegmentsText.setVisibility(View.VISIBLE);
-            mNavPage.setText(R.string.segment_list_no_pages);
+            mNavPage.setText(R.string.bill_list_no_bills);
             return;
         }
         mNoSegmentsText.setVisibility(View.GONE);
 
-
         long currPage =  (int) Math.ceil( (double) mOffset/ITEMS_PER_PAGE ) + 1;//mOffset/ITEMS_PER_PAGE + 1;
-
 
         String navText = currPage + "/" + numPages;
         mNavPage.setText(navText);
@@ -196,29 +175,27 @@ public class SegmentListFragment extends Fragment {
     void updateNumItems(){
         DbManager dbManager = new DbManager(getContext());
         SQLiteDatabase db = dbManager.getReadableDatabase();
-        mNumItems =  DatabaseUtils.queryNumEntries(db, SegmentTable.TABLE_NAME, SegmentTable.COL_TYPE + "=?", new String[]{String.valueOf(SegmentTable.TYPE_GLOBAL)});
+        mNumItems =  DatabaseUtils.queryNumEntries(db, BillTable.TABLE_NAME,
+                BillTable.COL_STATUS + "=?",
+                new String[]{String.valueOf(BillTable.STATUS_SAVED)});
     }
 
     void startFragmentUpdateTransaction(long id){
-
-        SegmentFragment segmentNewFragment = new SegmentFragment();
-        segmentNewFragment.setState(SegmentFragment.STATE_UPDATE);
-        segmentNewFragment.setSegmentId(String.valueOf(id));
+        BillsFragment billsFragment = new BillsFragment();
+        billsFragment.setState(BillsFragment.STATE_SAVED, id);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment_container, segmentNewFragment, "NewBillsFrag");
+        ft.replace(R.id.fragment_container, billsFragment, "NewBillsFrag");
         ft.addToBackStack(null);
         ft.commit();
     }
 
-    void deleteSegment(long id){
-        String strId = String.valueOf(id);
+    void deleteBill(long billId){
         DbManager dbManager  = new DbManager(getContext());
         SQLiteDatabase db = dbManager.getReadableDatabase();
         db.beginTransaction();
         try{
-            db.delete(SegmentTable.TABLE_NAME, SegmentTable.COL_ID + " =?", new String[]{strId});
-            db.delete(SegmentBillTypeTable.TABLE_NAME, SegmentBillTypeTable.COL_SEGMENT_ID + " =?", new String[]{strId});
-
+            BillManager bm = new BillManager(this);
+            bm.deleteBillsFromDb(db,billId);
             db.setTransactionSuccessful();
         } catch(Exception e){
             Log.e("SQL_ERR", e.toString());
@@ -237,8 +214,8 @@ public class SegmentListFragment extends Fragment {
 
         }
 
-        updateSegmentsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
-        mSegmentListAdapter.notifyDataSetChanged();
+        updateBillsByOffsetAndLimit(ITEMS_PER_PAGE, mOffset);
+        mBillListAdapter.notifyDataSetChanged();
         updateNavPageText();
 
     }
@@ -250,7 +227,6 @@ public class SegmentListFragment extends Fragment {
 
         outState.putLong("offset", mOffset);
         outState.putLong("numItems", mNumItems);
-
     }
 
 }

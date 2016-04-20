@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+    android:layout_width="0dp"
+    android:layout_weight="6"
+    android:layout_height="wrap_content"
+        android:padding="10dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bill_name"
+        android:id="@+id/name_label"
+        android:paddingRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/name_value"
+        android:layout_toRightOf="@+id/name_label" />
+
+    <TextView
+        android:text="@string/bill_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/date_label"
+        android:layout_below="@+id/name_label"
+        android:paddingRight="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:id="@+id/date_value"
+        android:layout_below="@+id/name_label"
+        android:layout_toRightOf="@+id/date_label" />
+
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/line"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:gravity="center_horizontal"
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="#eee"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="5dp" />
+
+    <ImageView
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@mipmap/ic_action_discard"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="fill_parent"
+        android:id="@+id/delete_bill"
+        android:focusable="true"
+        android:clickable="true"
+        android:scaleType="center" />
+
+    <TextView
+
+        android:id="@+id/line2"
+        style="?android:attr/listSeparatorTextViewStyle"
+        android:paddingTop="5dip"
+        android:gravity="center_horizontal"
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="#eee"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="5dp" />
+
+    <ImageView
+
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@mipmap/ic_action_forward"
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="fill_parent"
+        android:id="@+id/update_bill"
+        android:focusable="true"
+        android:clickable="true"
+        android:scaleType="center"
+        android:layout_gravity="center" />
+
+</LinearLayout>

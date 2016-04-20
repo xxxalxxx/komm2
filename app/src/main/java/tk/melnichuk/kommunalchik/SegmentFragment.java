@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
@@ -23,10 +25,10 @@ import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
  * Created by al on 22.03.16.
  */
 public class SegmentFragment extends Fragment{
-    String testVar = "ttt";
+
     public final static int STATE_CREATE = 0, STATE_UPDATE = 1, STATE_COMMON = 2;
     public final static int MODE_DECIMAL = 0, MODE_PERCENT = 1, MODE_FRACTION = 2;
-
+    private long mBillId = -1;
     private int mCurrentMode, mState = -1;
     String mSegmentId = "-1";
 
@@ -57,8 +59,7 @@ public class SegmentFragment extends Fragment{
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
-        if(mView != null) testVar = "aaa";
-        Log.d("TESTVAR",testVar);
+
         mView = inflater.inflate(R.layout.frag_segment, container, false);
 
         mTitle = (TextView) mView.findViewById(R.id.title);
@@ -120,6 +121,7 @@ public class SegmentFragment extends Fragment{
             mCurrentMode = savedInstanceState.getInt("mode");
             mState = savedInstanceState.getInt("state");
             mSegmentId = String.valueOf(savedInstanceState.getInt("segmentId", -1));
+            mBillId = savedInstanceState.getLong("billId");
         } else {
             mCurrentMode = 0;
         }
@@ -179,8 +181,6 @@ public class SegmentFragment extends Fragment{
                     null
             );
 
-
-
             while(c.moveToNext()){
                 int segmentId = c.getInt(c.getColumnIndexOrThrow(SegmentBillTypeTable.COL_TYPE));
                 billsTypes[segmentId] = new Integer(segmentId);
@@ -229,20 +229,25 @@ public class SegmentFragment extends Fragment{
                 String num = "";
                 String denom = "1";
                 String val = "";
+                int mode = -1;
+
 
                 switch (mCurrentMode){
                     case MODE_DECIMAL:
                         num = mInputDecimal.getText().toString();
                         val = num;
+                        mode = MODE_DECIMAL;
                         break;
                     case MODE_PERCENT:
                         num = mInputPercent.getText().toString();
                         val = num;
+                        mode = MODE_PERCENT;
                         break;
                     case MODE_FRACTION:
                         num = mInputFractionNumerator.getText().toString();
                         denom = mInputFractionDenominator.getText().toString();
                         val = num + "/" + denom;
+                        mode = MODE_FRACTION;
                         break;
                 }
 
@@ -273,6 +278,7 @@ public class SegmentFragment extends Fragment{
 
                         ContentValues cw = new ContentValues();
                         cw.put(SegmentTable.COL_BILL_ID, SegmentTable.BILL_ID_GLOBAL );
+                        cw.put(SegmentTable.COL_BILL_TYPE, SegmentTable.BILL_TYPE_NONE);
                         cw.put(SegmentTable.COL_TYPE, SegmentTable.TYPE_GLOBAL);
                         cw.put(SegmentTable.COL_NAME,segmentName);
                         cw.put(SegmentTable.COL_UNIT, mCurrentMode);
@@ -315,7 +321,29 @@ public class SegmentFragment extends Fragment{
                     }
 
                 } else {
+                    Log.d("_SDB", mBillId + " " + mode );
+                    if(mBillId != -1 && mode != -1){
+                        BillManager billManager = new BillManager(SegmentFragment.this);
 
+                        ArrayList<Integer> segmentIds = new ArrayList<Integer>();
+                        ArrayList<String> segment = new ArrayList<String>();
+                        segment.add(segmentName);
+                        segment.add( String.valueOf(mode) );
+                        segment.add(val);
+
+                        int billType = 0;
+                        for(int i=0;i<len;++i) {
+                            View child = mCheckBoxLayout.getChildAt(i);
+                            if(child instanceof CheckBox) {
+                                CheckBox cb = (CheckBox) child;
+                                if(cb.isChecked()){
+                                    segmentIds.add(billType);
+                                }
+                                ++billType;
+                            }
+                        }
+                        billManager.addCommonCalcedSegments(segmentIds, segment, mBillId);
+                    }
                 }
 
                 int strRes = mState == STATE_UPDATE ? R.string.segment_update_success : R.string.segment_create_success;
@@ -334,6 +362,7 @@ public class SegmentFragment extends Fragment{
         outState.putInt("state", mState);
         outState.putInt("mode", mCurrentMode);
         outState.putInt("segmentId", Integer.valueOf(mSegmentId));
+        outState.putLong("billId",mBillId);
     }
 
     void setUnderlineVisibilities(int decimalVisibility, int percentVisibility, int fractionVisibility)
@@ -356,17 +385,9 @@ public class SegmentFragment extends Fragment{
     public void setState(int state){
         mState = state;
     }
-
+    public void setBillId(long billId){ mBillId = billId; }
     public void setSegmentId(String segmentId){
         mSegmentId = segmentId;
     }
-
-    public void setCommon(BillManager dh) {
-        //TODO: save dataholder on recreation of window
-        mBillManager = dh;
-
-        mState = STATE_COMMON;
-    }
-
 
 }

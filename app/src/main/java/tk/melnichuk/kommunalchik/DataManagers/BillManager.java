@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -23,10 +24,10 @@ import tk.melnichuk.kommunalchik.Models.WaterModel;
  */
 public class BillManager {
 
-    BillsFragment mFragment;
+    Fragment mFragment;
 
-    public BillManager(BillsFragment fragment){
-        mFragment =fragment;
+    public BillManager(Fragment fragment){
+        mFragment = fragment;
 
         initModels();
     }
@@ -45,6 +46,17 @@ public class BillManager {
             INDEX_ELECTRICITY = 6,
             INDEX_PHONE = 7;
 
+    public static final int[] modelIndices = {
+            INDEX_COMMUNAL,
+            INDEX_GAS ,
+            INDEX_COLD_WATER,
+            INDEX_WASTE_WATER,
+            INDEX_HOT_WATER,
+            INDEX_HEATING,
+            INDEX_ELECTRICITY,
+            INDEX_PHONE
+    };
+
     private void initModels(){
         mModels = new BaseModel[NUM_BILL_TABLES];
         mModels[INDEX_COMMUNAL] = new CommunalModel();
@@ -55,10 +67,6 @@ public class BillManager {
         mModels[INDEX_HEATING] = new HeatingModel();
         mModels[INDEX_ELECTRICITY] = new ElectricityModel();
         mModels[INDEX_PHONE] = new PhoneModel();
-    }
-
-    private BillManager(){
-
     }
 
     public static BaseModel getModel(int modelIndex){
@@ -86,69 +94,33 @@ public class BillManager {
         }
     }
 
-    public void getExcelArray(){
-        //return row-cell representation of bills in dataholder for excel table
-    }
 
-    public void writeToSql(){
 
-    }
+    public long initNewBill(long relId){
+        if(mFragment == null) return -1;
+        Context context = mFragment.getContext();
+        DbManager dbManager = new DbManager(context);
+        SQLiteDatabase db = dbManager.getWritableDatabase();
 
-    public void getFromSql(){
+        long retBillId = -1;
 
-    }
+        db.beginTransaction();
+        try {
+            long billId = getTempTableIdByRelId(db, relId,BillTable.STATUS_TEMP);
 
-    public void initDb(){
+            if(billId != -1) {
+                deleteBillsFromDb(db,billId);
+            }
+            retBillId = initBillsInDb(db,context, relId, BillTable.STATUS_TEMP);
 
-    }
-
-    public long getTempTableIdByRelId(SQLiteDatabase db, long relId){
-
-        Cursor c = db.query(
-                BillTable.TABLE_NAME,
-                new String[]{BillTable.COL_ID},
-                BillTable.COL_RELATION + "=? AND " + BillTable.COL_STATUS + "=?",
-                new String[]{String.valueOf(relId), String.valueOf(BillTable.STATUS_TEMP)},
-                null,
-                null,
-                null,
-                "1"
-        );
-
-        if(c.getCount() > 0) {
-            c.moveToFirst();
-            return c.getLong(c.getColumnIndexOrThrow(BillTable.COL_ID));
-        }
-        return -1;
-    }
-
-    public long initBillsInDb(SQLiteDatabase db, Context context, long relId){
-
-        Log.d("_DBD", "bi3 " + relId);
-        ContentValues cw = new ContentValues();
-        cw.put(BillTable.COL_RELATION, relId);
-        cw.put(BillTable.COL_STATUS, BillTable.STATUS_TEMP);
-        cw.put(BillTable.COL_NAME, BillTable.NAME_TEMP);
-        cw.put(BillTable.COL_DESC, "");
-        cw.put(BillTable.COL_DATE, "0");
-
-        long retBillId = db.insertOrThrow(BillTable.TABLE_NAME, null, cw);
-
-        Log.d("_DBD", "bi2 " + retBillId);
-        for (BaseModel m : mModels) {
-            m.initInDb(db, retBillId, context);
-        }
-
-        return  retBillId;
-
-    }
-
-    public void deleteBillsFromDb(SQLiteDatabase db,long billId){
-
-        db.delete(BillTable.TABLE_NAME, BillTable.COL_ID + "=?", new String[]{String.valueOf(billId)});
-
-        for (BaseModel m : mModels) {
-            m.deleteFromDb(db, billId);
+            db.setTransactionSuccessful();
+            //create segments with global segments
+        } catch (Exception e) {
+            Log.d("_DBD","err " + e.toString());
+        } finally {
+            db.endTransaction();
+            db.close();
+            return retBillId;
         }
     }
 
@@ -164,38 +136,13 @@ public class BillManager {
         db.beginTransaction();
 
         try {
-            Cursor c = db.query(
-                    BillTable.TABLE_NAME,
-                    new String[]{BillTable.COL_ID},
-                    BillTable.COL_RELATION + "=? AND " + BillTable.COL_STATUS + "=?",
-                    new String[]{String.valueOf(relId), String.valueOf(BillTable.STATUS_TEMP)},
-                    null,
-                    null,
-                    null,
-                    "1"
-            );
+            long billId =  getTempTableIdByRelId(db, relId,BillTable.STATUS_TEMP);
 
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                retBillId = c.getInt(c.getColumnIndexOrThrow(BillTable.COL_ID));
+            if(billId != -1){
+                retBillId = billId;
                 Log.d("_DBD", "bill id on continue " + retBillId);
-
             } else {
-                //create new temp row
-                Log.d("_DBD", "bi3 " + relId);
-                ContentValues cw = new ContentValues();
-                cw.put(BillTable.COL_RELATION, relId);
-                cw.put(BillTable.COL_STATUS, BillTable.STATUS_TEMP);
-                cw.put(BillTable.COL_NAME, BillTable.NAME_TEMP);
-                cw.put(BillTable.COL_DESC, "");
-                cw.put(BillTable.COL_DATE, "0");
-
-                retBillId = db.insertOrThrow(BillTable.TABLE_NAME, null, cw);
-
-                Log.d("_DBD", "bi2 " + retBillId);
-                for (BaseModel m : mModels) {
-                    m.initInDb(db, retBillId, context);
-                }
+                retBillId = initBillsInDb(db,context, relId, BillTable.STATUS_TEMP);
             }
 
             db.setTransactionSuccessful();
@@ -209,7 +156,8 @@ public class BillManager {
         }
     }
 
-    public long initNewBill(long relId){
+
+    public long initSavedBill(long relId){
         if(mFragment == null) return -1;
         Context context = mFragment.getContext();
 
@@ -220,84 +168,205 @@ public class BillManager {
 
         db.beginTransaction();
         try {
-
-            long billId = getTempTableIdByRelId(db, relId);
-/*
-            Cursor c = db.query(
-                    BillTable.TABLE_NAME,
-                    new String[]{BillTable.COL_ID},
-                    BillTable.COL_RELATION + "=? AND " + BillTable.COL_STATUS + "=?",
-                    new String[]{String.valueOf(relId), String.valueOf(BillTable.STATUS_TEMP)},
-                    null,
-                    null,
-                    null,
-                    "1"
-            );
-*/
+            long billId = getTempTableIdByRelId(db, relId, BillTable.STATUS_TEMP_FROM_SAVED);
 
             if(billId != -1) {
-
                 deleteBillsFromDb(db,billId);
-
-               /* db.delete(BillTable.TABLE_NAME, BillTable.COL_ID + "=?", new String[]{String.valueOf(billId)});
-
-                for (BaseModel m : mModels) {
-
-                    m.deleteFromDb(db, billId);
-                }*/
             }
 
-            /*
-            if (c.getCount() > 0) {
-                c.moveToFirst();
-                int billId =  // c.getInt(c.getColumnIndexOrThrow(BillTable.COL_ID));
+            retBillId = initBillsInDb(db,context, relId, BillTable.STATUS_TEMP_FROM_SAVED);
 
-                Log.d("_DBD", "bi1 "+billId);
 
-                db.delete(BillTable.TABLE_NAME, BillTable.COL_ID + "=?", new String[]{String.valueOf(billId)});
+            for(int i=0;i<mModels.length;++i){
+                ArrayList<String> mainTableData = mModels[i].getMainTableFromDb(db,relId);
+                long modelId = mModels[i].getLastModelId();
+                ArrayList<ArrayList<String>> segmentsData = mModels[i].getSegmentsFromDb(db,modelId,i);
 
-                for (BaseModel m : mModels) {
 
-                    m.deleteFromDb(db, billId);
+                mModels[i].initInDb(db, retBillId, context);
+
+                if(mainTableData != null) {
+                    Log.d("_SDB", mainTableData.toString());
+                    mModels[i].updateMainTableInDb(db, mainTableData, retBillId);
                 }
-                Log.d("_DBD", "del m ");
-                //temp row exists, delete bill and related bill ids
+
+                if(segmentsData != null) {
+                    long savedModelId = mModels[i].getLastModelId();
+                    mModels[i].updateSegmentsInDb(db,segmentsData,savedModelId,i);
+                    Log.d("_SDB", segmentsData.toString());
+                }
+
             }
-*/
-
-            retBillId = initBillsInDb(db,context, relId);
-
-            //create new temp row
-          /*  Log.d("_DBD", "bi3 "+relId);
-            ContentValues cw = new ContentValues();
-            cw.put(BillTable.COL_RELATION, relId);
-            cw.put(BillTable.COL_STATUS, BillTable.STATUS_TEMP);
-            cw.put(BillTable.COL_NAME, BillTable.NAME_TEMP);
-            cw.put(BillTable.COL_DESC, "");
-            cw.put(BillTable.COL_DATE, "0");
-
-            retBillId = db.insertOrThrow(BillTable.TABLE_NAME, null, cw);
-
-            Log.d("_DBD", "bi2 "+retBillId);
-            for (BaseModel m : mModels) {
-                m.initInDb(db, retBillId, context);
-            }*/
-
-            //fill bill tables with default settings
 
             db.setTransactionSuccessful();
             //create segments with global segments
         } catch (Exception e) {
-            Log.d("_DBD","err " + e.toString());
+            Log.d("_DBD","err initSavedBill()" + e.toString());
         } finally {
             db.endTransaction();
             db.close();
             return retBillId;
         }
-
-
-
     }
+
+
+
+
+
+
+
+
+
+
+    public void getExcelArray(){
+        //return row-cell representation of bills in dataholder for excel table
+    }
+
+
+
+    public long getTempTableIdByRelId(SQLiteDatabase db, long relId, int status){
+
+        Cursor c = db.query(
+                BillTable.TABLE_NAME,
+                new String[]{BillTable.COL_ID},
+                BillTable.COL_RELATION + "=? AND " + BillTable.COL_STATUS + "=?",
+                new String[]{String.valueOf(relId), String.valueOf(status)},
+                null,
+                null,
+                null,
+                "1"
+        );
+
+        if(c.getCount() > 0) {
+            c.moveToFirst();
+            return c.getLong(c.getColumnIndexOrThrow(BillTable.COL_ID));
+        }
+        return -1;
+    }
+
+    public long initBillsInDb(SQLiteDatabase db, Context context, long relId, int status){
+
+        ContentValues cw = new ContentValues();
+        cw.put(BillTable.COL_RELATION, relId);
+        cw.put(BillTable.COL_STATUS, status);
+        cw.put(BillTable.COL_NAME, BillTable.NAME_TEMP);
+        cw.put(BillTable.COL_DESC, "");
+        cw.put(BillTable.COL_DATE, "0");
+
+        long retBillId = db.insertOrThrow(BillTable.TABLE_NAME, null, cw);
+
+        for (BaseModel m : mModels) {
+            m.initInDb(db, retBillId, context);
+        }
+
+        return  retBillId;
+    }
+
+    public long createSavedBill(String name, String date, long billId){
+        long retRelId = -1;
+        if(name == null || date == null) return retRelId;
+        Context context = mFragment.getContext();
+        DbManager dbManager = new DbManager(context);
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues cw = new ContentValues();
+            cw.put(BillTable.COL_RELATION, BillTable.RELATION_NONE);
+            cw.put(BillTable.COL_STATUS, BillTable.STATUS_SAVED);
+            cw.put(BillTable.COL_NAME, name);
+            cw.put(BillTable.COL_DESC, "");
+            cw.put(BillTable.COL_DATE, date);
+            long savedBillId = db.insertOrThrow(BillTable.TABLE_NAME,null,cw);
+
+            for(int i=0;i<mModels.length;++i){
+                ArrayList<String> mainTableData = mModels[i].getMainTableFromDb(db,billId);
+                long modelId = mModels[i].getLastModelId();
+                ArrayList<ArrayList<String>> segmentsData = mModels[i].getSegmentsFromDb(db,modelId,i);
+
+
+                mModels[i].initInDb(db, savedBillId, context);
+
+                if(mainTableData != null) {
+                    Log.d("_SDB", mainTableData.toString());
+                    mModels[i].updateMainTableInDb(db, mainTableData, savedBillId);
+                }
+
+                if(segmentsData != null) {
+                    long savedModelId = mModels[i].getLastModelId();
+                    mModels[i].updateSegmentsInDb(db,segmentsData,savedModelId,i);
+                    Log.d("_SDB", segmentsData.toString());
+                }
+            }
+
+            cw.clear();
+            cw.put(BillTable.COL_RELATION, savedBillId);
+
+            db.update(BillTable.TABLE_NAME, cw, BillTable.COL_ID + "=?", new String[]{String.valueOf(billId)});
+            retRelId = savedBillId;
+
+            db.setTransactionSuccessful();
+        } catch (Exception e){
+            Log.d("_SDB", "crt err " + e.toString() );
+        } finally {
+            db.endTransaction();
+            db.close();
+            return retRelId;
+        }
+    }
+
+
+    public long updateSavedBill(String name, String date, long billId, long relId){
+        long retRelId = -1;
+        if(name == null || date == null) return retRelId;
+        Context context = mFragment.getContext();
+        DbManager dbManager = new DbManager(context);
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            ContentValues cw = new ContentValues();
+            cw.put(BillTable.COL_NAME, name);
+            cw.put(BillTable.COL_DATE, date);
+            db.update(BillTable.TABLE_NAME, cw, BillTable.COL_ID + "=?", new String[]{String.valueOf(relId)});
+
+            for(int i=0;i<mModels.length;++i){
+                ArrayList<String> mainTableData = mModels[i].getMainTableFromDb(db,billId);
+                long modelId = mModels[i].getLastModelId();
+                ArrayList<ArrayList<String>> segmentsData = mModels[i].getSegmentsFromDb(db,modelId,i);
+
+                if(mainTableData != null) {
+                    Log.d("_SDB", mainTableData.toString());
+                    mModels[i].updateMainTableInDb(db, mainTableData, relId);
+                }
+                if(segmentsData != null) {
+                    long savedModelId = mModels[i].getLastModelId();
+                    mModels[i].updateSegmentsInDb(db,segmentsData,savedModelId,i);
+                    Log.d("_SDB", segmentsData.toString());
+                }
+
+            }
+            retRelId = relId;
+
+            db.setTransactionSuccessful();
+        } catch (Exception e){
+            Log.d("_DBD", "crt err " + e.toString() );
+        } finally {
+            db.endTransaction();
+            db.close();
+            return retRelId;
+        }
+    }
+
+    public void deleteBillsFromDb(SQLiteDatabase db,long billId){
+
+        db.delete(BillTable.TABLE_NAME, BillTable.COL_ID + "=?", new String[]{String.valueOf(billId)});
+
+        for (BaseModel m : mModels) {
+            m.deleteFromDb(db, billId);
+        }
+    }
+
+
+
 
 
 
@@ -319,10 +388,10 @@ public class BillManager {
         DbManager dbManager = new DbManager(mFragment.getContext());
         SQLiteDatabase db = dbManager.getReadableDatabase();
 
-        ArrayList<ArrayList<String>> ret = mModels[modelPos].getSegmentsFromDb(db, modelId);
+        ArrayList<ArrayList<String>> ret = mModels[modelPos].getSegmentsFromDb(db, modelId, modelPos);
 
         db.close();
-        Log.d("_DBD","getting segments:"+modelId);
+        Log.d("_DBD", "getting segments:" + modelId + " model pos:" + modelPos);
         return ret;
     }
 
@@ -333,7 +402,7 @@ public class BillManager {
         try {
             mModels[currViewPagerItem].updateMainTableInDb(db, mainTableData, billId);
             long modelId = getLastModelId(currViewPagerItem);
-            mModels[currViewPagerItem].updateSegmentsInDb(db, segmentsData, modelId);
+            mModels[currViewPagerItem].updateSegmentsInDb(db, segmentsData, modelId, currViewPagerItem);
             db.setTransactionSuccessful();
         } catch (Exception e){
             Log.d("_DBD","err upd " + e.toString());
@@ -341,16 +410,49 @@ public class BillManager {
             db.endTransaction();
             db.close();
         }
-
-
-    }
-
-    public void updateModelInDb(){
-
     }
 
     public long getLastModelId(int modelPos){
         return mModels[modelPos].getLastModelId();
+    }
+
+    public void addCommonCalcedSegments(ArrayList<Integer> segmentIds, ArrayList<String> segment, long billId){
+        if(segmentIds == null || segmentIds.isEmpty()) return;
+        DbManager dbManager = new DbManager(mFragment.getContext());
+        SQLiteDatabase db = dbManager.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            for(Integer i : segmentIds){
+                mModels[i].addCalcedSegment(db,billId, segment);
+            }
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("_DBD", "common seg exception " + e.toString());
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+
+    public Cursor getRelatedBillCursor(long relId){
+
+        DbManager dbManager = new DbManager(mFragment.getContext());
+        SQLiteDatabase db = dbManager.getReadableDatabase();
+
+        Cursor c =  db.query(
+                BillTable.TABLE_NAME,
+                null,
+                BillTable.COL_ID + "=?",
+                new String[]{String.valueOf(relId)},
+                null,
+                null,
+                null,
+                "1");
+
+        c.moveToFirst();
+        return c;
+
     }
 
 }

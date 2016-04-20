@@ -69,22 +69,22 @@ public class MenuFragment extends Fragment {
 
         });
 
-
-/*
-        Button btnSettings = (Button) v.findViewById(R.id.btn_settings);
-        btnSettings.setOnClickListener(new View.OnClickListener() {
+        Button btnSavedBills = (Button) v.findViewById(R.id.btn_saved_bills);
+        btnSavedBills.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View b) {
-                BillsSettingsFragment settingsFrament = new BillsSettingsFragment();
+
+                BillListFragment billListFragment = new BillListFragment();
                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, settingsFrament, "SettingsFrag");
+                ft.replace(R.id.fragment_container, billListFragment, "BillListFrag");
                 ft.addToBackStack(null);
                 ft.commit();
             }
 
         });
-*/
+
+
         Button btnExit = (Button) v.findViewById(R.id.btn_exit);
         btnExit.setOnClickListener(new View.OnClickListener() {
 
