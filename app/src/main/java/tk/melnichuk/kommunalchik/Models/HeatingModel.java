@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -10,9 +11,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.CommunalTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.HeatingTable;
+import tk.melnichuk.kommunalchik.R;
 
 /**
  * Created by al on 30.03.16.
@@ -59,10 +64,57 @@ public class HeatingModel extends BaseModel {
     @Override
     BigDecimal[] getLastColumnItems() {
         return new BigDecimal[]{
-                mMainTableData[INDEX_TOTAL],
                 mMainTableData[INDEX_ADDPAY],
                 mMainTableData[INDEX_SUM]
         };
+    }
+
+    @Override
+    public int addCellsExcelTable(int rowsOffset, WritableSheet ws, Resources res,
+                                  ArrayList<String> mainTableData, ArrayList<ArrayList<String>> segmentsData) {
+
+        if(mainTableData ==  null || mainTableData.isEmpty()) return 0;
+        int row1 = rowsOffset + 2,
+                row2 = row1 + 1,
+                row3 = row2 + 1,
+                row4 = row3 + 1;
+
+        try {
+            Log.d("_EDB", "mtd:" + mainTableData.toString());
+            Log.d("_EDB", "sd:" + segmentsData.toString());
+
+
+            ExcelManager.addTitleToSheet(ws, 0, 4, rowsOffset, res.getString(R.string.heating));
+
+            ExcelManager.addLabelToSheet(ws, 0, row1, res.getString(R.string.calculated));
+            ExcelManager.addLabelToSheet(ws, 1, row1, res.getString(R.string.recalculated));
+            ExcelManager.addLabelToSheet(ws, 2, row1, res.getString(R.string.subsidy));
+            ExcelManager.addLabelToSheet(ws, 3, row1, res.getString(R.string.compensation));
+            ExcelManager.addLabelToSheet(ws, 4, row1, res.getString(R.string.sum));
+
+            ExcelManager.addNumberToSheet(ws, 0, row2, mainTableData.get(INDEX_CALC));
+            ExcelManager.addNumberToSheet(ws, 1, row2, mainTableData.get(INDEX_RECALC));
+            ExcelManager.addNumberToSheet(ws, 2, row2, mainTableData.get(INDEX_SUB));
+            ExcelManager.addNumberToSheet(ws,3,row2, mainTableData.get(INDEX_COMP));
+            ExcelManager.addNumberToSheet(ws,4,row2, mainTableData.get(INDEX_TOTAL));
+
+            ExcelManager.addLabelToSheet(ws, 0, row3, res.getString(R.string.calculated));
+            ExcelManager.addNumberToSheet(ws, 1, row3, mainTableData.get(INDEX_CALC));
+            ExcelManager.addLabelToSheet(ws, 2, row3, res.getString(R.string.additional_payment));
+            ws.mergeCells(2, row3, 3, row3);
+            ExcelManager.addNumberToSheet(ws, 4, row3, mainTableData.get(INDEX_ADDPAY));
+
+            ExcelManager.addLabelToSheet(ws, 2, row4, res.getString(R.string.table_group_sum));
+            ws.mergeCells(2, row4, 3, row4);
+            ExcelManager.addNumberToSheet(ws, 4, row4, mainTableData.get(INDEX_SUM));
+
+            ExcelManager.addSegmentsToExcelCellsArrayList(ws, res, segmentsData, row1, 5);
+
+        } catch (WriteException e){
+            Log.d("_EDB", "e gas:"+e.toString());
+        }
+
+        return row4 - rowsOffset;
     }
 
 
@@ -182,7 +234,7 @@ public class HeatingModel extends BaseModel {
 
         Cursor c = db.query(
                 HeatingTable.TABLE_NAME,
-                new String[]{HeatingTable.COL_ID, HeatingTable.COL_TOTAL, HeatingTable.COL_ADDPAY ,HeatingTable.COL_SUM},
+                new String[]{HeatingTable.COL_ID, HeatingTable.COL_ADDPAY ,HeatingTable.COL_SUM},
                 HeatingTable.COL_BILL_ID + "=?",
                 new String[]{String.valueOf(billId)},
                 null,
@@ -196,14 +248,13 @@ public class HeatingModel extends BaseModel {
             long modelId = c.getLong(c.getColumnIndex(HeatingTable.COL_ID));
             setLastModelId(modelId);
 
-            String total =  c.getString(c.getColumnIndex(HeatingTable.COL_TOTAL));
             String addpay = c.getString(c.getColumnIndex(HeatingTable.COL_ADDPAY));
             String sum =  c.getString(c.getColumnIndex(HeatingTable.COL_SUM));
 
             ArrayList<String> newSegment = new ArrayList<>();
             for(String s : segment) newSegment.add(s);
 
-            addCalcedItemsToSegment(newSegment, segment.get(2), new String[]{total, addpay, sum});
+            addCalcedItemsToSegment(newSegment, segment.get(2), new String[]{addpay, sum});
             addSegment(db, modelId, BillManager.INDEX_HEATING, newSegment);
         }
     }

@@ -1,14 +1,18 @@
 package tk.melnichuk.kommunalchik;
 
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import tk.melnichuk.kommunalchik.CustomViews.UnitTypesKeyboard;
 import tk.melnichuk.kommunalchik.DataManagers.DbManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.BaseTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.CommunalTable;
@@ -27,6 +31,7 @@ import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterTable;
 public class MainActivity extends FragmentActivity {
 
     public UnitTypesKeyboard mKeyboard = null;
+    public boolean mShowSavedBillExitMessage = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +59,11 @@ public class MainActivity extends FragmentActivity {
         for(BaseTable t: tables){
             dbManager.registerTable(t);
         }
-        //dbManager.registerTable(new SegmentTable());
-        // dbManager.registerTable(new SegmentBillTypeTable());
+
         dbManager.onCreate(dbManager.getWritableDatabase());
+
+        ExcelManager em = new ExcelManager();
+        em.init();
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -119,10 +126,26 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         if(mKeyboard != null && mKeyboard.isCustomKeyboardVisible()) {
-
             mKeyboard.hideCustomKeyboard();
             return;
         }
+        //int count = getSupportFragmentManager().getBackStackEntryCount();
+        //Log.d("_LDB", count + " <-n");
+        if(mShowSavedBillExitMessage && getSupportFragmentManager().getBackStackEntryCount() == 2){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage(R.string.alert_dialog_bills_saved_bill_exit_message)
+                    .setPositiveButton(R.string.alert_dialog_yes,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mShowSavedBillExitMessage = false;
+                                    MainActivity.super.onBackPressed();
+                                }
+                            })
+            .setNegativeButton(R.string.alert_dialog_no, null).show();
+            return;
+        }
+
         super.onBackPressed();
     }
 

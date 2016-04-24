@@ -27,7 +27,9 @@
     <string name="save">ЗБЕРЕГТИ</string>
     <string name="counter">Лічильник:</string>
 
-
+    <string name="gas_calc_by">Нарахування за</string>
+    <string name="gas_calc_by_rate">тарифом</string>
+    <string name="gas_calc_by_counter">Нарахування за</string>
     <string name="gas_calc">Нарахування за:</string>
     <string name="area">Площа</string>
     <string name="registered">Зареєстровано</string>
@@ -189,6 +191,10 @@
     <string name="segment_create_success">Сегмент успішно створено.</string>
     <string name="segment_update_success">Сегмент успішно оновлено</string>
 
+    <string name="segment_create">Додати</string>
+    <string name="segment_update">Змінити</string>
+    <string name="segment_back">Назад</string>
+
     <string name="alert_dialog_save_btn_new">Новий рахунок</string>
     <string name="alert_dialog_save_btn_update">Оновити рахунок</string>
     <string name="alert_dialog_save_hint_name">Назва рахунку</string>
@@ -196,6 +202,7 @@
     <string name="alert_dialog_bills_settings_save">Ви дійсно бажаєте змінити значення?</string>
     <string name="alert_dialog_bills_save">Зберегти розраховані рахунки?</string>
     <string name="alert_dialog_bills_delete">Ви дійсно бажаєте видалити рахунок?</string>
+    <string name="alert_dialog_bills_saved_bill_exit_message">Не збережені зміни будуть втрачені.\nВи дійсно бажаєте вийти?</string>
     <string name="alert_dialog_segments_delete">Ви дійсно бажаєте видалити сегмент?</string>
 
     <string name="alert_dialog_yes">ТАК</string>
@@ -208,5 +215,6 @@
     <string name="bill_list_no_bills">Нема збережених рахунків</string>
 
 
-
+    <string name="pagination_next">-</string>
+    <string name="pagination_prev">-</string>
 </resources>

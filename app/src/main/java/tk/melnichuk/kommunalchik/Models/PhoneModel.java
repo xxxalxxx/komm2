@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -10,12 +11,16 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelManager;
 import tk.melnichuk.kommunalchik.DataManagers.OptionsManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.PhoneRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.PhoneTable;
+import tk.melnichuk.kommunalchik.R;
 
 /**
  * Created by al on 30.03.16.
@@ -194,6 +199,61 @@ public class PhoneModel extends BaseModel {
 
     }
 
+    @Override
+    public int addCellsExcelTable(int rowsOffset, WritableSheet ws, Resources res,
+                                  ArrayList<String> mainTableData, ArrayList<ArrayList<String>> segmentsData) {
+
+        if(mainTableData ==  null || mainTableData.isEmpty()) return 0;
+        int row1 = rowsOffset + 2,
+                row2 = row1 + 1,
+                row3 = row2 + 1,
+                row4 = row3 + 1,
+                row5 = row4 + 1;
+
+        try {
+            Log.d("_EDB", "mtd:" + mainTableData.toString());
+            Log.d("_EDB", "sd:" + segmentsData.toString());
+
+
+            String tax = res.getString(R.string.tax) + " " + mainTableData.get(INDEX_TAX) + " " + res.getString(R.string.percent_sign);
+
+            ExcelManager.addTitleToSheet(ws, 0, 4, rowsOffset, res.getString(R.string.phone));
+
+            ExcelManager.addLabelToSheet(ws, 0, row2, res.getString(R.string.phone_calc));
+            ws.mergeCells(0, row2, 1, row2);
+            ExcelManager.addLabelToSheet(ws, 2, row2, res.getString(R.string.no_tax));
+            ExcelManager.addLabelToSheet(ws, 3, row2, tax);
+            ExcelManager.addLabelToSheet(ws, 4, row2, res.getString(R.string.phone_sum));
+
+            addPhoneRow(ws, row3, res.getString(R.string.phone_rate), INDEX_PHONE_NO_TAX, mainTableData);
+            addPhoneRow(ws,row4,res.getString(R.string.radio_rate),INDEX_RADIO_NO_TAX,mainTableData);
+            addPhoneRow(ws,row5,res.getString(R.string.phone_total),INDEX_SUM_NO_TAX,mainTableData);
+
+            ExcelManager.addSegmentsToExcelCellsArrayList(ws, res, segmentsData, row1, 5);
+
+
+
+        } catch (WriteException e){
+            Log.d("_EDB", "e gas:"+e.toString());
+        }
+
+        return row5 - rowsOffset;
+    }
+
+
+    void addPhoneRow(WritableSheet ws,int row, String rowLabel,int indexNoTax, ArrayList<String> mainTableData){
+        try {
+            ExcelManager.addLabelToSheet(ws, 0, row, rowLabel);
+            ws.mergeCells(0, row, 1, row);
+            ExcelManager.addNumberToSheet(ws, 2, row, mainTableData.get(indexNoTax));
+            ExcelManager.addNumberToSheet(ws, 3, row, mainTableData.get(indexNoTax + 1));
+            ExcelManager.addNumberToSheet(ws, 4, row, mainTableData.get(indexNoTax + 2));
+
+
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 

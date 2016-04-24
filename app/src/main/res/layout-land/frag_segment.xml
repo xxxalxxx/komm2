@@ -2,8 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-    android:windowSoftInputMode="adjustNothing"
-    android:isScrollContainer="false"
     android:padding="8dp">
 
     <TextView
@@ -240,7 +238,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/decimal_input"
-        android:layout_above="@+id/buttons_layout">
+        android:layout_above="@+id/buttons_layout"
+        android:minHeight="200dp">
 
         <RelativeLayout
             android:id="@+id/checkbox_layout"

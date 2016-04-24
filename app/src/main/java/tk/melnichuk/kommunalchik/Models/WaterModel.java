@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -10,7 +11,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelManager;
 import tk.melnichuk.kommunalchik.DataManagers.OptionsManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentRowTable;
@@ -18,6 +22,7 @@ import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterTable;
 import tk.melnichuk.kommunalchik.Helpers.Utils;
+import tk.melnichuk.kommunalchik.R;
 
 /**
  * Created by al on 30.03.16.
@@ -133,6 +138,88 @@ public class WaterModel extends BaseModel {
                 mMainTableData[INDEX_SUM]
         };
     }
+
+
+    @Override
+    public int addCellsExcelTable(int rowsOffset, WritableSheet ws, Resources res,
+                                  ArrayList<String> mainTableData, ArrayList<ArrayList<String>> segmentsData) {
+
+        if(mainTableData ==  null || mainTableData.isEmpty()) return 0;
+        int row1 = rowsOffset + 2,
+            row2 = row1 + 1,
+            row3 = row2 + 1,
+            row4 = row3 + 1;
+        int sumRow = row4;
+        try {
+
+            Log.d("_EDB", "mtd:" + mainTableData.toString());
+            Log.d("_EDB", "sd:" + segmentsData.toString());
+
+            int counter = Integer.parseInt(mainTableData.get(INDEX_COUNTER));
+
+
+            if (counter == COUNTER_NONE) {
+
+                int indexRemoved = 4;
+                if(segmentsData!=null && !segmentsData.isEmpty())
+                    for(ArrayList<String> segment : segmentsData)
+                        if(segment.size() > indexRemoved)
+                            segment.remove(indexRemoved);
+
+
+            } else {
+                sumRow = row4 + 1;
+                ExcelManager.addNumberToSheet(ws, 3, row4, res.getString(R.string.consumed));
+                ExcelManager.addNumberToSheet(ws, 4, row4, mainTableData.get(INDEX_COUNTER_ROW_CALC));
+                ExcelManager.addNumberToSheet(ws, 5, row4, mainTableData.get(INDEX_COUNTER_ROW_RECALC));
+                ExcelManager.addNumberToSheet(ws, 6, row4, mainTableData.get(INDEX_COUNTER_ROW_SUB));
+                ExcelManager.addNumberToSheet(ws, 7, row4, mainTableData.get(INDEX_COUNTER_ROW_COMP));
+                ExcelManager.addNumberToSheet(ws, 8, row4, mainTableData.get(INDEX_COUNTER_ROW_TOTAL));
+            }
+
+            int titleId = mType == TYPE_COLD ? R.string.coldWater
+                    : (mType == TYPE_WASTE ? R.string.wasteWater: R.string.hotWater);
+            String title = res.getString(titleId);
+            ExcelManager.addTitleToSheet(ws, 0, 8, rowsOffset, title);
+
+
+            ExcelManager.addLabelToSheet(ws, 0, row1, res.getString(R.string.data));
+            ws.mergeCells(0, row1, 2, row1);
+
+            ExcelManager.addLabelToSheet(ws, 0, row2, res.getString(R.string.current));
+            ExcelManager.addLabelToSheet(ws, 1, row2, res.getString(R.string.previous));
+            ExcelManager.addLabelToSheet(ws, 2, row2, res.getString(R.string.difference));
+            ExcelManager.addLabelToSheet(ws, 3, row2, res.getString(R.string.rate));
+            ExcelManager.addLabelToSheet(ws, 4, row2, res.getString(R.string.calculated));
+            ExcelManager.addLabelToSheet(ws, 5, row2, res.getString(R.string.recalculated));
+            ExcelManager.addLabelToSheet(ws, 6, row2, res.getString(R.string.subsidy));
+            ExcelManager.addLabelToSheet(ws, 7, row2, res.getString(R.string.compensation));
+            ExcelManager.addLabelToSheet(ws, 8, row2, res.getString(R.string.sum));
+
+            ExcelManager.addNumberToSheet(ws, 0, row3, mainTableData.get(INDEX_CURR));
+            ExcelManager.addNumberToSheet(ws, 1, row3, mainTableData.get(INDEX_PREV));
+            ExcelManager.addNumberToSheet(ws, 2, row3, mainTableData.get(INDEX_DIFF));
+            ExcelManager.addNumberToSheet(ws, 3, row3, mainTableData.get(INDEX_RATE));
+            ExcelManager.addNumberToSheet(ws, 4, row3, mainTableData.get(INDEX_CALC));
+            ExcelManager.addNumberToSheet(ws, 5, row3, mainTableData.get(INDEX_RECALC));
+            ExcelManager.addNumberToSheet(ws, 6, row3, mainTableData.get(INDEX_SUB));
+            ExcelManager.addNumberToSheet(ws, 7, row3, mainTableData.get(INDEX_COMP));
+            ExcelManager.addNumberToSheet(ws, 8, row3, mainTableData.get(INDEX_TOTAL));
+
+            ExcelManager.addLabelToSheet(ws, 6, sumRow, res.getString(R.string.table_sum));
+            ws.mergeCells(6, sumRow, 7, sumRow);
+
+            ExcelManager.addNumberToSheet(ws, 8, sumRow, mainTableData.get(INDEX_SUM));
+
+            ExcelManager.addSegmentsToExcelCellsArrayList(ws, res, segmentsData, row1, 9);
+        } catch (WriteException e){
+            Log.d("_EDB", "e gas:"+e.toString());
+        }
+
+        return sumRow - rowsOffset;
+    }
+
+
 
     long createMainTableInDb(SQLiteDatabase db, long billId, ArrayList<String> data){
         ContentValues cw = new ContentValues();

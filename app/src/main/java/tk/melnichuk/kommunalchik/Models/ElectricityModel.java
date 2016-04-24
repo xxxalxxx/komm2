@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -10,12 +11,16 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
+import jxl.write.WritableSheet;
+import jxl.write.WriteException;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelManager;
 import tk.melnichuk.kommunalchik.DataManagers.OptionsManager;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.ElectricityTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterRowTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.WaterTable;
+import tk.melnichuk.kommunalchik.R;
 
 /**
  * Created by al on 30.03.16.
@@ -157,6 +162,109 @@ public class ElectricityModel extends BaseModel {
         };
     }
 
+
+    @Override
+    public int addCellsExcelTable(int rowsOffset, WritableSheet ws, Resources res,
+                                  ArrayList<String> mainTableData, ArrayList<ArrayList<String>> segmentsData) {
+
+        if(mainTableData ==  null || mainTableData.isEmpty()) return 0;
+        int row1 = rowsOffset + 2,
+            row2 = row1 + 1,
+            row3 = row2 + 1,
+            row4 = row3 + 1,
+            row5 = row4 + 1,
+            row6 = row5 + 1,
+            row7 = row6 + 1;
+
+        try {
+            Log.d("_EDB", "mtd:" + mainTableData.toString());
+            Log.d("_EDB", "sd:" + segmentsData.toString());
+
+            String units = res.getString(R.string.e_units);
+            String from = res.getString(R.string.e_from);
+            String over = res.getString(R.string.e_over);
+            String to = res.getString(R.string.e_to);
+            String step1Val = mainTableData.get(INDEX_STEP_1);
+            String step2Val = mainTableData.get(INDEX_STEP_2);
+
+            String step1 = to + " " + step1Val + " " + units;
+            String step2 = from + " " + step1Val + " " + to + " " + step2Val + " " + units;
+            String step3 = over + " " + step2Val + " " + units;
+
+            ExcelManager.addTitleToSheet(ws, 0, 4, rowsOffset, res.getString(R.string.electricity));
+
+            ExcelManager.addLabelToSheet(ws, 0, row1, res.getString(R.string.e_current));
+            ExcelManager.addLabelToSheet(ws, 1, row1, res.getString(R.string.e_previous));
+            ExcelManager.addLabelToSheet(ws, 2, row1, res.getString(R.string.e_consumed));
+
+            ExcelManager.addNumberToSheet(ws, 0, row2, mainTableData.get(INDEX_CURR));
+            ExcelManager.addNumberToSheet(ws, 1, row2, mainTableData.get(INDEX_PREV));
+            ExcelManager.addNumberToSheet(ws, 2, row2, mainTableData.get(INDEX_DIFF));
+            ExcelManager.addLabelToSheet(ws, 3, row2, res.getString(R.string.e_rate));
+            ExcelManager.addLabelToSheet(ws, 4, row2, res.getString(R.string.e_sum));
+
+            addElectricityRow(ws, row3, res.getString(R.string.e_subsidy), INDEX_DIFF_STEP_SUB, mainTableData);
+            addElectricityRow(ws, row4, step1, INDEX_DIFF_STEP_1, mainTableData);
+            addElectricityRow(ws, row5, step2, INDEX_DIFF_STEP_2, mainTableData);
+            addElectricityRow(ws, row6, step3, INDEX_DIFF_STEP_3, mainTableData);
+
+            ExcelManager.addLabelToSheet(ws, 2, row7, res.getString(R.string.e_total_sum));
+            ws.mergeCells(2, row7, 3, row7);
+            ExcelManager.addNumberToSheet(ws, 4, row7, mainTableData.get(INDEX_SUM));
+
+            ExcelManager.addSegmentsToExcelCellsArrayList(ws, res, segmentsData, row1, 5);
+
+            /*
+            ExcelManager.addLabelToSheet(ws, 0, row3, res.getString(R.string.e_subsidy));
+            ws.mergeCells(0, row3, 1, row3);
+            ExcelManager.addNumberToSheet(ws, 2, row3, mainTableData.get(INDEX_DIFF_STEP_SUB));
+            ExcelManager.addNumberToSheet(ws, 3, row3, mainTableData.get(INDEX_RATE_STEP_SUB));
+            ExcelManager.addNumberToSheet(ws, 4, row3, mainTableData.get(INDEX_TOTAL_STEP_SUB));
+
+
+            ExcelManager.addLabelToSheet(ws, 0, row4, step1);
+            ws.mergeCells(0, row4, 1, row4);
+            ExcelManager.addNumberToSheet(ws, 2, row4, mainTableData.get(INDEX_DIFF_STEP_1));
+            ExcelManager.addNumberToSheet(ws, 3, row4, mainTableData.get(INDEX_RATE_STEP_1));
+            ExcelManager.addNumberToSheet(ws, 4, row4, mainTableData.get(INDEX_TOTAL_STEP_1));
+
+            ExcelManager.addLabelToSheet(ws, 0, row5, step2);
+            ws.mergeCells(0, row5, 1, row5);
+            ExcelManager.addNumberToSheet(ws, 2, row5, mainTableData.get(INDEX_DIFF_STEP_2));
+            ExcelManager.addNumberToSheet(ws, 3, row5, mainTableData.get(INDEX_RATE_STEP_2));
+            ExcelManager.addNumberToSheet(ws, 4, row5, mainTableData.get(INDEX_TOTAL_STEP_2));
+
+            ExcelManager.addLabelToSheet(ws, 0, row6, step3);
+            ws.mergeCells(0, row6, 1, row6);
+            ExcelManager.addNumberToSheet(ws, 2, row6, mainTableData.get(INDEX_DIFF_STEP_3));
+            ExcelManager.addNumberToSheet(ws, 3, row6, mainTableData.get(INDEX_RATE_STEP_3));
+            ExcelManager.addNumberToSheet(ws, 4, row6, mainTableData.get(INDEX_TOTAL_STEP_3));
+            */
+
+
+        } catch (WriteException e){
+            Log.d("_EDB", "e gas:"+e.toString());
+        }
+
+        return row7 - rowsOffset;
+    }
+
+    void addElectricityRow(WritableSheet ws, int row, String stepStr, int indexDiff, ArrayList<String> mainTableData){
+
+        try {
+            ExcelManager.addLabelToSheet(ws, 0, row, stepStr);
+            ws.mergeCells(0, row, 1, row);
+            ExcelManager.addNumberToSheet(ws, 2, row, mainTableData.get(indexDiff));
+            ExcelManager.addNumberToSheet(ws, 3, row, mainTableData.get(indexDiff + 1));
+            ExcelManager.addNumberToSheet(ws, 4, row, mainTableData.get(indexDiff + 2));
+
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     long createMainTableInDb(SQLiteDatabase db, long billId, ArrayList<String> data){
         ContentValues cw = new ContentValues();
         cw.put(ElectricityTable.COL_BILL_ID, billId );
@@ -267,8 +375,6 @@ public class ElectricityModel extends BaseModel {
         initSegmentsInDb(db, billTypeId, BillManager.INDEX_ELECTRICITY);
 
         Log.d("_DBD", "init " + data.toString());
-
-
     }
 
 

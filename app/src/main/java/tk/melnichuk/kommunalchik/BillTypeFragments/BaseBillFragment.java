@@ -58,7 +58,6 @@ public class BaseBillFragment extends Fragment {
         if(savedInstanceState != null){
             mDummySegmentNameCounter = savedInstanceState.getInt("dummySegmentNameCounter",0);
         }
-
     }
 
 
@@ -81,7 +80,6 @@ public class BaseBillFragment extends Fragment {
 
         mDummySegmentNameValue = getResources().getString(R.string.dummy_segment_name_value);
 
-
         ImageButton addSegmentButton = (ImageButton) mView.findViewById(R.id.button);
         addSegmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,10 +89,7 @@ public class BaseBillFragment extends Fragment {
             }
         });
 
-
-
         Log.d("_VINF","on create view");
-
 
         return mView;
 
@@ -159,17 +154,26 @@ public class BaseBillFragment extends Fragment {
             mainActivity.mKeyboard.registerEditText(et);
 
         }
-
-        int interfaceSegmentsLeft = newView.getChildCount() - INDEX_SEGMENT_INPUT_START;
+        int numViewChildren = newView.getChildCount();
+        int interfaceSegmentsLeft = numViewChildren - INDEX_SEGMENT_INPUT_START;
         int arrayListSegmentsLeft = segmentItem.size() - INDEX_SEGMENT_INPUT_FROM_DB_START;
         if(interfaceSegmentsLeft > 0 && arrayListSegmentsLeft > 0){
-            int len = Math.min(interfaceSegmentsLeft,arrayListSegmentsLeft);
-            for(int i=0, j = INDEX_SEGMENT_INPUT_START, k = INDEX_SEGMENT_INPUT_FROM_DB_START;
+            int len =  Math.min(interfaceSegmentsLeft,arrayListSegmentsLeft);
+            int  j = INDEX_SEGMENT_INPUT_START, k = INDEX_SEGMENT_INPUT_FROM_DB_START;
+            for(int i=0;
                 i<len;
                 ++i, ++j, ++k){
-                Log.d("_DBD", "j:" + j + "segInterfacelen:" + newView.getChildCount() + " k:" + k + " segitemlen:" + segmentItem.size());
+
+                Log.d("_DBD", "j:" + j + " segInterfacelen:" + newView.getChildCount() + " k:" + k + " segitemlen:" + segmentItem.size());
+
                 ((TextView)newView.getChildAt(j)).setText(segmentItem.get(k));
             }
+
+            if(j < numViewChildren)
+                for(int i=j;i< numViewChildren;++i)
+                    ((TextView)newView.getChildAt(i)).setText("0");
+
+
         }
 
         newView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
@@ -201,7 +205,6 @@ public class BaseBillFragment extends Fragment {
 
     public void fillSegmentsData(ArrayList<ArrayList<String>> segmentsData){
         if(mBillContainer == null || mSegmentContainer == null){
-
             return;
         }
 
@@ -216,7 +219,6 @@ public class BaseBillFragment extends Fragment {
                 ++k;
             }
         }
-
     }
 
 
@@ -338,10 +340,6 @@ public class BaseBillFragment extends Fragment {
             Log.d("_CHC",rll.getChildCount() +"");
         }
     }
-
-
-
-
 
 
     @Override

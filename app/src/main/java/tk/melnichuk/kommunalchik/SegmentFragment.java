@@ -51,8 +51,6 @@ public class SegmentFragment extends Fragment{
 
     ViewGroup mCheckBoxLayout;
 
-    BillManager mBillManager;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -130,6 +128,9 @@ public class SegmentFragment extends Fragment{
 
         if(mState == STATE_UPDATE) {
             //if segment is being updated - set text and current mode values from db
+
+
+
             DbManager dbManager  = new DbManager(getContext());
             SQLiteDatabase db = dbManager.getReadableDatabase();
             Cursor c = db.query(
@@ -142,8 +143,8 @@ public class SegmentFragment extends Fragment{
                     null,
                     "1"
             );
-            if(c.moveToFirst()){
-
+            if(c.getCount() > 0){
+                c.moveToFirst();
                 String name = c.getString(c.getColumnIndexOrThrow(SegmentTable.COL_NAME));
                 int unit = c.getInt(c.getColumnIndexOrThrow(SegmentTable.COL_UNIT));
                 String value = c.getString(c.getColumnIndexOrThrow(SegmentTable.COL_VALUE));
@@ -342,6 +343,9 @@ public class SegmentFragment extends Fragment{
                                 ++billType;
                             }
                         }
+
+                        Log.d("___DD", segment.toString());
+
                         billManager.addCommonCalcedSegments(segmentIds, segment, mBillId);
                     }
                 }

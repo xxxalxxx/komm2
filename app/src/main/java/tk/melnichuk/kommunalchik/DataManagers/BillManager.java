@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.DataManagers;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
 import tk.melnichuk.kommunalchik.BillsFragment;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.BillTable;
 import tk.melnichuk.kommunalchik.Models.BaseModel;
@@ -114,7 +117,6 @@ public class BillManager {
             retBillId = initBillsInDb(db,context, relId, BillTable.STATUS_TEMP);
 
             db.setTransactionSuccessful();
-            //create segments with global segments
         } catch (Exception e) {
             Log.d("_DBD","err " + e.toString());
         } finally {
@@ -146,7 +148,6 @@ public class BillManager {
             }
 
             db.setTransactionSuccessful();
-            //create segments with global segments
         } catch (Exception e) {
             Log.d("_DBD","err " + e.toString());
         } finally {
@@ -155,7 +156,6 @@ public class BillManager {
             return retBillId;
         }
     }
-
 
     public long initSavedBill(long relId){
         if(mFragment == null) return -1;
@@ -199,7 +199,6 @@ public class BillManager {
             }
 
             db.setTransactionSuccessful();
-            //create segments with global segments
         } catch (Exception e) {
             Log.d("_DBD","err initSavedBill()" + e.toString());
         } finally {
@@ -209,17 +208,62 @@ public class BillManager {
         }
     }
 
+    public void writeBillsToExcel(long billId){
+
+        Context context = mFragment.getContext();
+        DbManager dbManager = new DbManager(context);
+        SQLiteDatabase db = dbManager.getReadableDatabase();
+
+        String name = "", date = "";
+        String thisId    = "A." + BillTable.COL_ID;
+        String relId     = "A." + BillTable.COL_RELATION;
+        String otherId   = "B." + BillTable.COL_ID;
+        String otherName = "B." + BillTable.COL_NAME;
+        String otherDate = "B." + BillTable.COL_DATE;
+
+        Cursor c = db.query(
+                BillTable.TABLE_NAME + " AS A INNER JOIN " + BillTable.TABLE_NAME + " AS B ON " + relId + "=" + otherId,
+                new String[]{otherName, otherDate},
+                thisId + "=?",
+                new String[]{String.valueOf(billId)},
+                null,
+                null,
+                null,
+                "1");
+
+        if(c.getCount() > 0){
+            c.moveToFirst();
+            name = c.getString(0);
+            String dateStr = c.getString(1);
+
+            Log.d("_EDB", "d:"+name + " d:"+ dateStr);
+
+            date = dateStr.replace("/","_");
+        }
+
+        long time = System.currentTimeMillis();
+        Log.d("_EDB", "n:"+name +" d:"+date +" t:"+ time);
 
 
+        String fileName = name+"_"+date+"_"+time;
 
+        ExcelManager em = new ExcelManager();
+        WritableSheet ws = em.begin(fileName);
 
+        if(ws != null) {
 
+            int offset = 0;
+            Resources res = context.getResources();
 
+            for (int i = 0; i < mModels.length; ++i) {
+                ArrayList<String> mainTableData = mModels[i].getMainTableFromDb(db, billId);
+                long modelId = mModels[i].getLastModelId();
+                ArrayList<ArrayList<String>> segmentsData = mModels[i].getSegmentsFromDb(db, modelId, i);
+                offset += (mModels[i].addCellsExcelTable(offset, ws, res, mainTableData, segmentsData) + 3);
+            }
 
-
-
-    public void getExcelArray(){
-        //return row-cell representation of bills in dataholder for excel table
+            em.end();
+        }
     }
 
 
@@ -364,10 +408,6 @@ public class BillManager {
             m.deleteFromDb(db, billId);
         }
     }
-
-
-
-
 
 
     public ArrayList<String> getMainTableFromDb(long billId, int currViewPagerItem){

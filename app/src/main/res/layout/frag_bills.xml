@@ -95,7 +95,8 @@
         android:clickable="true"
         app:borderWidth="0dp"
         android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/mid" />
+        android:layout_centerInParent="true"
+        android:layout_alignWithParentIfMissing="false" />
 
 
     <android.support.design.widget.FloatingActionButton
@@ -113,22 +114,6 @@
         android:clickable="true"
         android:layout_toRightOf="@+id/fab_excel"
         android:layout_alignParentBottom="true" />
-
-    <android.support.design.widget.FloatingActionButton
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab_segment"
-        android:layout_width="wrap_content"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_box_white_48dp"
-        app:backgroundTint="@color/fab_segment"
-        style="@style/floating_action_button"
-        app:elevation="6dp"
-        app:fabSize="normal"
-        android:focusable="true"
-        android:clickable="true"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/fab_segment_global" />
 
     </RelativeLayout>
 

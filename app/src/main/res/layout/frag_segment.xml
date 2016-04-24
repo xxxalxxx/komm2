@@ -224,14 +224,14 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="@string/segment_back"
             android:id="@+id/btn_back" />
 
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="New Button"
+            android:text="@string/segment_create"
             android:id="@+id/btn_save" />
     </LinearLayout>
 

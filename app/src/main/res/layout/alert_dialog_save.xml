@@ -27,6 +27,7 @@
     </RadioGroup>
     <EditText
         android:hint="@string/alert_dialog_save_hint_name"
+        android:imeOptions="flagNoExtractUi"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/name" />

@@ -2,6 +2,7 @@ package tk.melnichuk.kommunalchik.Models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -12,8 +13,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import jxl.write.WritableSheet;
 import tk.melnichuk.kommunalchik.BillTypeFragments.BaseBillFragment;
 import tk.melnichuk.kommunalchik.DataManagers.BillManager;
+import tk.melnichuk.kommunalchik.DataManagers.ExcelCell;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.CommunalTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentBillTypeTable;
 import tk.melnichuk.kommunalchik.DataManagers.Tables.SegmentRowTable;
@@ -29,9 +32,10 @@ public class BaseModel {
     long mLastModelId = -1;
 
     public static final String DEFAULT_INPUT = "0";
+    public static final String EMPTY_CELL = "";
 
     public BaseModel(){
-      //  mMainTableItems = new String[getNumMainTableItems()];
+      //mMainTableItems = new String[getNumMainTableItems()];
     }
 
     BigDecimal[] getBigDecimalArray(ArrayList<String> in){
@@ -52,9 +56,8 @@ public class BaseModel {
 
     void calcMainTable(BigDecimal[] b){}
 
-
-    //getExcelArrayFromDataManager
-    void getExcelArray(){}
+    public int addCellsExcelTable(int rowsOffset, WritableSheet ws, Resources res,
+                             ArrayList<String> mainTableData, ArrayList<ArrayList<String>> segmentsData) {return -1;}
 
     public ArrayList<String> getCalcedMainTableData(ArrayList<String> mainTableData){
         if(mainTableData == null) return null;
@@ -203,6 +206,7 @@ public class BaseModel {
 
                 db.insertOrThrow(SegmentTable.TABLE_NAME, null, cw);
             }
+
         }
     }
 
@@ -302,6 +306,7 @@ public class BaseModel {
         if(newSegment != null){
             Log.d("_SDB", newSegment.toString() + " m:"+multiplier + " ");
             BigDecimal decMultipier = Utils.getParsedBigDecimal(multiplier);
+            if(newSegment.get(1).equals("1")) decMultipier = decMultipier.divide(new BigDecimal(100),2, RoundingMode.HALF_UP);
             for(String item : items){
                 BigDecimal decItem =  Utils.getParsedBigDecimal(item);
                 BigDecimal decResult = decMultipier.multiply(decItem);
@@ -310,5 +315,7 @@ public class BaseModel {
             }
         }
     }
+
+
 
 }

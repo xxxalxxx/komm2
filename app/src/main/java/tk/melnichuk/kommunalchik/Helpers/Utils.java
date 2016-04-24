@@ -19,11 +19,16 @@ public class Utils {
 
     public static String getUnitValue(Context context,int unit){
         Resources res = context.getResources();
+
+        return getUnitValue(res,unit);
+    }
+
+    public static String getUnitValue(Resources res,int unit){
         return unit == SegmentTable.UNIT_DECIMAL
-        ? res.getString(R.string.format_decimal)
-        : ( unit == SegmentTable.UNIT_PERCENT
-            ? res.getString(R.string.format_percent)
-            : res.getString(R.string.format_fraction) );
+                ? res.getString(R.string.format_decimal)
+                : ( unit == SegmentTable.UNIT_PERCENT
+                ? res.getString(R.string.format_percent)
+                : res.getString(R.string.format_fraction) );
     }
 
     public static int getHeight(Context context, String text, int textSize, int deviceWidth) {

@@ -115,16 +115,13 @@ public class BillsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d("_LDB", "create");
         if(savedInstanceState != null) {
             mPrevHeight = savedInstanceState.getInt("prevViewPagerHeight",0);
             mPrevPos = savedInstanceState.getInt("viewPagerPos",0);
             mBillId = savedInstanceState.getLong("billId", 0);
             mRelId = savedInstanceState.getLong("relId", 0);
             mState = savedInstanceState.getInt("state",0);
-          //  mDoRestoreBill = savedInstanceState.getBoolean("doRestoreBill",false);
-            //restore dataholder state
-
         }
 
     }
@@ -154,6 +151,7 @@ public class BillsFragment extends Fragment {
                 break;
             case STATE_SAVED:
                 mBillId = mBillManager.initSavedBill(mRelId);
+                ((MainActivity)getActivity()).mShowSavedBillExitMessage = true;
                 break;
         }
 
@@ -197,12 +195,6 @@ public class BillsFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.fab_segment).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "new segment", Toast.LENGTH_LONG).show();
-            }
-        });
 
         view.findViewById(R.id.fab_segment_global).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,6 +299,8 @@ public class BillsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "excel", Toast.LENGTH_LONG).show();
+                updateFragmentInDb(mCurrBill);
+                mBillManager.writeBillsToExcel(mBillId);
             }
         });
 
@@ -452,11 +446,6 @@ public class BillsFragment extends Fragment {
             super.setPrimaryItem(container, position, object);
             Log.d("_CURRBILL", " IN ");
 
-           /* mCurrBill = ((BaseBillFragment) object);
-            if(mCurrBill != null && mDoRestoreBill){
-                updateFragmentFromDb(position);
-                mDoRestoreBill = false;
-            }*/
             boolean pageChanged =  false;
             if (mCurrBill != object) {
                 pageChanged = true;
