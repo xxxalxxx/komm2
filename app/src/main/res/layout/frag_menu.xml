@@ -26,46 +26,53 @@
         android:singleLine="true" />
 
     <Button
-        android:background="@drawable/custom_button"
+        android:background="@drawable/menu_button"
+        android:textColor="#ffffff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/continue_bills"
         android:id="@+id/btn_continue_bills"
 
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp" />
 
     <Button
+        android:background="@drawable/menu_button"
+        android:textColor="#ffffff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/new_bills"
         android:id="@+id/btn_new_bills"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp" />
 
     <Button
+        android:background="@drawable/menu_button"
+        android:textColor="#ffffff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/saved_bills"
         android:id="@+id/btn_saved_bills"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp" />
 
     <Button
+        android:background="@drawable/menu_button"
+        android:textColor="#ffffff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/settings"
         android:id="@+id/btn_settings"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp" />
 
     <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/help"
-        android:id="@+id/btn_help"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
+        android:background="@drawable/menu_button"
+        android:textColor="#ffffff"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/exit"
         android:id="@+id/btn_exit"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="4dp" />
 </LinearLayout>

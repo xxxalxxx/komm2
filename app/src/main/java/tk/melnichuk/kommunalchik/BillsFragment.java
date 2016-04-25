@@ -510,10 +510,6 @@ public class BillsFragment extends Fragment {
 
     void animateViewPagerPageChange(final int position){
 
-                    /*   ObjectAnimator animation = ObjectAnimator.ofFloat(v, "rotationX", 0.0f, 0f);
-                animation.setDuration(1000);
-                animation.setInterpolator(new AccelerateDecelerateInterpolator());*/
-
         final TextView v = (TextView) getActivity().findViewById(R.id.bill_title);
         v.setText(mBillNames[position]);
         Log.d("_SCROLLER", " IN "+ position);

@@ -203,6 +203,7 @@
     <string name="alert_dialog_bills_save">Зберегти розраховані рахунки?</string>
     <string name="alert_dialog_bills_delete">Ви дійсно бажаєте видалити рахунок?</string>
     <string name="alert_dialog_bills_saved_bill_exit_message">Не збережені зміни будуть втрачені.\nВи дійсно бажаєте вийти?</string>
+    <string name="alert_dialog_bills_new_bill_warning">Зміни в продовжуваному рахунку будуть втрачені.\nДійсно створити новий рахунок?</string>
     <string name="alert_dialog_segments_delete">Ви дійсно бажаєте видалити сегмент?</string>
 
     <string name="alert_dialog_yes">ТАК</string>

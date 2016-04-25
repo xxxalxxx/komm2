@@ -1,8 +1,10 @@
 package tk.melnichuk.kommunalchik;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +23,24 @@ public class MenuFragment extends Fragment {
 
             @Override
             public void onClick(View b) {
-                BillsFragment billsFragment = new BillsFragment();
-              //  Bundle args = new Bundle();
-              //  args.putInt("state", BillsFragment.STATE_NEW);
-              //  args.putInt("billId", BillsFragment.BILL_ID_NEW);
-             //   billsFragment.setArguments(args);
-                billsFragment.setState(BillsFragment.STATE_NEW,BillsFragment.BILL_ID_NEW);
-                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.fragment_container, billsFragment, "NewBillsFrag");
-                ft.addToBackStack(null);
-                ft.commit();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setMessage(R.string.alert_dialog_bills_new_bill_warning)
+                        .setPositiveButton(R.string.alert_dialog_yes,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        BillsFragment billsFragment = new BillsFragment();
+
+                                        billsFragment.setState(BillsFragment.STATE_NEW,BillsFragment.BILL_ID_NEW);
+                                        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                        ft.replace(R.id.fragment_container, billsFragment, "NewBillsFrag");
+                                        ft.addToBackStack(null);
+                                        ft.commit();
+                                    }
+                                })
+                        .setNegativeButton(R.string.alert_dialog_no, null).show();
+
             }
 
         });

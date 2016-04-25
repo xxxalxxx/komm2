@@ -199,8 +199,8 @@ public class SegmentFragment extends Fragment{
 
         }
 
-        int titleRes = mCurrentMode == STATE_CREATE ? R.string.segment_title_create
-                : (mCurrentMode == STATE_UPDATE ? R.string.segment_title_update : R.string.segment_title_common );
+        int titleRes = mState == STATE_CREATE ? R.string.segment_title_create
+                : (mState == STATE_UPDATE ? R.string.segment_title_update : R.string.segment_title_common );
         mTitle.setText(titleRes);
 
 

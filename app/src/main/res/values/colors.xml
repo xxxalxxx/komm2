@@ -58,7 +58,7 @@
 
     <color name="segment_picker_background_main">#fff5f1cf</color>
     <color name="segment_picker_background_background">#ffd7d3b4</color>
-
+    <color name="segment_title_background">#6d1fff</color>
 
     <color name="fab_save">#ffffffff</color>
     <color name="fab_excel">#1e7145</color>
@@ -79,12 +79,22 @@
     <color name="btn_add_segment_pressed">#2d7fe2</color>
     <color name="btn_add_segment_border_pressed">#2b79d7</color>
 
+    <color name="btn_add_global_segment">#2b79d7</color>
+    <color name="btn_add_global_segment_pressed">#1565c0</color>
+
+    <color name="btn_back_from_global_segment">#ff3d00</color>
+    <color name="btn_back_from_global_segment_pressed">#dd2c00</color>
+
     <color name="btn_calc">#FF9800</color>
     <color name="btn_calc_border">#f79300</color>
     <color name="btn_calc_pressed">#e98b01</color>
     <color name="btn_calc_border_pressed">#dc8300</color>
     <color name="btn_calc_text">#ffffffff</color>
-
+    <color name="btn_nav">#f79300</color>
+    <color name="btn_nav_pressed">#dc8300</color>
     <color name="btn_empty_space">#1effffff</color>
+
+    <color name="btn_menu_background">#3F51B5</color>
+    <color name="btn_menu_background_pressed">#303F9F</color>
 
 </resources>

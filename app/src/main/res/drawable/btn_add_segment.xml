@@ -4,13 +4,11 @@
 
     <item android:state_pressed="true" >
         <shape>
-            <gradient
-                android:endColor="@color/btn_add_segment_pressed"
-                android:startColor="@color/btn_add_segment_pressed"
-                android:angle="270" />
+            <solid
+                android:color="@color/btn_add_segment_pressed" />
 
             <stroke
-                android:width="7dp"
+                android:width="4dp"
                 android:color="@color/btn_empty_space" />
 
             <corners
@@ -23,18 +21,14 @@
         </shape>
     </item>
 
-    <item android:state_focused="true" >
+    <item android:state_pressed="true" >
         <shape>
-            <gradient
-                android:endColor="@color/btn_add_segment_pressed"
-                android:startColor="@color/btn_add_segment_pressed"
-                android:angle="270" />
+            <solid
+                android:color="@color/btn_add_segment_pressed" />
 
             <stroke
-                android:width="2dp"
+                android:width="4dp"
                 android:color="@color/btn_empty_space" />
-
-            <inset android:insetLeft="6dip"/>
 
             <corners
                 android:radius="3dp" />
@@ -45,17 +39,14 @@
                 android:bottom="10dp" />
         </shape>
     </item>
+
     <item >
         <shape>
-            <gradient
-                android:startColor="@color/btn_add_segment"
-                android:endColor="@color/btn_add_segment"
-                android:angle="270" />
-
+            <solid
+                android:color="@color/btn_add_segment"/>
             <stroke
-                android:width="7dp"
+                android:width="4dp"
                 android:color="@color/btn_empty_space" />
-
 
             <corners
                 android:radius="3dp" />

@@ -592,7 +592,9 @@
         android:layout_alignParentTop="true" />
 
     <ImageButton
-        android:src="@mipmap/segmentation_icon"
+        android:src="@mipmap/ic_add_box_white_48dp"
+        android:background="@drawable/btn_add_segment"
+        android:scaleType="fitCenter"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:id="@+id/button"

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,10 +29,10 @@ import tk.melnichuk.kommunalchik.Helpers.Utils;
 public class SegmentListFragment extends Fragment {
     View mView;
     ListView mListView;
-    Button mNavNext, mNavPrev;
+    ImageButton mNavNext, mNavPrev;
     TextView mNavPage, mNoSegmentsText;
     SegmentListAdapter mSegmentListAdapter;
-    private final int ITEMS_PER_PAGE = 3;
+    private final int ITEMS_PER_PAGE = 6;
     private long mNumItems, mOffset = 0;
     ArrayList<SegmentListItem> mData;
 
@@ -70,8 +71,8 @@ public class SegmentListFragment extends Fragment {
 
         mNavPage = (TextView) mView.findViewById(R.id.nav_page);
         mNoSegmentsText = (TextView) mView.findViewById(R.id.no_segments_text);
-        mNavPrev = (Button) mView.findViewById(R.id.nav_prev);
-        mNavNext = (Button) mView.findViewById(R.id.nav_next);
+        mNavPrev = (ImageButton) mView.findViewById(R.id.nav_prev);
+        mNavNext = (ImageButton) mView.findViewById(R.id.nav_next);
 
         updateNavPageText();
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,10 +31,10 @@ import tk.melnichuk.kommunalchik.Helpers.Utils;
 public class BillListFragment extends Fragment {
     View mView;
     ListView mListView;
-    Button mNavNext, mNavPrev;
+    ImageButton mNavNext, mNavPrev;
     TextView mNavPage, mNoSegmentsText;
     BillListAdapter mBillListAdapter;
-    private final int ITEMS_PER_PAGE = 3;
+    private final int ITEMS_PER_PAGE = 6;
     private long mNumItems, mOffset = 0;
     ArrayList<BillListItem> mData;
 
@@ -54,7 +55,6 @@ public class BillListFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         setHasOptionsMenu(true);
 
-
         mData = new ArrayList<>();
 
         if(mView == null){
@@ -71,8 +71,8 @@ public class BillListFragment extends Fragment {
 
         mNavPage = (TextView) mView.findViewById(R.id.nav_page);
         mNoSegmentsText = (TextView) mView.findViewById(R.id.no_segments_text);
-        mNavPrev = (Button) mView.findViewById(R.id.nav_prev);
-        mNavNext = (Button) mView.findViewById(R.id.nav_next);
+        mNavPrev = (ImageButton) mView.findViewById(R.id.nav_prev);
+        mNavNext = (ImageButton) mView.findViewById(R.id.nav_next);
 
         updateNavPageText();
 
@@ -161,7 +161,7 @@ public class BillListFragment extends Fragment {
         int numPages = (int) Math.ceil( (double) mNumItems/ITEMS_PER_PAGE );
         if(numPages == 0) {
             mNoSegmentsText.setVisibility(View.VISIBLE);
-            mNavPage.setText(R.string.bill_list_no_bills);
+            mNavPage.setText(R.string.segment_list_no_pages);
             return;
         }
         mNoSegmentsText.setVisibility(View.GONE);

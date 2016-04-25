@@ -25,16 +25,18 @@
         android:id="@+id/nav_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp">
 
-        <Button
+        <ImageButton
+            android:background="@drawable/nav_button"
+            android:src="@mipmap/ic_chevron_left_white_48dp"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="match_parent"
-            android:text="New Button"
-            android:id="@+id/nav_prev" />
+            android:id="@+id/nav_prev"
+            android:layout_margin="5dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -48,12 +50,14 @@
             android:singleLine="true"
             android:gravity="center" />
 
-        <Button
+        <ImageButton
+            android:background="@drawable/nav_button"
+            android:src="@mipmap/ic_chevron_right_white_48dp"
             android:layout_width="0dp"
             android:layout_weight="5"
             android:layout_height="match_parent"
-            android:text="New Button"
-            android:id="@+id/nav_next" />
+            android:id="@+id/nav_next"
+            android:layout_margin="5dp" />
     </LinearLayout>
 
 
@@ -62,7 +66,7 @@
         android:id="@+id/fab_segment_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_box_white_48dp"
+        android:src="@mipmap/ic_add_white_48dp"
         app:backgroundTint="@color/fab_segment"
         style="@style/floating_action_button"
         app:elevation="6dp"

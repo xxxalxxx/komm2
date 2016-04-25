@@ -5,10 +5,7 @@
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="@color/btn_calc_pressed" />
-            <stroke
-                android:width="3dp"
-                android:color="@color/btn_calc_border_pressed" />
+                android:color="@color/btn_add_global_segment_pressed" />
             <corners
                 android:radius="3dp" />
             <padding
@@ -22,10 +19,7 @@
     <item android:state_focused="true" >
         <shape>
             <solid
-                android:color="@color/btn_calc_pressed" />
-            <stroke
-                android:width="3dp"
-                android:color="@color/btn_calc_border_pressed" />
+                android:color="@color/btn_add_global_segment_pressed" />
             <corners
                 android:radius="3dp" />
             <padding
@@ -38,10 +32,7 @@
     <item >
         <shape>
             <solid
-                android:color="@color/btn_calc" />
-            <stroke
-                android:width="2dp"
-                android:color="@color/btn_calc_border" />
+                android:color="@color/btn_add_global_segment"/>
             <corners
                 android:radius="3dp" />
             <padding
