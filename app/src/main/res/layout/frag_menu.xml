@@ -10,6 +10,12 @@
     android:paddingTop="40dp"
     android:gravity="center_vertical">
 
+    <ImageView
+        android:src="@mipmap/icon_kommunalchik"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal" />
+
     <TextView
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"

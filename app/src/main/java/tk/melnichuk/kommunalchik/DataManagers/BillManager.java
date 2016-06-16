@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -208,8 +209,8 @@ public class BillManager {
         }
     }
 
-    public void writeBillsToExcel(long billId){
-
+    public int writeBillsToExcel(long billId){
+        int offset = 0;
         Context context = mFragment.getContext();
         DbManager dbManager = new DbManager(context);
         SQLiteDatabase db = dbManager.getReadableDatabase();
@@ -252,7 +253,6 @@ public class BillManager {
 
         if(ws != null) {
 
-            int offset = 0;
             Resources res = context.getResources();
 
             for (int i = 0; i < mModels.length; ++i) {
@@ -264,6 +264,8 @@ public class BillManager {
 
             em.end();
         }
+
+        return offset;
     }
 
 

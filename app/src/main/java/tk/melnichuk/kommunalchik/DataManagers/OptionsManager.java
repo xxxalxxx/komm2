@@ -101,8 +101,7 @@ public class OptionsManager {
     }
 
     public float getColdWaterRate(){
-        float out = mSharedPrefs.getFloat(STR_COLD_WATER_RATE, DEFAULT_COLD_WATER_RATE);
-        return out == 0 ? 0 : out;
+        return mSharedPrefs.getFloat(STR_COLD_WATER_RATE, DEFAULT_COLD_WATER_RATE);
     }
 
     public float getWasteWaterRate(){

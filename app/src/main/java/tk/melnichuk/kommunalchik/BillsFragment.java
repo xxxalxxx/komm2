@@ -275,13 +275,18 @@ public class BillsFragment extends Fragment {
                                     long resultRelId;
                                     if(radioButtonChild == rbNew) {
                                         resultRelId = mBillManager.createSavedBill(name, date,mBillId);
-                                        if(resultRelId != -1) mRelId = resultRelId;
+                                        if(resultRelId != -1) {
+                                            mRelId = resultRelId;
+                                            Toast.makeText(getActivity(), R.string.bill_save_success, Toast.LENGTH_LONG).show();
+                                        }
                                     } else if(radioButtonChild == rbCurr){
                                         resultRelId = mBillManager.updateSavedBill(name, date, mBillId, mRelId);
-                                        if(resultRelId != -1) mRelId = resultRelId;
+                                        if(resultRelId != -1){
+                                            mRelId = resultRelId;
+                                            Toast.makeText(getActivity(),R.string.bill_update_success, Toast.LENGTH_LONG).show();
+                                        }
                                     }
                                 }
-
                             }
                         }
                     }
@@ -291,16 +296,18 @@ public class BillsFragment extends Fragment {
 
 
 
-                Toast.makeText(getActivity(), "save", Toast.LENGTH_LONG).show();
+
             }
         });
 
         view.findViewById(R.id.fab_excel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "excel", Toast.LENGTH_LONG).show();
                 updateFragmentInDb(mCurrBill);
-                mBillManager.writeBillsToExcel(mBillId);
+                int numRowsWritten = mBillManager.writeBillsToExcel(mBillId);
+                if(numRowsWritten > 0){
+                    Toast.makeText(getContext(), R.string.excel_write_success, Toast.LENGTH_LONG).show();
+                }
             }
         });
 

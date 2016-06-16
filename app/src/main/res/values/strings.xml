@@ -3,7 +3,7 @@
     <string name="menu_app_name">КОМУНАЛЬЧИК</string>
     <string name="action_settings">Settings</string>
 
-    <string name="continue_bills">Продовжити новий рахунок</string>
+    <string name="continue_bills">Продовжити рахунок</string>
     <string name="new_bills">Новий рахунок</string>
     <string name="saved_bills">Збережені рахунки</string>
     <string name="settings">Опції</string>
@@ -215,7 +215,8 @@
     <string name="segment_list_no_segments">Нема глобальних сегментів</string>
     <string name="bill_list_no_bills">Нема збережених рахунків</string>
 
+    <string name="bill_save_success">Рахунок успішно створено!</string>
+    <string name="bill_update_success">Рахунок успішно оновлено!</string>
+    <string name="excel_write_success">Excel файл успішно створено!</string>
 
-    <string name="pagination_next">-</string>
-    <string name="pagination_prev">-</string>
 </resources>

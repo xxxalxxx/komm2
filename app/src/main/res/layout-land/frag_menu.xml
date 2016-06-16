@@ -11,8 +11,13 @@
     android:minWidth="250dp"
     android:gravity="center_horizontal">
 
+    <ImageView
+        android:src="@mipmap/icon_kommunalchik"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal" />
+
     <TextView
-        android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
